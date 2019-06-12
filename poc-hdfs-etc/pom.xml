@@ -1,0 +1,179 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.galatea.hadooppoc</groupId>
+	<artifactId>hadoop-poc</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+
+	<name>hadoop-poc</name>
+	<url>http://maven.apache.org</url>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.5.RELEASE</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk.tools</artifactId>
+			<version>1.8.0_211</version>
+			<scope>system</scope>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </exclusion>
+  </exclusions>
+		</dependency>
+
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-core -->
+<!-- 		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+			<version>1.2.1</version>
+		</dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+<!-- 		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>3.2.0</version>
+		</dependency> -->
+		<dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-hdfs-client</artifactId>
+        <version>3.2.0</version>
+</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
+<dependency>
+    <groupId>org.apache.hadoop</groupId>
+    <artifactId>hadoop-common</artifactId>
+    <version>3.2.0</version>
+</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-hdfs -->
+<dependency>
+    <groupId>org.apache.hadoop</groupId>
+    <artifactId>hadoop-hdfs</artifactId>
+    <version>3.2.0</version>
+</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
+		<dependency>
+    		<groupId>org.apache.spark</groupId>
+    		<artifactId>spark-core_2.12</artifactId>
+    		<version>2.4.3</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
+		<dependency>
+    		<groupId>org.apache.spark</groupId>
+    		<artifactId>spark-sql_2.12</artifactId>
+    		<version>2.4.3</version>
+		</dependency>
+		
+		
+		<dependency>
+          	<groupId>com.jcraft</groupId>
+          	<artifactId>jsch</artifactId>
+          	<version>0.1.53</version>
+        </dependency>
+        
+        <dependency>
+          	<groupId>ant</groupId>
+          	<artifactId>ant-jsch</artifactId>
+          	<version>1.6.5</version>
+        </dependency>
+        
+        <dependency>
+    		<groupId>org.apache.hbase</groupId>
+   	 		<artifactId>hbase-client</artifactId>
+   	 		<version>1.4.9</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.9.9</version>
+</dependency>
+		
+		
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+      			<groupId>org.apache.maven.plugins</groupId>
+      			<artifactId>maven-antrun-plugin</artifactId>
+      			<version>1.8</version>
+      			<executions>
+        			<execution>
+          				<id>scp-to-remote</id>
+          				<phase>package</phase>
+          				<goals>
+            				<goal>run</goal>
+          				</goals>
+          				<configuration>
+            				<target>
+              					<scp localFile="C:\Users\kpayne\git\hadoop_poc\hadoop-poc\target\hadoop-poc-0.0.1-SNAPSHOT.jar"
+                					remoteToFile="ec2-user@ec2-18-222-172-50.us-east-2.compute.amazonaws.com:/home/ec2-user" verbose="true"
+               						keyfile="C:\Users\kpayne\Documents\Hadoop_AWS\galatea-hadoop.pem"
+                					passphrase="" trust="true">
+             				 	</scp>
+            				</target>
+          				</configuration>
+        			</execution>
+      			</executions>
+      			<dependencies>
+        			<dependency>
+          			<groupId>com.jcraft</groupId>
+          			<artifactId>jsch</artifactId>
+          			<version>0.1.53</version>
+        		</dependency>
+        		<dependency>
+          			<groupId>ant</groupId>
+          			<artifactId>ant-jsch</artifactId>
+          			<version>1.6.5</version>
+        		</dependency>
+      		</dependencies>
+    	</plugin>  
+	</plugins>
+</build>
+
+</project>
