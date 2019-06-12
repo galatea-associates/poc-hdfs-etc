@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.common;
+package org.galatea.pochdfs.common;
 
 import java.util.StringTokenizer;
 

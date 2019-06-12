@@ -1,12 +1,12 @@
-package org.galatea.hadooppoc.hdfs;
+package org.galatea.pochdfs.hdfs;
 
 import java.io.File;
 import java.util.Collection;
 
 import org.apache.hadoop.fs.Path;
-import org.galatea.hadooppoc.hdfs.jsonobjects.JsonObject;
-import org.galatea.hadooppoc.hdfs.jsonobjects.SwapHeader;
-import org.galatea.hadooppoc.hdfs.jsonobjects.SwapHeaders;
+import org.galatea.pochdfs.hdfs.jsonobjects.JsonObject;
+import org.galatea.pochdfs.hdfs.jsonobjects.SwapHeader;
+import org.galatea.pochdfs.hdfs.jsonobjects.SwapHeaders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

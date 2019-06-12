@@ -1,11 +1,11 @@
-package org.galatea.hadooppoc;
+package org.galatea.pochdfs;
 
 import java.util.Scanner;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.galatea.hadooppoc.spark.SwapDataAccessor;
-import org.galatea.hadooppoc.spark.SwapDataFiles;
+import org.galatea.pochdfs.spark.SwapDataAccessor;
+import org.galatea.pochdfs.spark.SwapDataFiles;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

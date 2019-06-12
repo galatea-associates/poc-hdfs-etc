@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs;
+package org.galatea.pochdfs.hdfs;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

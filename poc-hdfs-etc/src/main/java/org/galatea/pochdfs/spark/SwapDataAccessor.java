@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.spark;
+package org.galatea.pochdfs.spark;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
-import org.galatea.hadooppoc.spark.SwapDataFiles.SwapDataFilename;
+import org.galatea.pochdfs.spark.SwapDataFiles.SwapDataFilename;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

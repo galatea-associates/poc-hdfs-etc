@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs.jsonobjects;
+package org.galatea.pochdfs.hdfs.jsonobjects;
 
 import java.time.LocalDateTime;
 

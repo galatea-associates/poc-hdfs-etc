@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.spark;
+package org.galatea.pochdfs.spark;
 
 import java.util.ArrayList;
 import java.util.Collection;

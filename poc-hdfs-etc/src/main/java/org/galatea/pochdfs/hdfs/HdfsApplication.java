@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs;
+package org.galatea.pochdfs.hdfs;
 
 import lombok.extern.slf4j.Slf4j;
 

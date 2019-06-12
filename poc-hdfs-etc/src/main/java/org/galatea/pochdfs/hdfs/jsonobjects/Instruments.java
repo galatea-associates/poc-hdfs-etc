@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs.jsonobjects;
+package org.galatea.pochdfs.hdfs.jsonobjects;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -10,18 +10,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LegalEntities implements JsonObject {
+public class Instruments implements JsonObject {
 
-	Collection<LegalEntity> legalEntities;
+	Collection<Instrument> instruments;
 
 	@Override
 	public String getObjectType() {
-		return "legalEntities";
+		return "instruments";
 	}
 
 	@Override
-	public Collection<LegalEntity> getData() {
-		return legalEntities;
+	public Collection<Instrument> getData() {
+		return instruments;
 	}
 
 }
@@ -29,10 +29,10 @@ public class LegalEntities implements JsonObject {
 @Getter
 @Setter
 @NoArgsConstructor
-class LegalEntity {
+class Instrument {
 
-	private String code;
-	private String name;
+	private String ric;
+	private String instrumentId;
 	private String timeStamp = LocalDateTime.now().toString();
 
 }

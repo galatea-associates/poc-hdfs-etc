@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs;
+package org.galatea.pochdfs.hdfs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hdfs;
+package org.galatea.pochdfs.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;

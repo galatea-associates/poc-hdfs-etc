@@ -1,4 +1,4 @@
-package org.galatea.hadooppoc.hbase;
+package org.galatea.pochdfs.hbase;
 
 import org.apache.hadoop.hbase.TableName;
 
