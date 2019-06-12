@@ -4,7 +4,11 @@ import java.io.File;
 import java.util.Collection;
 
 import org.apache.hadoop.fs.Path;
+import org.galatea.pochdfs.hdfs.jsonobjects.CashFlow;
+import org.galatea.pochdfs.hdfs.jsonobjects.CashFlows;
 import org.galatea.pochdfs.hdfs.jsonobjects.JsonObject;
+import org.galatea.pochdfs.hdfs.jsonobjects.Position;
+import org.galatea.pochdfs.hdfs.jsonobjects.Positions;
 import org.galatea.pochdfs.hdfs.jsonobjects.SwapHeader;
 import org.galatea.pochdfs.hdfs.jsonobjects.SwapHeaders;
 
@@ -50,6 +54,12 @@ public class UpstreamDataManager {
 			break;
 		case "swapHeaders":
 			writeSwapHeaderData(jsonObject);
+			break;
+		case "positions":
+			writePositionsData(jsonObject);
+			break;
+		case "cashFlows":
+			writeCashFlowsData(jsonObject);
 		}
 	}
 
@@ -83,13 +93,32 @@ public class UpstreamDataManager {
 		SwapHeaders swapHeaders = (SwapHeaders) jsonObject;
 		for (SwapHeader swapHeader : swapHeaders.getData()) {
 			Path filePath = new Path(filePathConstructor.constructSwapHeaderFilename((swapHeader).getCounterPartyId()));
-			writeFile(filePath, createSwapHeaderEntryData(swapHeader));
+			writeFile(filePath, createByteArray(swapHeader));
 		}
 	}
 
 	@SneakyThrows
-	private byte[] createSwapHeaderEntryData(final SwapHeader swapHeader) {
-		StringBuilder builder = new StringBuilder(objectMapper.writeValueAsString(swapHeader));
+	private void writePositionsData(final JsonObject jsonObject) {
+		Positions positions = (Positions) jsonObject;
+		for (Position position : positions.getData()) {
+			Path filePath = new Path(
+					filePathConstructor.constructPositionFilename(position.getCounterPartyId(), position.getCobDate()));
+			writeFile(filePath, createByteArray(position));
+		}
+	}
+
+	@SneakyThrows
+	private void writeCashFlowsData(final JsonObject jsonObject) {
+		CashFlows cashFlows = (CashFlows) jsonObject;
+		for (CashFlow cashFlow : cashFlows.getData()) {
+			Path filePath = new Path(filePathConstructor.constructCashFlowFilename(cashFlow.getSwapId()));
+			writeFile(filePath, createByteArray(cashFlow));
+		}
+	}
+
+	@SneakyThrows
+	private byte[] createByteArray(final Object object) {
+		StringBuilder builder = new StringBuilder(objectMapper.writeValueAsString(object));
 		return builder.append("\n").toString().getBytes();
 	}
 

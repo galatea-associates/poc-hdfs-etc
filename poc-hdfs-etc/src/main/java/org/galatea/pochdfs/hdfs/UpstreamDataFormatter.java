@@ -3,10 +3,12 @@ package org.galatea.pochdfs.hdfs;
 import java.io.File;
 import java.nio.file.Files;
 
+import org.galatea.pochdfs.hdfs.jsonobjects.CashFlows;
 import org.galatea.pochdfs.hdfs.jsonobjects.CounterParties;
 import org.galatea.pochdfs.hdfs.jsonobjects.Instruments;
 import org.galatea.pochdfs.hdfs.jsonobjects.JsonObject;
 import org.galatea.pochdfs.hdfs.jsonobjects.LegalEntities;
+import org.galatea.pochdfs.hdfs.jsonobjects.Positions;
 import org.galatea.pochdfs.hdfs.jsonobjects.SwapHeaders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +35,10 @@ public class UpstreamDataFormatter {
 			return getFormattedCounterParties(file);
 		case "swapHeader":
 			return getFormattedSwapHeaders(file);
+		case "positions":
+			return getFormattedPositions(file);
+		case "cashFlows":
+			return getFormattedCashFlows(file);
 		default:
 			return null;
 		}
@@ -56,6 +62,16 @@ public class UpstreamDataFormatter {
 	@SneakyThrows
 	private SwapHeaders getFormattedSwapHeaders(final File file) {
 		return objectMapper.readValue(Files.readAllBytes(file.toPath()), SwapHeaders.class);
+	}
+
+	@SneakyThrows
+	private Positions getFormattedPositions(final File file) {
+		return objectMapper.readValue(Files.readAllBytes(file.toPath()), Positions.class);
+	}
+
+	@SneakyThrows
+	private CashFlows getFormattedCashFlows(final File file) {
+		return objectMapper.readValue(Files.readAllBytes(file.toPath()), CashFlows.class);
 	}
 
 }

@@ -33,6 +33,5 @@ class CounterParty {
 	private String counterPartyId;
 	private String entity;
 	private String code;
-	// private String timeStamp = LocalDateTime.now().toString();
 
 }

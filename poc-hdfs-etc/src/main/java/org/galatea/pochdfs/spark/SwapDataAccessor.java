@@ -16,11 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 public class SwapDataAccessor implements AutoCloseable {
 
 	private SparkSession sparkSession;
-	private Map<SwapDataFilename, Dataset<Row>> dataframes;
+	private Map<SwapDataFilename, Dataset<Row>> datasets;
 
 	private SwapDataAccessor() {
 		sparkSession = SparkSession.builder().appName("SwapDataAccessor").getOrCreate();
-		dataframes = new HashMap<>();
+		datasets = new HashMap<>();
 	}
 
 	public static SwapDataAccessor newDataAccessor() {
@@ -37,14 +37,17 @@ public class SwapDataAccessor implements AutoCloseable {
 		// log.info("Spark Session created view ".concat(filename.getFilename()));
 
 		// dataset.cache(); // lazy
+	}
 
-		dataframes.put(SwapDataFilename.SWAP_HEADER_200, sparkSession.read()
+	public void initializeDefaultSwapData() {
+		datasets.put(SwapDataFilename.SWAP_HEADER_200, sparkSession.read()
 				.json(constructJsonFilePath("/cs/data/swap-header/", SwapDataFilename.SWAP_HEADER_200.getFilename())));
-		dataframes.put(SwapDataFilename.COUNTER_PARTIES, sparkSession.read()
+		datasets.put(SwapDataFilename.COUNTER_PARTIES, sparkSession.read()
 				.json(constructJsonFilePath("/cs/data/counterparty/", SwapDataFilename.COUNTER_PARTIES.getFilename())));
-		dataframes.put(SwapDataFilename.INSTRUMENTS, sparkSession.read()
+		datasets.put(SwapDataFilename.INSTRUMENTS, sparkSession.read()
 				.json(constructJsonFilePath("/cs/data/instrument/", SwapDataFilename.INSTRUMENTS.getFilename())));
-		// }
+		datasets.put(SwapDataFilename.LEGAL_ENTITY, sparkSession.read()
+				.json(constructJsonFilePath("/cs/data/instrument/", SwapDataFilename.LEGAL_ENTITY.getFilename())));
 	}
 
 	private String constructJsonFilePath(final String path, final String fileName) {
@@ -65,12 +68,12 @@ public class SwapDataAccessor implements AutoCloseable {
 		dataset.write().mode(SaveMode.Overwrite).json(path);
 	}
 
-	public Dataset<Row> getEnrich() {
-		Dataset<Row> swapHeader = dataframes.get(SwapDataFilename.SWAP_HEADER_200);
+	public Dataset<Row> getEnrichedPositions() {
+		Dataset<Row> swapHeader = datasets.get(SwapDataFilename.SWAP_HEADER_200);
 		swapHeader.show();
-		Dataset<Row> counterParties = dataframes.get(SwapDataFilename.COUNTER_PARTIES);
+		Dataset<Row> counterParties = datasets.get(SwapDataFilename.COUNTER_PARTIES);
 		counterParties.show();
-		Dataset<Row> instruments = dataframes.get(SwapDataFilename.INSTRUMENTS);
+		Dataset<Row> instruments = datasets.get(SwapDataFilename.INSTRUMENTS);
 		instruments.show();
 		log.info("Joining Swap Positions and Swap Contracts");
 		long startTime = System.currentTimeMillis();
@@ -78,7 +81,6 @@ public class SwapDataAccessor implements AutoCloseable {
 				counterParties.col("counterPartyId").equalTo(swapHeader.col("counterPartyId")), "inner");
 		// dataset = dataset.join(instruments, dataset.)
 		log.info("Execution took {} milliseconds", System.currentTimeMillis() - startTime);
-		dataset.show();
 		return dataset;
 	}
 

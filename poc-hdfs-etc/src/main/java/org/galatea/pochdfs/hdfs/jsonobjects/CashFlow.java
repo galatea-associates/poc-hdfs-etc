@@ -9,12 +9,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SwapHeader {
+public class CashFlow {
 
-	private String counterPartyId;
 	private String swapId;
-	private String swapMnemonic;
-	private String isShortMtmFinanced;
+	private String instrumentId;
+	private String type;
+	private String payDate;
+	private String effectiveDate;
+	private String currency;
+	private String amount;
 	private String timeStamp = LocalDateTime.now().toString();
 
 }

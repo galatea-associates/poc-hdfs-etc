@@ -1,7 +1,5 @@
 package org.galatea.pochdfs.hdfs;
 
-import lombok.SneakyThrows;
-
 public class FilepathConstructor {
 
 	private static final String BASE_PATH = "/cs/data/";
@@ -19,7 +17,7 @@ public class FilepathConstructor {
 	}
 
 	public String constructLegalEntityFilename() {
-		return buildFilepath(BASE_PATH, "swap-header/", BaseFilename.Filename.LEGAL_ENTITY.getFilename(),
+		return buildFilepath(BASE_PATH, "legal-entity/", BaseFilename.Filename.LEGAL_ENTITY.getFilename(),
 				FILE_EXTENSION);
 	}
 
@@ -28,10 +26,19 @@ public class FilepathConstructor {
 				FILE_EXTENSION);
 	}
 
-	@SneakyThrows
 	public String constructSwapHeaderFilename(final String counterPartyId) {
 		return buildFilepath(BASE_PATH, "swap-header/", counterPartyId, "-",
 				BaseFilename.Filename.SWAP_HEADER.getFilename(), FILE_EXTENSION);
+	}
+
+	public String constructPositionFilename(final String counterPartyId, final String COBDate) {
+		return buildFilepath(BASE_PATH, "positions/", counterPartyId, "-", COBDate, "-",
+				BaseFilename.Filename.POSITIONS.getFilename(), FILE_EXTENSION);
+	}
+
+	public String constructCashFlowFilename(final String swapId) {
+		return buildFilepath(BASE_PATH, "cash-flows/", swapId, "-", BaseFilename.Filename.CASH_FLOWS.getFilename(),
+				FILE_EXTENSION);
 	}
 
 	private String buildFilepath(final String... fileParts) {

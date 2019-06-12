@@ -9,12 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SwapHeader {
+public class Position {
 
-	private String counterPartyId;
 	private String swapId;
-	private String swapMnemonic;
-	private String isShortMtmFinanced;
+	private String instrumentId;
+	private String cobDate;
+	private String counterPartyId;
 	private String timeStamp = LocalDateTime.now().toString();
 
 }
