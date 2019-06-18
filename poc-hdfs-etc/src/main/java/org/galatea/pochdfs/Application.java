@@ -1,7 +1,5 @@
 package org.galatea.pochdfs;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
 import org.galatea.pochdfs.spark.SwapDataAccessor;
 
 import lombok.SneakyThrows;
@@ -15,8 +13,7 @@ public class Application {
 
 		try (SwapDataAccessor accessor = SwapDataAccessor.newDataAccessor()) {
 			accessor.initializeDefaultSwapData();
-			Dataset<Row> dataset = accessor.getEnrichedPositions();
-			dataset.show();
+			accessor.writeDataset(accessor.getEnrichedPositionsWithUnpaidCash(), "/test.json");
 		}
 	}
 

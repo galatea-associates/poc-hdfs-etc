@@ -29,7 +29,7 @@ public class SwapDataFiles {
 	@Getter
 	public static enum SwapDataFilename {
 		SWAP_HEADER_200("200-swapHeader"), SWAP_HEADER_201("201-swapHeader"), LEGAL_ENTITY("legalEntity"),
-		INSTRUMENTS("instruments"), COUNTER_PARTIES("counterparties");
+		INSTRUMENTS("instruments"), COUNTER_PARTIES("counterparties"), POSITIONS_200_20190429("200-20190429-positions");
 
 		private String filename;
 	}

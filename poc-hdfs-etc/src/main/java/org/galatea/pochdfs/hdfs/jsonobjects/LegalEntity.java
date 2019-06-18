@@ -11,12 +11,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Position {
+public class LegalEntity {
 
-	private String swapId;
-	private String instrumentId;
-	private String cobDate;
-	private String counterPartyId;
+	private String code;
+	private String name;
 	private String timeStamp = LocalDateTime.now().toString();
 
 }

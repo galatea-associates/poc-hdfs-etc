@@ -2,6 +2,7 @@ package org.galatea.pochdfs.hdfs.jsonobjects;
 
 import java.util.Collection;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CounterParties implements JsonObject {
 
 	Collection<CounterParty> counterParties;
@@ -23,15 +25,8 @@ public class CounterParties implements JsonObject {
 		return counterParties;
 	}
 
-}
-
-@Getter
-@Setter
-@NoArgsConstructor
-class CounterParty {
-
-	private String counterPartyId;
-	private String entity;
-	private String code;
+	public void addCounterParty(final CounterParty counterParty) {
+		this.counterParties.add(counterParty);
+	}
 
 }

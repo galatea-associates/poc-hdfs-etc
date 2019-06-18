@@ -41,7 +41,7 @@ public class UpstreamDataManager {
 		writeData(jsonObject);
 	}
 
-	private void writeData(final JsonObject jsonObject) {
+	public void writeData(final JsonObject jsonObject) {
 		switch (jsonObject.getObjectType()) {
 		case "counterParties":
 			writeCounterPartyData(jsonObject);

@@ -15,12 +15,26 @@ public class HdfsApplication {
 
 		FileSystem fs = FileSystemFactory.newDefaultFileSystem();
 		UpstreamDataManager manager = UpstreamDataManager.newManager(FileWriter.newFileWriter(fs));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/instruments.json"));
+
+		// for (int i = 0; i < 100; i++) {
+		// manager.writeData(new
+		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/instruments.json"));
 		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/counterparty.json"));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/swapHeader.json"));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/legalEntity.json"));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/positions.json"));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/cashFlows.json"));
+		// manager.writeData(new
+		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/swapHeader.json"));
+		// manager.writeData(new
+		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/legalEntity.json"));
+		// manager.writeData(new
+		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/positions.json"));
+		// manager.writeData(new
+		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/cashFlows.json"));
+		// }
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/instruments.json"));
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/counterparty.json"));
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/swapHeader.json"));
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/legalEntity.json"));
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/positions.json"));
+//		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/cashFlows.json"));
 	}
 
 }

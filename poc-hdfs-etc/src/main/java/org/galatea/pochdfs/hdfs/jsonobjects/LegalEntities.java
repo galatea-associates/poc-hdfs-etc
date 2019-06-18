@@ -1,8 +1,8 @@
 package org.galatea.pochdfs.hdfs.jsonobjects;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class LegalEntities implements JsonObject {
 
 	Collection<LegalEntity> legalEntities;
@@ -23,16 +24,5 @@ public class LegalEntities implements JsonObject {
 	public Collection<LegalEntity> getData() {
 		return legalEntities;
 	}
-
-}
-
-@Getter
-@Setter
-@NoArgsConstructor
-class LegalEntity {
-
-	private String code;
-	private String name;
-	private String timeStamp = LocalDateTime.now().toString();
 
 }

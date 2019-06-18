@@ -1,8 +1,8 @@
 package org.galatea.pochdfs.hdfs.jsonobjects;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Instruments implements JsonObject {
 
 	Collection<Instrument> instruments;
@@ -23,16 +24,5 @@ public class Instruments implements JsonObject {
 	public Collection<Instrument> getData() {
 		return instruments;
 	}
-
-}
-
-@Getter
-@Setter
-@NoArgsConstructor
-class Instrument {
-
-	private String ric;
-	private String instrumentId;
-	private String timeStamp = LocalDateTime.now().toString();
 
 }
