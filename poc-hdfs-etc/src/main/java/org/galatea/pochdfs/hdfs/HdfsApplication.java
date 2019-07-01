@@ -19,7 +19,7 @@ public class HdfsApplication {
 		// for (int i = 0; i < 100; i++) {
 		// manager.writeData(new
 		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/instruments.json"));
-		manager.writeData(new File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/counterparty.json"));
+		manager.writeData(new File("/Users/kylepayne/Documents/Work/Hadoop_Data/counterparties.json"));
 		// manager.writeData(new
 		// File("C://Users/kpayne/Documents/Hadoop_AWS/swap_data_test/swapHeader.json"));
 		// manager.writeData(new
