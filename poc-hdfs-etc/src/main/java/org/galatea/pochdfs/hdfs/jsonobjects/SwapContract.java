@@ -12,19 +12,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashFlow {
+public class SwapContract {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddss");
 
-	private int cashFlowId;
+	private int counterPartyId;
 	private int swapId;
-	private int instrumentId;
-	private String type;
-	private int payDate;
-	private int effectiveDate;
-	private String currency;
-	private double amount;
-	private String longShort;
 	private int timeStamp = Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString());
 
 }

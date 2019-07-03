@@ -4,12 +4,14 @@ import java.io.File;
 
 public class DatanameExtractor {
 
+	private static final DatanameExtractor INSTANCE = new DatanameExtractor();
+
 	private DatanameExtractor() {
 
 	}
 
-	public static DatanameExtractor newExtractor() {
-		return new DatanameExtractor();
+	public static DatanameExtractor getInstance() {
+		return INSTANCE;
 	}
 
 	public String extract(final File file) {

@@ -1,6 +1,7 @@
 package org.galatea.pochdfs.hdfs.jsonobjects;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,10 +14,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Position {
 
-	private String swapId;
-	private String instrumentId;
-	private String cobDate;
-	private String counterPartyId;
-	private String timeStamp = LocalDateTime.now().toString();
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddss");
+
+	private int swapId;
+	private int instrumentId;
+	private int effectiveDate;
+	private String positionType;
+	private int timeStamp = Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString());
 
 }

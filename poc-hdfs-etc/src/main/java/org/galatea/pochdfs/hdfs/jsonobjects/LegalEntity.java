@@ -1,6 +1,7 @@
 package org.galatea.pochdfs.hdfs.jsonobjects;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LegalEntity {
 
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+
 	private String code;
 	private String name;
-	private String timeStamp = LocalDateTime.now().toString();
+	private int timeStamp = Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString());
 
 }

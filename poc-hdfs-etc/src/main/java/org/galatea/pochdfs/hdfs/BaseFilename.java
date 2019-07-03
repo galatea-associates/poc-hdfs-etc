@@ -13,7 +13,7 @@ public class BaseFilename {
 	@Getter
 	public static enum Filename {
 		COUNTERPARTY("counterparties"), LEGAL_ENTITY("legalEntity"), INST_REFS("instruments"),
-		SWAP_HEADER("swapHeader"), POSITIONS("positions"), CASH_FLOWS("cashFlows");
+		SWAP_CONTRACT("swapContracts"), POSITIONS("positions"), CASH_FLOWS("cashFlows");
 		private String filename;
 	}
 

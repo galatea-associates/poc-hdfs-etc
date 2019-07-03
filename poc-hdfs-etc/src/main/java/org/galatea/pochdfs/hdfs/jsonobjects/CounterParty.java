@@ -11,8 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CounterParty {
 
-	private String counterPartyId;
-	private String entity;
-	private String counterPartyCode;
+	private int counterPartyId;
 
 }

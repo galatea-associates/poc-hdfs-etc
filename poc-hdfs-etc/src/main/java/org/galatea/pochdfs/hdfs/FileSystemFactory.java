@@ -30,8 +30,8 @@ public class FileSystemFactory {
 		configuration.setBoolean("dfs.support.append", true);
 		configuration.setBoolean("dfs.client.use.datanode.hostname", true);
 		configuration.set("dfs.replication", "1");
-		configuration.setBoolean("dfs.client.block.write.replace-datanode-on-failure.enable", false);
-		configuration.set("dfs.client.block.write.replace-datanode-on-failure.policy", "NEVER");
+//		configuration.setBoolean("dfs.client.block.write.replace-datanode-on-failure.enable", false);
+//		configuration.set("dfs.client.block.write.replace-datanode-on-failure.policy", "NEVER");
 		return configuration;
 	}
 }
