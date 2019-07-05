@@ -14,7 +14,7 @@ public class FileSystemFactory {
 	private static final String DEFAULT_FS = "hdfs://ec2-18-222-172-50.us-east-2.compute.amazonaws.com:9000";
 
 	private FileSystemFactory(final String defaultFs) {
-
+		
 	}
 
 	@SneakyThrows
@@ -30,8 +30,6 @@ public class FileSystemFactory {
 		configuration.setBoolean("dfs.support.append", true);
 		configuration.setBoolean("dfs.client.use.datanode.hostname", true);
 		configuration.set("dfs.replication", "1");
-//		configuration.setBoolean("dfs.client.block.write.replace-datanode-on-failure.enable", false);
-//		configuration.set("dfs.client.block.write.replace-datanode-on-failure.policy", "NEVER");
 		return configuration;
 	}
 }

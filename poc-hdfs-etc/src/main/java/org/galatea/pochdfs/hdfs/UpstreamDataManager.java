@@ -41,97 +41,46 @@ public class UpstreamDataManager {
 		log.info("Writing {} data", file.getName());
 		switch (file.getName()) {
 		case "counterParties.json":
-			writeCounterPartyData(file);
+			writeData(file, (jsonObject) -> filePathConstructor.constructCounterpartyFilepath());
 			break;
 		case "instruments.json":
-			writeInstrumentData(file);
+			writeData(file, (jsonObject) -> filePathConstructor.constructInstRefsFilepath());
 			break;
 		case "swapContracts.json":
-			writeSwapContractData(file);
+			writeData(file, (jsonObject) -> filePathConstructor
+					.constructSwapContractFilepath((int) jsonObject.get("counterPartyId")));
 			break;
 		case "positions.json":
-			writePositionsData(file);
+			writeData(file, (jsonObject) -> filePathConstructor
+					.constructPositionFilepath((int) jsonObject.get("swapId"), (int) jsonObject.get("effectiveDate")));
 			break;
 		case "cashFlows.json":
-			writeCashFlowsData(file);
+			writeData(file,
+					(jsonObject) -> filePathConstructor.constructCashFlowFilepath((int) jsonObject.get("swapId")));
 		}
 	}
 
 	@SneakyThrows
-	private void writeCounterPartyData(final File file) {
+	private void writeData(final File file, final IFilePath path) {
+		Long startTime = System.currentTimeMillis();
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String counterPartyObjectLine = reader.readLine();
-			while (counterPartyObjectLine != null) {
-				Map<String, Object> counterParty = objectMapper.readValue(counterPartyObjectLine.getBytes(),
+			int recordCount = 0;
+			String jsonLine = reader.readLine();
+			while (jsonLine != null) {
+				Map<String, Object> jsonObject = objectMapper.readValue(jsonLine.getBytes(),
 						JSON_OBJECT_TYPE_REFERENCE);
-				counterParty.put("timeStamp", Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString()));
-				Path filePath = new Path(filePathConstructor.constructCounterpartyFilename());
-				writeFile(filePath, createByteArray(counterParty));
-				counterPartyObjectLine = reader.readLine();
+				Path filePath = new Path(path.getFilePath(jsonObject));
+				jsonObject.put("timeStamp", getCurrentTime());
+				writeBytesToHdfs(filePath, createByteArray(jsonObject));
+				jsonLine = reader.readLine();
+				recordCount++;
 			}
+			log.info("Processed {} records in {} ms", recordCount, System.currentTimeMillis() - startTime);
 		}
 	}
 
-	@SneakyThrows
-	private void writeInstrumentData(final File file) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String instrumentObjectLine = reader.readLine();
-			while (instrumentObjectLine != null) {
-				Map<String, Object> instrument = objectMapper.readValue(instrumentObjectLine.getBytes(),
-						JSON_OBJECT_TYPE_REFERENCE);
-				instrument.put("timeStamp", Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString()));
-				Path filePath = new Path(filePathConstructor.constructInstRefsFilename());
-				writeFile(filePath, createByteArray(instrument));
-				instrumentObjectLine = reader.readLine();
-			}
-		}
-	}
-
-	@SneakyThrows
-	private void writeSwapContractData(final File file) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String swapContractObjectLine = reader.readLine();
-			while (swapContractObjectLine != null) {
-				Map<String, Object> swapContract = objectMapper.readValue(swapContractObjectLine.getBytes(),
-						JSON_OBJECT_TYPE_REFERENCE);
-				swapContract.put("timeStamp", Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString()));
-				Path filePath = new Path(
-						filePathConstructor.constructSwapContractFilename((int) swapContract.get("counterPartyId")));
-				writeFile(filePath, createByteArray(swapContract));
-				swapContractObjectLine = reader.readLine();
-			}
-		}
-	}
-
-	@SneakyThrows
-	private void writePositionsData(final File file) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String positionObjectLine = reader.readLine();
-			while (positionObjectLine != null) {
-				Map<String, Object> position = objectMapper.readValue(positionObjectLine.getBytes(),
-						JSON_OBJECT_TYPE_REFERENCE);
-				position.put("timeStamp", Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString()));
-				Path filePath = new Path(filePathConstructor.constructPositionFilename((int) position.get("swapId"),
-						(int) position.get("effectiveDate")));
-				writeFile(filePath, createByteArray(position));
-				positionObjectLine = reader.readLine();
-			}
-		}
-	}
-
-	@SneakyThrows
-	private void writeCashFlowsData(final File file) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String cashFlowObjectLine = reader.readLine();
-			while (cashFlowObjectLine != null) {
-				Map<String, Object> cashFlow = objectMapper.readValue(cashFlowObjectLine.getBytes(),
-						JSON_OBJECT_TYPE_REFERENCE);
-				cashFlow.put("timeStamp", Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString()));
-				Path filePath = new Path(filePathConstructor.constructCashFlowFilename((int) cashFlow.get("swapId")));
-				writeFile(filePath, createByteArray(cashFlow));
-				cashFlowObjectLine = reader.readLine();
-			}
-		}
+	private int getCurrentTime() {
+		return Integer.valueOf(LocalDateTime.now().format(FORMATTER).toString());
 	}
 
 	@SneakyThrows
@@ -141,7 +90,7 @@ public class UpstreamDataManager {
 	}
 
 	@SneakyThrows
-	private void writeFile(final Path path, final byte[] source) {
+	private void writeBytesToHdfs(final Path path, final byte[] source) {
 		if (writer.getFileSystem().exists(path)) {
 			writer.appendFile(path, source);
 		} else {

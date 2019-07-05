@@ -16,27 +16,52 @@ public class HdfsAccessor implements AutoCloseable {
 	private SparkSession sparkSession;
 
 	public HdfsAccessor() {
+		Long startTime = System.currentTimeMillis();
 		sparkSession = SparkSession.builder().appName("SwapDataAccessor").getOrCreate();
+		log.info("Spark Session created in {} ms", System.currentTimeMillis() - startTime);
 	}
 
 	public Dataset<Row> getCounterPartySwapContracts(final int counterPartyId) {
-		return sparkSession.read().json("/cs/data/swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
+		log.info("Reading swapContracts for counter party id [{}] from HDFS into Spark Dataset", counterPartyId);
+		Long startTime = System.currentTimeMillis();
+		Dataset<Row> swapContracts = sparkSession.read()
+				.json("/cs/data/swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
+		log.info("SwapContracts HDFS read took {} ms", System.currentTimeMillis() - startTime);
+		return swapContracts;
 	}
 
 	public Dataset<Row> getPositions(final long swapId, final int effectiveDate) {
-		return sparkSession.read().json("/cs/data/positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
+		log.info("Reading swap id [{}] positions with effective date [{}] from HDFS into Spark Dataset", swapId,
+				effectiveDate);
+		Long startTime = System.currentTimeMillis();
+		Dataset<Row> positions = sparkSession.read()
+				.json("/cs/data/positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
+		log.info("Positions HDFS read took {} ms", System.currentTimeMillis() - startTime);
+		return positions;
 	}
 
 	public Dataset<Row> getInstruments() {
-		return sparkSession.read().json("/cs/data/instrument/instruments.jsonl");
+		log.info("Reading Instruments from HDFS into Spark Dataset");
+		Long startTime = System.currentTimeMillis();
+		Dataset<Row> instruments = sparkSession.read().json("/cs/data/instrument/instruments.jsonl");
+		log.info("Instruments HDFS read took [{}] ms", System.currentTimeMillis() - startTime);
+		return instruments;
 	}
 
 	public Dataset<Row> getCounterParties() {
-		return sparkSession.read().json("/cs/data/counterparty/counterparties.jsonl");
+		log.info("Reading counterparties from HDFS into Spark Dataset");
+		Long startTime = System.currentTimeMillis();
+		Dataset<Row> counterparties = sparkSession.read().json("/cs/data/counterparty/counterparties.jsonl");
+		log.info("Counterparties HDFS read took [{}] ms", System.currentTimeMillis() - startTime);
+		return counterparties;
 	}
 
 	public Dataset<Row> getCashFlows(final long swapId) {
-		return sparkSession.read().json("/cs/data/cashflows/" + swapId + "-cashFlows.jsonl");
+		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
+		Long startTime = System.currentTimeMillis();
+		Dataset<Row> cashFlows = sparkSession.read().json("/cs/data/cashflows/" + swapId + "-cashFlows.jsonl");
+		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis() - startTime);
+		return cashFlows;
 	}
 
 	public Dataset<Row> createTemplateDataFrame(final StructType structType) {

@@ -9,22 +9,15 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
 @Getter
+@AllArgsConstructor
 public class FileWriter {
 
 	private FileSystem fileSystem;
-
-	@SneakyThrows
-	private FileWriter(final FileSystem fileSystem) {
-		this.fileSystem = fileSystem;
-	}
-
-	public static FileWriter newFileWriter(final FileSystem fileSystem) {
-		return new FileWriter(fileSystem);
-	}
 
 	@SneakyThrows
 	public void createFile(final Path path, final File file) {

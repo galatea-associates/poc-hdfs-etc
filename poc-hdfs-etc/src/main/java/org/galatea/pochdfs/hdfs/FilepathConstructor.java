@@ -14,31 +14,26 @@ public class FilepathConstructor {
 		return INSTANCE;
 	}
 
-	public String constructInstRefsFilename() {
+	public String constructInstRefsFilepath() {
 		return buildFilepath(BASE_PATH, "instrument/", BaseFilename.Filename.INST_REFS.getFilename(), FILE_EXTENSION);
 	}
 
-//	public String constructLegalEntityFilename() {
-//		return buildFilepath(BASE_PATH, "legal-entity/", BaseFilename.Filename.LEGAL_ENTITY.getFilename(),
-//				FILE_EXTENSION);
-//	}
-
-	public String constructCounterpartyFilename() {
+	public String constructCounterpartyFilepath() {
 		return buildFilepath(BASE_PATH, "counterparty/", BaseFilename.Filename.COUNTERPARTY.getFilename(),
 				FILE_EXTENSION);
 	}
 
-	public String constructSwapContractFilename(final int counterPartyId) {
+	public String constructSwapContractFilepath(final int counterPartyId) {
 		return buildFilepath(BASE_PATH, "swapcontracts/", String.valueOf(counterPartyId), "-",
 				BaseFilename.Filename.SWAP_CONTRACT.getFilename(), FILE_EXTENSION);
 	}
 
-	public String constructPositionFilename(final int swapId, final int effectiveDate) {
+	public String constructPositionFilepath(final int swapId, final int effectiveDate) {
 		return buildFilepath(BASE_PATH, "positions/", String.valueOf(swapId), "-", String.valueOf(effectiveDate), "-",
 				BaseFilename.Filename.POSITIONS.getFilename(), FILE_EXTENSION);
 	}
 
-	public String constructCashFlowFilename(final int swapId) {
+	public String constructCashFlowFilepath(final int swapId) {
 		return buildFilepath(BASE_PATH, "cashflows/", String.valueOf(swapId), "-",
 				BaseFilename.Filename.CASH_FLOWS.getFilename(), FILE_EXTENSION);
 	}
