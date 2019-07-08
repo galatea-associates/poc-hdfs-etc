@@ -2,6 +2,8 @@ package org.galatea.pochdfs;
 
 import java.util.Scanner;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.galatea.pochdfs.spark.HdfsAccessor;
 import org.galatea.pochdfs.spark.SwapDataAnalyzer;
 
@@ -18,10 +20,28 @@ public class Application {
 			SwapDataAnalyzer analyzer = new SwapDataAnalyzer(accessor);
 
 			String line = "";
-			while (!line.equalsIgnoreCase("quit")) {
-				line = scanner.nextLine();
-				analyzer.getEnrichedPositionsWithUnpaidCash(200, 20190103).show();
-			}
+
+			Dataset<Row> unpaidCash = analyzer.getEnrichedPositionsWithUnpaidCash(200, 20190103);
+			unpaidCash.show();
+//			analyzer.getHdfsAccessor().createOrReplaceSqlTempView(unpaidCash, "unpaidCash");
+//
+//			while (!line.equalsIgnoreCase("quit")) {
+//				try {
+//					executeSql(analyzer.getHdfsAccessor(), line).show();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+			// line = scanner.nextLine();
+//			}
+		}
+	}
+
+	private static Dataset<Row> executeSql(final HdfsAccessor accessor, final String command) {
+		try {
+			return accessor.executeSql(command);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

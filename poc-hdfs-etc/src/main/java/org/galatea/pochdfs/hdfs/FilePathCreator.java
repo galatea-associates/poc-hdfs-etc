@@ -1,39 +1,63 @@
 package org.galatea.pochdfs.hdfs;
 
-public class FilepathConstructor {
+public class FilePathCreator {
 
-	private static final FilepathConstructor INSTANCE = new FilepathConstructor();
+	private static final FilePathCreator INSTANCE = new FilePathCreator();
 
 	private static final String BASE_PATH = "/cs/data/";
 	private static final String FILE_EXTENSION = ".jsonl";
 
-	private FilepathConstructor() {
+	private FilePathCreator() {
 	}
 
-	public static FilepathConstructor getInstance() {
+	public static FilePathCreator getInstance() {
 		return INSTANCE;
 	}
 
-	public String constructInstRefsFilepath() {
+	/**
+	 *
+	 * @return the HDFS file path for instruments
+	 */
+	public String createInstrumentsFilepath() {
 		return buildFilepath(BASE_PATH, "instrument/", BaseFilename.Filename.INST_REFS.getFilename(), FILE_EXTENSION);
 	}
 
-	public String constructCounterpartyFilepath() {
+	/**
+	 *
+	 * @return the HDFS file path for counter parties
+	 */
+	public String createCounterpartyFilepath() {
 		return buildFilepath(BASE_PATH, "counterparty/", BaseFilename.Filename.COUNTERPARTY.getFilename(),
 				FILE_EXTENSION);
 	}
 
+	/**
+	 *
+	 * @param counterPartyId the counter party id
+	 * @return the HDFS file path for the counter party's swap contracts
+	 */
 	public String constructSwapContractFilepath(final int counterPartyId) {
 		return buildFilepath(BASE_PATH, "swapcontracts/", String.valueOf(counterPartyId), "-",
 				BaseFilename.Filename.SWAP_CONTRACT.getFilename(), FILE_EXTENSION);
 	}
 
-	public String constructPositionFilepath(final int swapId, final int effectiveDate) {
+	/**
+	 *
+	 * @param swapId        the position's swap id
+	 * @param effectiveDate the effective date of the position
+	 * @return the HDFS file path for the position
+	 */
+	public String createPositionFilepath(final int swapId, final int effectiveDate) {
 		return buildFilepath(BASE_PATH, "positions/", String.valueOf(swapId), "-", String.valueOf(effectiveDate), "-",
 				BaseFilename.Filename.POSITIONS.getFilename(), FILE_EXTENSION);
 	}
 
-	public String constructCashFlowFilepath(final int swapId) {
+	/**
+	 *
+	 * @param swapId the swap id the cash flow is associated with
+	 * @return the HDFS file path for the cash flow
+	 */
+	public String createCashFlowFilepath(final int swapId) {
 		return buildFilepath(BASE_PATH, "cashflows/", String.valueOf(swapId), "-",
 				BaseFilename.Filename.CASH_FLOWS.getFilename(), FILE_EXTENSION);
 	}

@@ -36,7 +36,8 @@ public class SwapDataAnalyzer {
 				unpaidCash);
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
 				System.currentTimeMillis() - startTime);
-		return enrichedPositionsWithUnpaidCash;
+		// getUnpaidCashBySwapAndInstrument(enrichedPositionsWithUnpaidCash);
+		return getUnpaidCashBySwapAndInstrument(enrichedPositionsWithUnpaidCash);
 	}
 
 	/**
@@ -182,6 +183,7 @@ public class SwapDataAnalyzer {
 					.agg(functions.sum("amount").as("unpaidCash"));
 			unpaidCash = unpaidCash.union(summedCashFlows);
 		}
+
 		log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
 		return unpaidCash;
 	}
@@ -218,4 +220,35 @@ public class SwapDataAnalyzer {
 		return swapIds;
 	}
 
+	private Dataset<Row> getUnpaidCashBySwapAndInstrument(final Dataset<Row> enrichedPositionsAndUnpaidCash) {
+		Dataset<Row> distributedUnpaidCashByType = distributeUnpaidCashByType(enrichedPositionsAndUnpaidCash);
+		return joinUnpaidCashByTypeWithEnrichedPositionsAndUnpaidCash(enrichedPositionsAndUnpaidCash,
+				distributedUnpaidCashByType);
+	}
+
+	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash) {
+		hdfsAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaidCash");
+		Dataset<Row> distributedUnpaidCashByType = hdfsAccessor.executeSql("SELECT instrumentId, longShort, swapId, "
+				+ "CASE WHEN type=\"DIV\" THEN unpaidCash ELSE 0 END unpaidDiv, CASE WHEN type=\"INT\" "
+				+ "THEN unpaidCash ELSE 0 END unpaidInt FROM unpaidCash");
+		return distributedUnpaidCashByType.select("instrumentId", "longShort", "swapId", "unpaidDiv", "unpaidInt")
+				.groupBy("instrumentId", "longShort", "swapId")
+				.agg(functions.sum("unpaidDiv").as("unpaidDiv"), functions.sum("unpaidInt").as("unpaidInt"));
+	}
+
+	private Dataset<Row> joinUnpaidCashByTypeWithEnrichedPositionsAndUnpaidCash(
+			final Dataset<Row> enrichedPositionsAndUnpaidCash, final Dataset<Row> unpaidCashByType) {
+		Dataset<Row> unpaidCashByTypeWithDroppableCols = unpaidCashByType
+				.withColumnRenamed("instrumentId", "droppable-instrumentId")
+				.withColumnRenamed("longShort", "droppable-longShort").withColumnRenamed("swapId", "droppable-swapId");
+		Dataset<Row> joinedData = enrichedPositionsAndUnpaidCash.join(unpaidCashByTypeWithDroppableCols,
+				enrichedPositionsAndUnpaidCash.col("instrumentId")
+						.equalTo(unpaidCashByTypeWithDroppableCols.col("droppable-instrumentId"))
+						.and(enrichedPositionsAndUnpaidCash.col("longShort")
+								.equalTo(unpaidCashByTypeWithDroppableCols.col("droppable-longShort"))
+								.and(enrichedPositionsAndUnpaidCash.col("swapId")
+										.equalTo(unpaidCashByTypeWithDroppableCols.col("droppable-swapId")))));
+		return joinedData.drop("droppable-instrumentId").drop("droppable-longShort").drop("droppable-swapId")
+				.drop("unpaidCash").drop("type");
+	}
 }

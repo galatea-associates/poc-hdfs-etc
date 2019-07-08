@@ -1,34 +1,48 @@
 package org.galatea.pochdfs.hdfs;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Files;
 
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Getter;
 import lombok.SneakyThrows;
 
+/**
+ * A file writer to write to HDFS
+ */
 @Getter
-@AllArgsConstructor
+//@AllArgsConstructor
 public class FileWriter {
 
 	private FileSystem fileSystem;
+	private ObjectMapper mapper;
 
-	@SneakyThrows
-	public void createFile(final Path path, final File file) {
-		createFile(path, Files.readAllBytes(file.toPath()));
+	public FileWriter(final FileSystem fileSystem) {
+		this.fileSystem = fileSystem;
+		mapper = new ObjectMapper();
 	}
 
 	@SneakyThrows
-	public void appendFile(final Path path, final File file) {
-		appendFile(path, Files.readAllBytes(file.toPath()));
+	public void createFile(final Path path, final Object object) {
+		createFile(path, createByteArray(object));
 	}
 
+	@SneakyThrows
+	public void appendFile(final Path path, final Object object) {
+		appendFile(path, createByteArray(object));
+	}
+
+	/**
+	 * Creates a new file in HDFS
+	 *
+	 * @param path   the HDFS path of the new file
+	 * @param source the byte array of the file to be created in HDFS
+	 */
 	@SneakyThrows
 	public void createFile(final Path path, final byte[] source) {
 		try (InputStream inputStream = new ByteArrayInputStream(source);
@@ -41,6 +55,12 @@ public class FileWriter {
 		}
 	}
 
+	/**
+	 * Appends to an existing file in HDFS
+	 *
+	 * @param path   the HDFS path of the file to append to
+	 * @param source the byte array of the file to be created in HDFS
+	 */
 	@SneakyThrows
 	public void appendFile(final Path path, final byte[] source) {
 		try (FSDataOutputStream outputStream = fileSystem.append(path);
@@ -52,6 +72,12 @@ public class FileWriter {
 			}
 
 		}
+	}
+
+	@SneakyThrows
+	private byte[] createByteArray(final Object object) {
+		StringBuilder builder = new StringBuilder(mapper.writeValueAsString(object));
+		return builder.append("\n").toString().getBytes();
 	}
 
 }

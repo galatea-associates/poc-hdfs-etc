@@ -68,6 +68,14 @@ public class HdfsAccessor implements AutoCloseable {
 		return sparkSession.createDataFrame(new ArrayList<>(), structType);
 	}
 
+	public void createOrReplaceSqlTempView(final Dataset<Row> dataset, final String viewName) {
+		dataset.createOrReplaceTempView(viewName);
+	}
+
+	public Dataset<Row> executeSql(final String command) {
+		return sparkSession.sql(command);
+	}
+
 	public void writeDataset(final Dataset<Row> dataset, final String path) {
 		log.info("Writing dataset to path {}", path);
 		dataset.write().mode(SaveMode.Overwrite).json(path);
