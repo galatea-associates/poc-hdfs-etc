@@ -226,8 +226,15 @@ public class SwapDataAnalyzer {
 				distributedUnpaidCashByType);
 	}
 
-	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash) {
-		hdfsAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaidCash");
+	/**
+	 * Creates an unpaid cash dataset with additional columns that merge the
+	 * cashflow type with the unpaid cash
+	 *
+	 * @param enrichedPositionsAndUnpaidCash the enriched positions with unpaid cash
+	 * @return a dataset including columns for unpaidDiv and unpaidInt
+	 */
+	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> enrichedPositionsAndUnpaidCash) {
+		hdfsAccessor.createOrReplaceSqlTempView(enrichedPositionsAndUnpaidCash, "unpaidCash");
 		Dataset<Row> distributedUnpaidCashByType = hdfsAccessor.executeSql("SELECT instrumentId, longShort, swapId, "
 				+ "CASE WHEN type=\"DIV\" THEN unpaidCash ELSE 0 END unpaidDiv, CASE WHEN type=\"INT\" "
 				+ "THEN unpaidCash ELSE 0 END unpaidInt FROM unpaidCash");
@@ -236,6 +243,15 @@ public class SwapDataAnalyzer {
 				.agg(functions.sum("unpaidDiv").as("unpaidDiv"), functions.sum("unpaidInt").as("unpaidInt"));
 	}
 
+	/**
+	 * Joins the distributed unpaid cash back with the enriched positions with
+	 * unpaid cash result
+	 *
+	 * @param enrichedPositionsAndUnpaidCash
+	 * @param unpaidCashByType
+	 * @return a dataset including columns for unpaidDiv and unpaidInt and without
+	 *         type and unpaidCash columns
+	 */
 	private Dataset<Row> joinUnpaidCashByTypeWithEnrichedPositionsAndUnpaidCash(
 			final Dataset<Row> enrichedPositionsAndUnpaidCash, final Dataset<Row> unpaidCashByType) {
 		Dataset<Row> unpaidCashByTypeWithDroppableCols = unpaidCashByType
@@ -248,7 +264,8 @@ public class SwapDataAnalyzer {
 								.equalTo(unpaidCashByTypeWithDroppableCols.col("droppable-longShort"))
 								.and(enrichedPositionsAndUnpaidCash.col("swapId")
 										.equalTo(unpaidCashByTypeWithDroppableCols.col("droppable-swapId")))));
-		return joinedData.drop("droppable-instrumentId").drop("droppable-longShort").drop("droppable-swapId")
+		joinedData = joinedData.drop("droppable-instrumentId").drop("droppable-longShort").drop("droppable-swapId")
 				.drop("unpaidCash").drop("type");
+		return joinedData.distinct();
 	}
 }

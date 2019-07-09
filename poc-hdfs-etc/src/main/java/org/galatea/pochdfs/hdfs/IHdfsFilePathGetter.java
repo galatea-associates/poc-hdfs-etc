@@ -3,7 +3,7 @@ package org.galatea.pochdfs.hdfs;
 import java.util.Map;
 
 @FunctionalInterface
-public interface IFilePath {
+public interface IHdfsFilePathGetter {
 
 	/**
 	 * @param jsonObject the object-mapped json object

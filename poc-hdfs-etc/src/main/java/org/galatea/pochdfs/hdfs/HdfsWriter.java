@@ -9,42 +9,24 @@ import org.apache.hadoop.fs.Path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
-/**
- * A file writer to write to HDFS
- */
-@Getter
-//@AllArgsConstructor
-public class FileWriter {
+@AllArgsConstructor
+public class HdfsWriter implements IHdfsWriter {
+
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private FileSystem fileSystem;
-	private ObjectMapper mapper;
 
-	public FileWriter(final FileSystem fileSystem) {
-		this.fileSystem = fileSystem;
-		mapper = new ObjectMapper();
-	}
-
+	@Override
 	@SneakyThrows
 	public void createFile(final Path path, final Object object) {
-		createFile(path, createByteArray(object));
+		createFileFromByteArray(path, createByteArray(object));
 	}
 
 	@SneakyThrows
-	public void appendFile(final Path path, final Object object) {
-		appendFile(path, createByteArray(object));
-	}
-
-	/**
-	 * Creates a new file in HDFS
-	 *
-	 * @param path   the HDFS path of the new file
-	 * @param source the byte array of the file to be created in HDFS
-	 */
-	@SneakyThrows
-	public void createFile(final Path path, final byte[] source) {
+	private void createFileFromByteArray(final Path path, final byte[] source) {
 		try (InputStream inputStream = new ByteArrayInputStream(source);
 				FSDataOutputStream outputStream = fileSystem.create(path)) {
 			byte[] b = new byte[1024];
@@ -55,14 +37,14 @@ public class FileWriter {
 		}
 	}
 
-	/**
-	 * Appends to an existing file in HDFS
-	 *
-	 * @param path   the HDFS path of the file to append to
-	 * @param source the byte array of the file to be created in HDFS
-	 */
+	@Override
 	@SneakyThrows
-	public void appendFile(final Path path, final byte[] source) {
+	public void appendFile(final Path path, final Object object) {
+		appendByteArrayToFile(path, createByteArray(object));
+	}
+
+	@SneakyThrows
+	private void appendByteArrayToFile(final Path path, final byte[] source) {
 		try (FSDataOutputStream outputStream = fileSystem.append(path);
 				InputStream inputStream = new ByteArrayInputStream(source)) {
 			byte[] b = new byte[1024];
@@ -76,8 +58,14 @@ public class FileWriter {
 
 	@SneakyThrows
 	private byte[] createByteArray(final Object object) {
-		StringBuilder builder = new StringBuilder(mapper.writeValueAsString(object));
+		StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(object));
 		return builder.append("\n").toString().getBytes();
+	}
+
+	@Override
+	@SneakyThrows
+	public boolean fileExists(final Path path) {
+		return fileSystem.exists(path);
 	}
 
 }

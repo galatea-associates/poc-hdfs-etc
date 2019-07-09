@@ -8,18 +8,14 @@ import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class HdfsAccessor implements AutoCloseable {
+@AllArgsConstructor
+public class HdfsAccessor {
 
 	private SparkSession sparkSession;
-
-	public HdfsAccessor() {
-		Long startTime = System.currentTimeMillis();
-		sparkSession = SparkSession.builder().appName("SwapDataAccessor").getOrCreate();
-		log.info("Spark Session created in {} ms", System.currentTimeMillis() - startTime);
-	}
 
 	public Dataset<Row> getCounterPartySwapContracts(final int counterPartyId) {
 		log.info("Reading swapContracts for counter party id [{}] from HDFS into Spark Dataset", counterPartyId);
@@ -79,11 +75,6 @@ public class HdfsAccessor implements AutoCloseable {
 	public void writeDataset(final Dataset<Row> dataset, final String path) {
 		log.info("Writing dataset to path {}", path);
 		dataset.write().mode(SaveMode.Overwrite).json(path);
-	}
-
-	@Override
-	public void close() throws Exception {
-		sparkSession.close();
 	}
 
 }

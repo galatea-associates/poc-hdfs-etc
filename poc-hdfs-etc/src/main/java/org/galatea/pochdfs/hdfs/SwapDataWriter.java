@@ -7,53 +7,60 @@ import java.util.Map;
 
 import org.apache.hadoop.fs.Path;
 
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * A writer to write swap data from upstream to HDFS
+ */
 @Slf4j
+@AllArgsConstructor
 public class SwapDataWriter {
 
-	private FileWriter writer;
-	private FilePathCreator filePathCreator;
-	private UpstreamObjectMapper objectMapper;
+	private static final UpstreamObjectMapper OBJECT_MAPPER = UpstreamObjectMapper.getInstance();
+	private static final FilePathCreator FILE_PATH_CREATOR = FilePathCreator.getInstance();
 
-	public SwapDataWriter(final FileWriter writer) {
-		this.writer = writer;
-		filePathCreator = FilePathCreator.getInstance();
-		objectMapper = new UpstreamObjectMapper();
-	}
+	private IHdfsWriter writer;
 
-	public void writeData(final File file) {
+	public void writeSwapData(final File file) {
 		log.info("Writing {} data", file.getName());
 		switch (file.getName()) {
-		case "counterParties.json":
-			writeFile(file, (jsonObject) -> filePathCreator.createCounterpartyFilepath());
+		case "counterparties.json":
+			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR.createCounterpartyFilepath());
 			break;
 		case "instruments.json":
-			writeFile(file, (jsonObject) -> filePathCreator.createInstrumentsFilepath());
+			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR.createInstrumentsFilepath());
 			break;
 		case "swapContracts.json":
-			writeFile(file, (jsonObject) -> filePathCreator
+			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR
 					.constructSwapContractFilepath((int) jsonObject.get("counterPartyId")));
 			break;
 		case "positions.json":
-			writeFile(file, (jsonObject) -> filePathCreator.createPositionFilepath((int) jsonObject.get("swapId"),
-					(int) jsonObject.get("effectiveDate")));
+			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR
+					.createPositionFilepath((int) jsonObject.get("swapId"), (int) jsonObject.get("effectiveDate")));
 			break;
-		case "cashFlows.json":
-			writeFile(file, (jsonObject) -> filePathCreator.createCashFlowFilepath((int) jsonObject.get("swapId")));
+		case "cashflows.json":
+			writeSwapRecordsToHdfs(file,
+					(jsonObject) -> FILE_PATH_CREATOR.createCashFlowFilepath((int) jsonObject.get("swapId")));
 		}
 	}
 
+	/**
+	 * Writes each individual record in JSON format to HDFS
+	 *
+	 * @param file the file to be written to HDFS
+	 * @param path the path to write the records
+	 */
 	@SneakyThrows
-	private void writeFile(final File file, final IFilePath path) {
+	private void writeSwapRecordsToHdfs(final File file, final IHdfsFilePathGetter pathGetter) {
 		Long startTime = System.currentTimeMillis();
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			int recordCount = 0;
 			String jsonLine = reader.readLine();
 			while (jsonLine != null) {
-				Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
-				writeToHdfs(new Path(path.getFilePath(jsonObject)), jsonObject);
+				Map<String, Object> jsonObject = OBJECT_MAPPER.getTimestampedObject(jsonLine);
+				writeObjectToHdfs(new Path(pathGetter.getFilePath(jsonObject)), jsonObject);
 				jsonLine = reader.readLine();
 				recordCount++;
 			}
@@ -61,9 +68,14 @@ public class SwapDataWriter {
 		}
 	}
 
+	/**
+	 *
+	 * @param path   the HDFS path to write to
+	 * @param object the object bring written to HDFS
+	 */
 	@SneakyThrows
-	private void writeToHdfs(final Path path, final Object object) {
-		if (writer.getFileSystem().exists(path)) {
+	private void writeObjectToHdfs(final Path path, final Object object) {
+		if (writer.fileExists(path)) {
 			writer.appendFile(path, object);
 		} else {
 			writer.createFile(path, object);
