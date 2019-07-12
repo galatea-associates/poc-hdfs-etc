@@ -1,35 +1,38 @@
 package org.galatea.pochdfs;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-import org.galatea.pochdfs.spark.HdfsAccessor;
-import org.galatea.pochdfs.spark.SwapDataAnalyzer;
+import org.apache.commons.cli.MissingOptionException;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Application {
+@SpringBootApplication
+public class Application implements ApplicationRunner {
 
 	@SneakyThrows
 	public static void main(final String[] args) {
-
-		try (SparkSession sparkSession = SparkSession.builder().appName("SwapDataAccessor").getOrCreate()) {
-			HdfsAccessor accessor = new HdfsAccessor(sparkSession);
-			SwapDataAnalyzer analyzer = new SwapDataAnalyzer(accessor);
-			Dataset<Row> enrichedPositionsWithUnpaidCash = analyzer.getEnrichedPositionsWithUnpaidCash(200, 20190103);
-			enrichedPositionsWithUnpaidCash.show();
+		for (String arg : args) {
+			log.info("Command Line Arg is {}", arg);
 		}
+		SpringApplication.run(Application.class, args);
 	}
 
-//	private static Dataset<Row> executeSql(final HdfsAccessor accessor, final String command) {
-//		try {
-//			return accessor.executeSql(command);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
+	/**
+	 * Ensure that server port is passed in as a command line argument.
+	 *
+	 * @param args command line arguments
+	 * @throws MissingOptionException if server port not provided as argument
+	 */
+	@Override
+	@SneakyThrows
+	public void run(final ApplicationArguments args) {
+		if (!args.containsOption("server.port") && System.getProperty("server.port") == null) {
+			throw new MissingOptionException("Server port must be set via command line parameter");
+		}
+	}
 
 }

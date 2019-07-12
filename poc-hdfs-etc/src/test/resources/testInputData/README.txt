@@ -1,0 +1,1 @@
+This is the folder where the data generated during testing is written.
