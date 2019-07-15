@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.spark.sql.SparkSession;
 import org.galatea.pochdfs.service.analytics.SwapDataAccessor;
 import org.galatea.pochdfs.service.analytics.SwapDataAnalyzer;
+import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 import org.junit.After;
 import org.junit.Before;
 
@@ -19,8 +20,9 @@ public abstract class SwapQueryTest extends SharedJavaSparkContext implements Se
 	public void init() {
 		SwapDatasetFileManager.deleteData();
 		SparkSession session = new SparkSession(sc());
+		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-				new SwapDataAccessor(session, SwapDatasetFileManager.getINPUT_BASE_PATH()));
+				new SwapDataAccessor(fileSystemAccessor, SwapDatasetFileManager.getINPUT_BASE_PATH()));
 		resultGetter = new SwapQueryResultGetter(analyzer);
 	}
 

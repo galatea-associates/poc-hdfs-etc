@@ -39,4 +39,5 @@ public class UnpaidCash {
 		double unpaidInt = row.getAs("unpaid_int");
 		return unpaidInt == this.unpaidInt;
 	}
+
 }

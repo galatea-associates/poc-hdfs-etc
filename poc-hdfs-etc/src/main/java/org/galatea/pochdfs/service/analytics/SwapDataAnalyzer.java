@@ -1,18 +1,15 @@
 package org.galatea.pochdfs.service.analytics;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
+import org.galatea.pochdfs.utils.analytics.DatasetQueryExecutor;
 import org.springframework.stereotype.Service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SwapDataAnalyzer {
 
-	@Getter
+	private static final DatasetQueryExecutor QUERY_EXECUTOR = DatasetQueryExecutor.getInstance();
+
 	private final SwapDataAccessor dataAccessor;
 
 	/**
@@ -54,8 +52,8 @@ public class SwapDataAnalyzer {
 			final Dataset<Row> unpaidCash) {
 		log.info("Joining Enriched Positions with Unpaid Cash");
 		Long startTime = System.currentTimeMillis();
-		Dataset<Row> dataset = getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
-		dataset = getDatasetWithDroppableColumn(dataset, "instrument_id");
+		Dataset<Row> dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
+		dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(dataset, "instrument_id");
 		dataset = dataset
 				.join(unpaidCash,
 						dataset.col("droppable-swap_contract_id").equalTo(unpaidCash.col("swap_contract_id"))
@@ -64,6 +62,10 @@ public class SwapDataAnalyzer {
 		log.info("Enriched Positions join with Unpaid Cash finished in {} ms", System.currentTimeMillis() - startTime);
 		return dataset;
 	}
+
+//	private Dataset<Row> getDatasetWithDroppableColumn(final Dataset<Row> dataset, final String column) {
+//		return dataset.withColumnRenamed(column, "droppable-" + column);
+//	}
 
 	/**
 	 *
@@ -76,24 +78,21 @@ public class SwapDataAnalyzer {
 		log.info("Getting enriched positions for counter party ID {} on effective date {}", counterPartyId,
 				effectiveDate);
 		Long startTime = System.currentTimeMillis();
-		Dataset<Row> positions = getSwapContractsPositions(getCounterPartySwapIds(counterPartyId), effectiveDate)
-				.drop("time_stamp");
-		Dataset<Row> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId).drop("time_stamp");
-		Dataset<Row> counterParties = dataAccessor.getCounterParties().drop("time_stamp");
-		Dataset<Row> instruments = dataAccessor.getInstruments().drop("time_stamp");
-		positions = leftJoin(positions, swapContracts, "swap_contract_id");
-		positions = join(positions, counterParties, "counterparty_id");
-		positions = join(positions, instruments, "ric");
-		debugLogDatasetcontent(positions);
+		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+		Optional<Dataset<Row>> positions = getSwapContractsPositions(swapIds, effectiveDate);
+		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
+		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
+		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
+		Dataset<Row> enrichedPositions;
+		if (datasetsNotEmpty(positions, swapContracts, counterParties, instruments)) {
+			enrichedPositions = createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
+					instruments.get());
+		} else {
+			enrichedPositions = dataAccessor.getBlankDataset();
+		}
 		log.info("Completed Enriched Positions query in {} ms", System.currentTimeMillis() - startTime);
-		return positions;
-	}
-
-	private void debugLogDatasetcontent(final Dataset<Row> dataset) {
-		log.debug(dataset.schema().toString());
-		dataset.foreach((row) -> {
-			log.debug(row.toString());
-		});
+		debugLogDatasetcontent(enrichedPositions);
+		return enrichedPositions;
 	}
 
 	/**
@@ -103,136 +102,117 @@ public class SwapDataAnalyzer {
 	 * @return a dataset of all the positions across all swap contracts that a
 	 *         specific counter party has for a specific effective date
 	 */
-	private Dataset<Row> getSwapContractsPositions(final Collection<Long> swapIds, final int effectiveDate) {
-		Dataset<Row> totalPositions = dataAccessor.createTemplateDataFrame(createPositionsStructType());
+	private Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds, final int effectiveDate) {
+		Stack<Dataset<Row>> totalPositions = new Stack<>();
 		for (Long swapId : swapIds) {
-			Dataset<Row> positions = dataAccessor.getPositions(swapId, effectiveDate).drop("position_type").distinct();
-			totalPositions = totalPositions.union(positions);
+			Optional<Dataset<Row>> positions = dataAccessor.getPositions(swapId, effectiveDate);
+			if (positions.isPresent()) {
+				totalPositions.add(positions.get());
+			}
 		}
-		log.debug(String.valueOf(totalPositions.count()));
-		return totalPositions;
+		return combinePositions(totalPositions);
 	}
 
-	/**
-	 * Creates a struct type with fields in a specific order that match the Dataset
-	 * of a positions file. This is used to create an empty datasest template.
-	 *
-	 * @return a struct type with fields in specific order for positions
-	 */
-	private StructType createPositionsStructType() {
-		List<StructField> structFields = new ArrayList<>();
-		structFields.add(DataTypes.createStructField("time_stamp", DataTypes.IntegerType, true));
-		structFields.add(DataTypes.createStructField("ric", DataTypes.IntegerType, true));
-		structFields.add(DataTypes.createStructField("swap_contract_id", DataTypes.IntegerType, true));
-		structFields.add(DataTypes.createStructField("effective_date", DataTypes.IntegerType, true));
-		return DataTypes.createStructType(structFields);
+	private Optional<Dataset<Row>> combinePositions(final Stack<Dataset<Row>> positions) {
+		if (positions.isEmpty()) {
+			return Optional.empty();
+		} else {
+			Dataset<Row> result = positions.pop();
+			while (!positions.isEmpty()) {
+				result = result.union(positions.pop().drop("position_type"));
+			}
+			return Optional.of(result.distinct());
+		}
 	}
 
-	/**
-	 * e.g., SELECT * FROM selectedDataset LEFT JOIN leftJoinedDataset ON
-	 * selectedDataset.swapId=leftJoinedDataset.swapId
-	 *
-	 * @param selectedDataset
-	 * @param leftJoinedDataset
-	 * @param columnJoinedOn
-	 * @return the resulting dataset with the duplicate column dropped
-	 */
-	private Dataset<Row> leftJoin(final Dataset<Row> selectedDataset, final Dataset<Row> leftJoinedDataset,
-			final String columnJoinedOn) {
-		Dataset<Row> dataset = getDatasetWithDroppableColumn(selectedDataset, columnJoinedOn);
-		return dataset.join(leftJoinedDataset,
-				dataset.col("droppable-" + columnJoinedOn).equalTo(leftJoinedDataset.col(columnJoinedOn)), "left")
-				.drop("droppable-" + columnJoinedOn);
+	private Dataset<Row> createEnrichedPositions(final Dataset<Row> positions, final Dataset<Row> swapContracts,
+			final Dataset<Row> counterParties, final Dataset<Row> instruments) {
+		Dataset<Row> enrichedPositions = QUERY_EXECUTOR.leftJoin(positions, swapContracts, "swap_contract_id");
+		enrichedPositions = QUERY_EXECUTOR.join(positions, counterParties, "counterparty_id");
+		enrichedPositions = QUERY_EXECUTOR.join(positions, instruments, "ric");
+		return enrichedPositions.drop("time_stamp");
 	}
 
-	/**
-	 * e.g., SELECT * FROM firstDataset FULL JOIN secondDataset on
-	 * firstDataset.counterPartyId=secondDataset.counterPartyId
-	 *
-	 * @param firstDataset
-	 * @param secondDataset
-	 * @param columnJoinOn
-	 * @return the resulting dataset with the duplicate column dropped
-	 */
-	private Dataset<Row> join(final Dataset<Row> firstDataset, final Dataset<Row> secondDataset,
-			final String columnJoinedOn) {
-		Dataset<Row> dataset = getDatasetWithDroppableColumn(firstDataset, columnJoinedOn);
-		return dataset
-				.join(secondDataset,
-						dataset.col("droppable-" + columnJoinedOn).equalTo(secondDataset.col(columnJoinedOn)))
-				.drop("droppable-" + columnJoinedOn);
+	private void debugLogDatasetcontent(final Dataset<Row> dataset) {
+		log.debug(dataset.schema().toString());
+		dataset.foreach((row) -> {
+			log.debug(row.toString());
+		});
 	}
 
-	/**
-	 * Spark does not detect same table columns. This method is used to rename one
-	 * of the same columns in order to drop it after a join.
-	 *
-	 * @param dataset      the dataset with the droppable column
-	 * @param columnToDrop the column to drop (e.g., swapId)
-	 * @return a dataset with the renamed column (e.g., droppable-swapId)
-	 */
-	private Dataset<Row> getDatasetWithDroppableColumn(final Dataset<Row> dataset, final String columnToDrop) {
-		return dataset.withColumnRenamed(columnToDrop, "droppable-" + columnToDrop);
-	}
-
-	/**
-	 *
-	 * @param counterPartyId the counter party ID
-	 * @param effectiveDate  the effective date
-	 * @return a dataset of all the counterparty's unpaid cash for the specific
-	 *         effective date
-	 */
 	public Dataset<Row> getUnpaidCash(final int counterPartyId, final int effectiveDate) {
 		log.info("Getting unpaid cash for counter party ID {} on effective date {}", counterPartyId, effectiveDate);
 		Long startTime = System.currentTimeMillis();
-		Dataset<Row> unpaidCash = dataAccessor.createTemplateDataFrame(createUnpaidCashStructType());
-		for (Long swapId : getCounterPartySwapIds(counterPartyId)) {
-			Dataset<Row> cashFlows = dataAccessor.getCashFlows(swapId);
-			Dataset<Row> summedCashFlows = cashFlows
-					.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type")
-					.where(cashFlows.col("effective_date").leq(effectiveDate)
-							.and(cashFlows.col("pay_date").gt(effectiveDate)))
-					.groupBy("instrument_id", "long_short", "swap_contract_id", "cashflow_type")
-					.agg(functions.sum("amount").as("unpaid_cash"));
-			unpaidCash = unpaidCash.union(summedCashFlows);
+
+		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+		Optional<Dataset<Row>> unpaidCash = getUnpaidCashForContracts(swapIds, counterPartyId, effectiveDate);
+
+		if (datasetsNotEmpty(unpaidCash)) {
+			Dataset<Row> distributeUnpaidCash = distributeUnpaidCashByType(unpaidCash.get());
+			log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
+			return distributeUnpaidCash;
+		} else {
+			Dataset<Row> blankSet = dataAccessor.getBlankDataset();
+			log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
+			return blankSet;
 		}
-		unpaidCash = distributeUnpaidCashByType(unpaidCash);
-		debugLogDatasetcontent(unpaidCash);
-		log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
-		return unpaidCash;
 	}
 
-	/**
-	 * Creates a struct type with fields in a specific order that match the Dataset
-	 * of the unpaid cash. This is used to create an empty datasest template.
-	 *
-	 * @return a struct type with fields in specific order for unpaid cash
-	 */
-	private StructType createUnpaidCashStructType() {
-		List<StructField> structFields = new ArrayList<>();
-		structFields.add(DataTypes.createStructField("instrument_id", DataTypes.IntegerType, true));
-		structFields.add(DataTypes.createStructField("long_short", DataTypes.StringType, true));
-		structFields.add(DataTypes.createStructField("swap_contract_id", DataTypes.IntegerType, true));
-		structFields.add(DataTypes.createStructField("cashflow_type", DataTypes.StringType, true));
-		structFields.add(DataTypes.createStructField("unpaid_cash", DataTypes.DoubleType, true));
-		return DataTypes.createStructType(structFields);
+	private Optional<Dataset<Row>> getUnpaidCashForContracts(final Collection<Long> swapIds, final int counterPartyId,
+			final int effectiveDate) {
+		Stack<Dataset<Row>> unpaidCash = new Stack<>();
+		for (Long swapId : dataAccessor.getCounterPartySwapIds(counterPartyId)) {
+			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(swapId);
+			if (cashFlows.isPresent()) {
+				Dataset<Row> data = cashFlows.get();
+				Dataset<Row> summedCashFlows = data
+						.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type")
+						.where(data.col("effective_date").leq(effectiveDate)
+								.and(data.col("pay_date").gt(effectiveDate)))
+						.groupBy("instrument_id", "long_short", "swap_contract_id", "cashflow_type")
+						.agg(functions.sum("amount").as("unpaid_cash"));
+				unpaidCash.add(summedCashFlows);
+			}
+		}
+		return combineUnpaidCash(unpaidCash);
 	}
 
-	/**
-	 *
-	 * @param counterPartyId the counter party ID
-	 * @return a collection of all the swapIds for a specific counter party
-	 */
-	private Collection<Long> getCounterPartySwapIds(final int counterPartyId) {
-		Dataset<Row> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
-		Dataset<Row> swapIdRows = swapContracts.select("swap_contract_id")
-				.where(swapContracts.col("counterparty_id").equalTo(counterPartyId)).distinct();
-		List<Long> swapIds = new ArrayList<>();
-		for (Row row : swapIdRows.collectAsList()) {
-			swapIds.add((Long) row.getAs("swap_contract_id"));
+	private Optional<Dataset<Row>> combineUnpaidCash(final Stack<Dataset<Row>> unpaidCash) {
+		if (unpaidCash.isEmpty()) {
+			return Optional.empty();
+		} else {
+			Dataset<Row> result = unpaidCash.pop();
+			while (!unpaidCash.isEmpty()) {
+				result = result.union(unpaidCash.pop());
+			}
+			return Optional.of(result.distinct());
 		}
-		return swapIds;
 	}
+
+	private boolean datasetsNotEmpty(final Optional<?>... datasets) {
+		for (Optional<?> dataset : datasets) {
+			if (!dataset.isPresent()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+//	/**
+//	 * Creates a struct type with fields in a specific order that match the Dataset
+//	 * of the unpaid cash. This is used to create an empty datasest template.
+//	 *
+//	 * @return a struct type with fields in specific order for unpaid cash
+//	 */
+////	private StructType createUnpaidCashStructType() {
+////		List<StructField> structFields = new ArrayList<>();
+////		structFields.add(DataTypes.createStructField("instrument_id", DataTypes.IntegerType, true));
+////		structFields.add(DataTypes.createStructField("long_short", DataTypes.StringType, true));
+////		structFields.add(DataTypes.createStructField("swap_contract_id", DataTypes.IntegerType, true));
+////		structFields.add(DataTypes.createStructField("cashflow_type", DataTypes.StringType, true));
+////		structFields.add(DataTypes.createStructField("unpaid_cash", DataTypes.DoubleType, true));
+////		return DataTypes.createStructType(structFields);
+////	}
 
 	/**
 	 * Creates an unpaid cash dataset with additional columns that merge the

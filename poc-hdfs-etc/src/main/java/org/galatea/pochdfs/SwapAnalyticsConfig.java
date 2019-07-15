@@ -28,7 +28,7 @@ public class SwapAnalyticsConfig {
 	@Bean
 	@ConditionalOnProperty(value = "local.mode", havingValue = "true", matchIfMissing = true)
 	public SwapDataAccessor swapDataAccessor() {
-		return new SwapDataAccessor();
+		return new SwapDataAccessor(null, null);
 	}
 
 }

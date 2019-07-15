@@ -1,83 +1,94 @@
 package org.galatea.pochdfs.service.analytics;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SaveMode;
-import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
+import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SwapDataAccessor {
 
-	private SparkSession sparkSession;
-	private String baseFilePath;
+	private final FilesystemAccessor accessor;
+	private final String baseFilePath;
 
-	public Dataset<Row> getCounterPartySwapContracts(final int counterPartyId) {
-		log.info("Reading swapContracts for counter party id [{}] from HDFS into Spark Dataset", counterPartyId);
-		Long startTime = System.currentTimeMillis();
-		Dataset<Row> swapContracts = sparkSession.read()
-				.json(baseFilePath + "swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
-		log.info("SwapContracts HDFS read took {} ms", System.currentTimeMillis() - startTime);
+	public Optional<Dataset<Row>> getCounterPartySwapContracts(final int counterPartyId) {
+		Optional<Dataset<Row>> swapContracts = accessor
+				.getData(baseFilePath + "swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
 		return swapContracts;
 	}
 
-	public Dataset<Row> getPositions(final long swapId, final int effectiveDate) {
-		log.info("Reading swap id [{}] positions with effective date [{}] from HDFS into Spark Dataset", swapId,
-				effectiveDate);
-		Long startTime = System.currentTimeMillis();
-		Dataset<Row> positions = sparkSession.read()
-				.json(baseFilePath + "positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
-		log.info("Positions HDFS read took {} ms", System.currentTimeMillis() - startTime);
+	public Optional<Dataset<Row>> getPositions(final long swapId, final int effectiveDate) {
+		Optional<Dataset<Row>> positions = accessor
+				.getData(baseFilePath + "positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
 		return positions;
 	}
 
-	public Dataset<Row> getInstruments() {
-		log.info("Reading Instruments from HDFS into Spark Dataset");
-		Long startTime = System.currentTimeMillis();
-		Dataset<Row> instruments = sparkSession.read().json(baseFilePath + "instrument/instruments.jsonl");
-		log.info("Instruments HDFS read took [{}] ms", System.currentTimeMillis() - startTime);
+	public Optional<Dataset<Row>> getInstruments() {
+		Optional<Dataset<Row>> instruments = accessor.getData(baseFilePath + "instrument/instruments.jsonl");
 		return instruments;
 	}
 
-	public Dataset<Row> getCounterParties() {
-		log.info("Reading counterparties from HDFS into Spark Dataset");
-		Long startTime = System.currentTimeMillis();
-		Dataset<Row> counterparties = sparkSession.read().json(baseFilePath + "counterparty/counterparties.jsonl");
-		log.info("Counterparties HDFS read took [{}] ms", System.currentTimeMillis() - startTime);
+	public Optional<Dataset<Row>> getCounterParties() {
+		Optional<Dataset<Row>> counterparties = accessor.getData(baseFilePath + "counterparty/counterparties.jsonl");
 		return counterparties;
 	}
 
-	public Dataset<Row> getCashFlows(final long swapId) {
+	public Optional<Dataset<Row>> getCashFlows(final long swapId) {
 		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
 		Long startTime = System.currentTimeMillis();
-		Dataset<Row> cashFlows = sparkSession.read().json(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
+		// Dataset<Row> cashFlows = sparkSession.read().json(baseFilePath + "cashflows/"
+		// + swapId + "-cashFlows.jsonl");
+		Optional<Dataset<Row>> cashFlows = accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
 		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis() - startTime);
 		return cashFlows;
 	}
 
-	public Dataset<Row> createTemplateDataFrame(final StructType structType) {
-		return sparkSession.createDataFrame(new ArrayList<>(), structType);
+	/**
+	 *
+	 * @param counterPartyId the counter party ID
+	 * @return a collection of all the swapIds for a specific counter party
+	 */
+	public Collection<Long> getCounterPartySwapIds(final int counterPartyId) {
+		Optional<Dataset<Row>> swapContracts = getCounterPartySwapContracts(counterPartyId);
+		if (!swapContracts.isPresent()) {
+			return new ArrayList<>();
+		} else {
+			return combineCounterPartySwapIds(swapContracts, counterPartyId);
+		}
+	}
+
+	private Collection<Long> combineCounterPartySwapIds(final Optional<Dataset<Row>> swapContracts,
+			final int counterPartyId) {
+		Dataset<Row> contracts = swapContracts.get();
+		Dataset<Row> swapIdRows = contracts.select("swap_contract_id")
+				.where(contracts.col("counterparty_id").equalTo(counterPartyId)).distinct();
+		List<Long> swapIds = new ArrayList<>();
+		for (Row row : swapIdRows.collectAsList()) {
+			swapIds.add((Long) row.getAs("swap_contract_id"));
+		}
+		return swapIds;
+	}
+
+	public Dataset<Row> getBlankDataset() {
+		return accessor.createTemplateDataFrame(new StructType());
 	}
 
 	public void createOrReplaceSqlTempView(final Dataset<Row> dataset, final String viewName) {
-		dataset.createOrReplaceTempView(viewName);
+		accessor.createOrReplaceSqlTempView(dataset, viewName);
+
 	}
 
 	public Dataset<Row> executeSql(final String command) {
-		return sparkSession.sql(command);
-	}
-
-	public void writeDataset(final Dataset<Row> dataset, final String path) {
-		log.info("Writing dataset to path {}", path);
-		dataset.write().mode(SaveMode.Overwrite).json(path);
+		return accessor.executeSql(command);
 	}
 
 }
