@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -45,8 +46,6 @@ public class SwapDataAccessor {
 	public Optional<Dataset<Row>> getCashFlows(final long swapId) {
 		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
 		Long startTime = System.currentTimeMillis();
-		// Dataset<Row> cashFlows = sparkSession.read().json(baseFilePath + "cashflows/"
-		// + swapId + "-cashFlows.jsonl");
 		Optional<Dataset<Row>> cashFlows = accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
 		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis() - startTime);
 		return cashFlows;
@@ -78,13 +77,42 @@ public class SwapDataAccessor {
 		return swapIds;
 	}
 
+	/**
+	 *
+	 * @param swapIds       the list of swapIds for a counter party
+	 * @param effectiveDate the effective date
+	 * @return a dataset of all the positions across all swap contracts that a
+	 *         specific counter party has for a specific effective date
+	 */
+	public Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds, final int effectiveDate) {
+		Stack<Dataset<Row>> totalPositions = new Stack<>();
+		for (Long swapId : swapIds) {
+			Optional<Dataset<Row>> positions = getPositions(swapId, effectiveDate);
+			if (positions.isPresent()) {
+				totalPositions.add(positions.get());
+			}
+		}
+		return combinePositions(totalPositions);
+	}
+
+	private Optional<Dataset<Row>> combinePositions(final Stack<Dataset<Row>> positions) {
+		if (positions.isEmpty()) {
+			return Optional.empty();
+		} else {
+			Dataset<Row> result = positions.pop();
+			while (!positions.isEmpty()) {
+				result = result.union(positions.pop());
+			}
+			return Optional.of(result);
+		}
+	}
+
 	public Dataset<Row> getBlankDataset() {
 		return accessor.createTemplateDataFrame(new StructType());
 	}
 
 	public void createOrReplaceSqlTempView(final Dataset<Row> dataset, final String viewName) {
 		accessor.createOrReplaceSqlTempView(dataset, viewName);
-
 	}
 
 	public Dataset<Row> executeSql(final String command) {

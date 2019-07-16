@@ -1,6 +1,8 @@
 package org.galatea.pochdfs.service.analytics;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import scala.collection.JavaConverters;
+import scala.collection.Seq;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -63,10 +67,6 @@ public class SwapDataAnalyzer {
 		return dataset;
 	}
 
-//	private Dataset<Row> getDatasetWithDroppableColumn(final Dataset<Row> dataset, final String column) {
-//		return dataset.withColumnRenamed(column, "droppable-" + column);
-//	}
-
 	/**
 	 *
 	 * @param counterPartyId the counter party ID
@@ -79,7 +79,7 @@ public class SwapDataAnalyzer {
 				effectiveDate);
 		Long startTime = System.currentTimeMillis();
 		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
-		Optional<Dataset<Row>> positions = getSwapContractsPositions(swapIds, effectiveDate);
+		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
 		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
 		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
 		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
@@ -95,41 +95,14 @@ public class SwapDataAnalyzer {
 		return enrichedPositions;
 	}
 
-	/**
-	 *
-	 * @param swapIds       the list of swapIds for a counter party
-	 * @param effectiveDate the effective date
-	 * @return a dataset of all the positions across all swap contracts that a
-	 *         specific counter party has for a specific effective date
-	 */
-	private Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds, final int effectiveDate) {
-		Stack<Dataset<Row>> totalPositions = new Stack<>();
-		for (Long swapId : swapIds) {
-			Optional<Dataset<Row>> positions = dataAccessor.getPositions(swapId, effectiveDate);
-			if (positions.isPresent()) {
-				totalPositions.add(positions.get());
-			}
-		}
-		return combinePositions(totalPositions);
-	}
-
-	private Optional<Dataset<Row>> combinePositions(final Stack<Dataset<Row>> positions) {
-		if (positions.isEmpty()) {
-			return Optional.empty();
-		} else {
-			Dataset<Row> result = positions.pop();
-			while (!positions.isEmpty()) {
-				result = result.union(positions.pop().drop("position_type"));
-			}
-			return Optional.of(result.distinct());
-		}
-	}
-
 	private Dataset<Row> createEnrichedPositions(final Dataset<Row> positions, final Dataset<Row> swapContracts,
 			final Dataset<Row> counterParties, final Dataset<Row> instruments) {
-		Dataset<Row> enrichedPositions = QUERY_EXECUTOR.leftJoin(positions, swapContracts, "swap_contract_id");
-		enrichedPositions = QUERY_EXECUTOR.join(positions, counterParties, "counterparty_id");
-		enrichedPositions = QUERY_EXECUTOR.join(positions, instruments, "ric");
+		Dataset<Row> startOfDatePositions = positions.select("*").where(positions.col("position_type").equalTo("S"))
+				.distinct();
+		Dataset<Row> enrichedPositions = QUERY_EXECUTOR.leftJoin(startOfDatePositions, swapContracts,
+				"swap_contract_id");
+		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, counterParties, "counterparty_id");
+		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, instruments, "ric");
 		return enrichedPositions.drop("time_stamp");
 	}
 
@@ -162,22 +135,37 @@ public class SwapDataAnalyzer {
 			final int effectiveDate) {
 		Stack<Dataset<Row>> unpaidCash = new Stack<>();
 		for (Long swapId : dataAccessor.getCounterPartySwapIds(counterPartyId)) {
-			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(swapId);
-			if (cashFlows.isPresent()) {
-				Dataset<Row> data = cashFlows.get();
-				Dataset<Row> summedCashFlows = data
-						.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type")
-						.where(data.col("effective_date").leq(effectiveDate)
-								.and(data.col("pay_date").gt(effectiveDate)))
-						.groupBy("instrument_id", "long_short", "swap_contract_id", "cashflow_type")
-						.agg(functions.sum("amount").as("unpaid_cash"));
-				unpaidCash.add(summedCashFlows);
+			Optional<Dataset<Row>> swapContractCashFlows = dataAccessor.getCashFlows(swapId);
+			if (swapContractCashFlows.isPresent()) {
+				Dataset<Row> cashFlows = swapContractCashFlows.get();
+				Dataset<Row> unpaidCashFlows = getUnpaidCashFlows(cashFlows, effectiveDate);
+				if (unpaidCashFlows.isEmpty()) {
+					Dataset<Row> zeroAmountCashFlows = getZeroAmountCashFlows(cashFlows);
+					unpaidCash.add(sumUnpaidCashFlows(zeroAmountCashFlows));
+				} else {
+					unpaidCash.add(sumUnpaidCashFlows(unpaidCashFlows));
+				}
 			}
 		}
-		return combineUnpaidCash(unpaidCash);
+		return combineUnpaidCashResults(unpaidCash);
 	}
 
-	private Optional<Dataset<Row>> combineUnpaidCash(final Stack<Dataset<Row>> unpaidCash) {
+	private Dataset<Row> getUnpaidCashFlows(final Dataset<Row> cashFlows, final int effectiveDate) {
+		return cashFlows.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type").where(
+				cashFlows.col("effective_date").leq(effectiveDate).and(cashFlows.col("pay_date").gt(effectiveDate)));
+	}
+
+	private Dataset<Row> getZeroAmountCashFlows(final Dataset<Row> cashFlows) {
+		Dataset<Row> result = cashFlows.select("instrument_id", "long_short", "swap_contract_id", "cashflow_type");
+		return result.withColumn("amount", functions.lit(0.0));
+	}
+
+	private Dataset<Row> sumUnpaidCashFlows(final Dataset<Row> cashFlows) {
+		return cashFlows.groupBy("instrument_id", "long_short", "swap_contract_id", "cashflow_type")
+				.agg(functions.sum("amount").as("unpaid_cash"));
+	}
+
+	private Optional<Dataset<Row>> combineUnpaidCashResults(final Stack<Dataset<Row>> unpaidCash) {
 		if (unpaidCash.isEmpty()) {
 			return Optional.empty();
 		} else {
@@ -198,22 +186,6 @@ public class SwapDataAnalyzer {
 		return true;
 	}
 
-//	/**
-//	 * Creates a struct type with fields in a specific order that match the Dataset
-//	 * of the unpaid cash. This is used to create an empty datasest template.
-//	 *
-//	 * @return a struct type with fields in specific order for unpaid cash
-//	 */
-////	private StructType createUnpaidCashStructType() {
-////		List<StructField> structFields = new ArrayList<>();
-////		structFields.add(DataTypes.createStructField("instrument_id", DataTypes.IntegerType, true));
-////		structFields.add(DataTypes.createStructField("long_short", DataTypes.StringType, true));
-////		structFields.add(DataTypes.createStructField("swap_contract_id", DataTypes.IntegerType, true));
-////		structFields.add(DataTypes.createStructField("cashflow_type", DataTypes.StringType, true));
-////		structFields.add(DataTypes.createStructField("unpaid_cash", DataTypes.DoubleType, true));
-////		return DataTypes.createStructType(structFields);
-////	}
-
 	/**
 	 * Creates an unpaid cash dataset with additional columns that merge the
 	 * cashflow type with the unpaid cash
@@ -223,14 +195,20 @@ public class SwapDataAnalyzer {
 	 */
 	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash) {
 		dataAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaid_cash");
+		List<String> cashFlowTypes = getCashFlowTypes(unpaidCash);
 		Dataset<Row> distributedUnpaidCashByType = dataAccessor
-				.executeSql("SELECT instrument_id, long_short, swap_contract_id, "
-						+ "CASE WHEN cashflow_type=\"DIV\" THEN unpaid_cash ELSE 0 END unpaid_div, CASE WHEN cashflow_type=\"INT\" "
-						+ "THEN unpaid_cash ELSE 0 END unpaid_int FROM unpaid_cash");
-		distributedUnpaidCashByType = distributedUnpaidCashByType
-				.select("instrument_id", "long_short", "swap_contract_id", "unpaid_div", "unpaid_int")
-				.groupBy("instrument_id", "long_short", "swap_contract_id")
-				.agg(functions.sum("unpaid_div").as("unpaid_div"), functions.sum("unpaid_int").as("unpaid_int"));
+				.executeSql(buildUnpaidCashDistributionQuery(cashFlowTypes));
+//		Dataset<Row> distributedUnpaidCashByType = dataAccessor
+//				.executeSql("SELECT instrument_id, long_short, swap_contract_id, "
+//						+ "CASE WHEN cashflow_type=\"DIV\" THEN unpaid_cash ELSE 0 END unpaid_div, CASE WHEN cashflow_type=\"INT\" "
+//						+ "THEN unpaid_cash ELSE 0 END unpaid_int FROM unpaid_cash");
+		// String[] test = cashFlowTypes.toArray(new String[cashFlowTypes.size()]);
+
+//		distributedUnpaidCashByType = distributedUnpaidCashByType
+//				.select("instrument_id", "long_short", "swap_contract_id", convertListToSeq(cashFlowTypes))
+//				.groupBy("instrument_id", "long_short", "swap_contract_id")
+//				.agg(functions.sum("unpaid_div").as("unpaid_div"), functions.sum("unpaid_int").as("unpaid_int"));
+		distributedUnpaidCashByType = sumDistUnpaidCash(cashFlowTypes, distributedUnpaidCashByType);
 		distributedUnpaidCashByType = distributedUnpaidCashByType
 				.withColumnRenamed("instrument_id", "droppable-instrument_id")
 				.withColumnRenamed("swap_contract_id", "droppable-swap_contract_id");
@@ -242,6 +220,46 @@ public class SwapDataAnalyzer {
 		distributedUnpaidCashByType = distributedUnpaidCashByType.drop("droppable-instrument_id").drop("long_short")
 				.drop("droppable-swap_contract_id").drop("unpaid_cash").drop("cashflow_type");
 		return distributedUnpaidCashByType.distinct();
+	}
+
+	private List<String> getCashFlowTypes(final Dataset<Row> unpaidCash) {
+		Dataset<Row> cashFlowTypeRows = unpaidCash.select("cashflow_type").distinct();
+		List<String> cashFlowTypes = new ArrayList<>();
+		for (Row row : cashFlowTypeRows.collectAsList()) {
+			cashFlowTypes.add((String) row.getAs("cashflow_type"));
+		}
+		return cashFlowTypes;
+	}
+
+	private String buildUnpaidCashDistributionQuery(final Collection<String> cashFlowTypes) {
+		StringBuilder builder = new StringBuilder("SELECT instrument_id, long_short, swap_contract_id");
+		for (String type : cashFlowTypes) {
+			builder.append(", CASE WHEN cashflow_type=\"").append(type).append("\"");
+			builder.append(" THEN unpaid_cash ELSE 0 END unpaid_").append(type);
+		}
+		builder.append(" FROM unpaid_cash");
+		return builder.toString();
+	}
+
+	private Dataset<Row> sumDistUnpaidCash(final List<String> cashFlowTypes, final Dataset<Row> distUnpaidCash) {
+		List<String> unpaidCashTypes = new ArrayList<>();
+		for (String type : cashFlowTypes) {
+			unpaidCashTypes.add("unpaid_" + type);
+		}
+		List<String> selectedColumns = new ArrayList<>();
+		selectedColumns.addAll(unpaidCashTypes);
+		selectedColumns.add("long_short");
+		selectedColumns.add("swap_contract_id");
+		Dataset<Row> result = distUnpaidCash.select("instrument_id", convertListToSeq(selectedColumns))
+				.groupBy("instrument_id", "long_short", "swap_contract_id").sum(convertListToSeq(unpaidCashTypes));
+		// .add(functions.sum(convertListToSeq(cashFlowTypes)));
+		// .agg(functions.sum("unpaid_div").as("unpaid_div"),
+		// functions.sum("unpaid_int").as("unpaid_int"));
+		return result;
+	}
+
+	public Seq<String> convertListToSeq(final List<String> inputList) {
+		return JavaConverters.asScalaIteratorConverter(inputList.iterator()).asScala().toSeq();
 	}
 
 }
