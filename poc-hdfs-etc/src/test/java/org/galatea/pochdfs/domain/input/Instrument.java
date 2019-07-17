@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.domain.input;
 
+import org.galatea.pochdfs.domain.Defaults;
 import org.galatea.pochdfs.util.SwapDatasetFileManager;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -15,11 +16,14 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @SuppressWarnings("unused")
-public class Instrument implements ISwapDataset {
+public class Instrument implements SwapDataset {
 
-	private int time_stamp = 20190101;
-	private int instrument_id;
-	private String ric;
+	private int		instrument_id;
+	private String	ric;
+
+	public static Instrument defaultInstrument() {
+		return new Instrument().instrument_id(Defaults.INSTRUMENT_ID).ric(Defaults.RIC);
+	}
 
 	@Override
 	@SneakyThrows

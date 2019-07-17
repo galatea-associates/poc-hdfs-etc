@@ -12,11 +12,12 @@ import lombok.SneakyThrows;
 
 public class JsonMapper {
 
-	private static final JsonMapper INSTANCE = new JsonMapper();
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddss");
-	private static final ObjectMapper objectMapper = new ObjectMapper();
-	private static final TypeReference<HashMap<String, Object>> TYPE_REFERENCE = new TypeReference<HashMap<String, Object>>() {
-	};
+	private static final JsonMapper								INSTANCE			= new JsonMapper();
+	private static final DateTimeFormatter						DATE_TIME_FORMATTER	= DateTimeFormatter
+			.ofPattern("yyyyMMddss");
+	private static final ObjectMapper							objectMapper		= new ObjectMapper();
+	private static final TypeReference<HashMap<String, Object>>	TYPE_REFERENCE		= new TypeReference<HashMap<String, Object>>() {
+																					};
 
 	private JsonMapper() {
 	}

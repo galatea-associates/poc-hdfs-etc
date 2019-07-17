@@ -11,14 +11,14 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class EnrichedPositionsWithUnpaidCash {
 
-	private int instId;
-	private int swapId;
-	private String ric;
-	private int counterPartyId;
-	private String counterPartyField1;
-	private int effectiveDate;
-	private double unpaidDiv;
-	private double unpaidInt;
+	private int		instId;
+	private int		swapId;
+	private String	ric;
+	private int		counterPartyId;
+	private String	counterPartyField1;
+	private int		effectiveDate;
+	private double	unpaidDiv;
+	private double	unpaidInt;
 
 	public boolean equalsRow(final Row row) {
 		return (equalsInstId(row) && equalsSwapId(row) && equalsCounterPartyId(row) && equalsCounterPartyField1(row)

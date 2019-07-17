@@ -2,10 +2,11 @@ package org.galatea.pochdfs.domain.input;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public interface ISwapDataset {
+@FunctionalInterface
+public interface SwapDataset {
 
 	public static final ObjectMapper MAPPER = new ObjectMapper();
 
-	public void write();
+	public abstract void write();
 
 }

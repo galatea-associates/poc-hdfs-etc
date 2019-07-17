@@ -39,4 +39,9 @@ public class UnpaidCashResults {
 		});
 	}
 
+	public UnpaidCashResult getSingleResult() {
+		assertResultCountEquals(1);
+		return new UnpaidCashResult(unpaidCashRows.toLocalIterator().next());
+	}
+
 }

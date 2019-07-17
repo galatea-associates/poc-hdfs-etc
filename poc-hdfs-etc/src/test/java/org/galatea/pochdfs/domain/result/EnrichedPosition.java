@@ -11,16 +11,18 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class EnrichedPosition {
 
-	private int instId;
-	private int swapId;
-	private String ric;
-	private int counterPartyId;
-	private String counterPartyField1;
-	private int effectiveDate;
+	private int		instId;
+	private int		swapId;
+	private String	ric;
+	private int		counterPartyId;
+	private String	counterPartyField1;
+	private int		effectiveDate;
+	private int		tdQuantity;
+	private String	book;
 
 	public boolean equalsRow(final Row row) {
 		return (equalsInstId(row) && equalsSwapId(row) && equalsCounterPartyId(row) && equalsCounterPartyField1(row)
-				&& equalsEffectiveDate(row) && equalsRic(row));
+				&& equalsEffectiveDate(row) && equalsRic(row) && equalsTdQuantity(row) && equalsBook(row));
 	}
 
 	private boolean equalsInstId(final Row row) {
@@ -51,5 +53,15 @@ public class EnrichedPosition {
 	private boolean equalsRic(final Row row) {
 		String ric = row.getAs("ric");
 		return ric.equalsIgnoreCase(this.ric);
+	}
+
+	private boolean equalsTdQuantity(final Row row) {
+		Long tdQuantity = row.getAs("td_quantity");
+		return tdQuantity.equals(Long.valueOf(this.tdQuantity));
+	}
+
+	private boolean equalsBook(final Row row) {
+		String book = row.getAs("book");
+		return book.equals(this.book);
 	}
 }

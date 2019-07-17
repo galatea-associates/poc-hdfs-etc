@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.test;
 
+import org.galatea.pochdfs.domain.Defaults;
 import org.galatea.pochdfs.domain.input.CashFlow;
 import org.galatea.pochdfs.domain.input.Contract;
 import org.galatea.pochdfs.domain.input.CounterParty;
@@ -27,8 +28,8 @@ public class SimpleEnrichedPositionsWithUnpaidCashTest extends SwapQueryTest {
 		new CashFlow().cashflow_id(2).swap_contract_id(12345).amount(-50).cashflow_type("INT").effective_date(20190101)
 				.pay_date(20190102).instrument_id(11).long_short("Long").write();
 
-		EnrichedPositionsWithUnpaidCashResults results = resultGetter.getEnrichedPositionsWithUnpaidCashResults(200,
-				20190101);
+		EnrichedPositionsWithUnpaidCashResults results = resultGetter
+				.getEnrichedPositionsWithUnpaidCashResults(Defaults.BOOK, Defaults.EFFECTIVE_DATE);
 
 		results.assertResultCountEquals(1);
 		results.assertHasEnrichedPositionWithUnpaidCash(new EnrichedPositionsWithUnpaidCash().ric("ABC")

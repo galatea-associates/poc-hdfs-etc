@@ -6,15 +6,16 @@ import org.apache.spark.sql.SparkSession;
 import org.galatea.pochdfs.service.analytics.SwapDataAccessor;
 import org.galatea.pochdfs.service.analytics.SwapDataAnalyzer;
 import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 
 public abstract class SwapQueryTest extends SharedJavaSparkContext implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	protected SwapQueryResultGetter resultGetter;
+	private static final long		serialVersionUID	= 1L;
+	protected SwapQueryResultGetter	resultGetter;
 
 	@Before
 	public void initializeResultGetter() {
@@ -25,9 +26,9 @@ public abstract class SwapQueryTest extends SharedJavaSparkContext implements Se
 		resultGetter = new SwapQueryResultGetter(analyzer);
 	}
 
-	@Before
-	@After
-	public void holyHandGrenade() {
+	@BeforeClass
+	@AfterClass
+	public static void holyHandGrenade() {
 		SwapDatasetFileManager.deleteData();
 	}
 

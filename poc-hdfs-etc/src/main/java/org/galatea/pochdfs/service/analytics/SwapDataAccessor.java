@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SwapDataAccessor {
 
-	private final FilesystemAccessor accessor;
-	private final String baseFilePath;
+	private final FilesystemAccessor	accessor;
+	private final String				baseFilePath;
 
-	public Optional<Dataset<Row>> getCounterPartySwapContracts(final int counterPartyId) {
+	public Optional<Dataset<Row>> getCounterPartySwapContracts(final Long counterPartyId) {
 		Optional<Dataset<Row>> swapContracts = accessor
 				.getData(baseFilePath + "swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
 		return swapContracts;
@@ -56,7 +56,7 @@ public class SwapDataAccessor {
 	 * @param counterPartyId the counter party ID
 	 * @return a collection of all the swapIds for a specific counter party
 	 */
-	public Collection<Long> getCounterPartySwapIds(final int counterPartyId) {
+	public Collection<Long> getCounterPartySwapIds(final Long counterPartyId) {
 		Optional<Dataset<Row>> swapContracts = getCounterPartySwapContracts(counterPartyId);
 		if (!swapContracts.isPresent()) {
 			return new ArrayList<>();
@@ -66,7 +66,7 @@ public class SwapDataAccessor {
 	}
 
 	private Collection<Long> combineCounterPartySwapIds(final Optional<Dataset<Row>> swapContracts,
-			final int counterPartyId) {
+			final Long counterPartyId) {
 		Dataset<Row> contracts = swapContracts.get();
 		Dataset<Row> swapIdRows = contracts.select("swap_contract_id")
 				.where(contracts.col("counterparty_id").equalTo(counterPartyId)).distinct();

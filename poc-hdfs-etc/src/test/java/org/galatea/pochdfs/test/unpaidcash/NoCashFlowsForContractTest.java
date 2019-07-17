@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.test.unpaidcash;
 
+import org.galatea.pochdfs.domain.Defaults;
 import org.galatea.pochdfs.domain.input.Contract;
 import org.galatea.pochdfs.domain.result.UnpaidCashResults;
 import org.galatea.pochdfs.util.SwapQueryTest;
@@ -12,7 +13,7 @@ public class NoCashFlowsForContractTest extends SwapQueryTest {
 	@Test
 	public void testUnpaidCashQuery() {
 		new Contract().counterparty_id(200).swap_contract_id(12345).write();
-		UnpaidCashResults unpaidCashResults = resultGetter.getUnpaidCashResults(200, 20190101);
+		UnpaidCashResults unpaidCashResults = resultGetter.getUnpaidCashResults(Defaults.BOOK, Defaults.EFFECTIVE_DATE);
 		unpaidCashResults.assertResultCountEquals(0);
 	}
 

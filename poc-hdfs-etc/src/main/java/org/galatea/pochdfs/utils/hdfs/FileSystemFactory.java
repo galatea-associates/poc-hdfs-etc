@@ -14,7 +14,7 @@ public class FileSystemFactory {
 	private static final String DEFAULT_FS = "hdfs://ec2-18-222-172-50.us-east-2.compute.amazonaws.com:9000";
 
 	private FileSystemFactory(final String defaultFs) {
-		
+
 	}
 
 	@SneakyThrows

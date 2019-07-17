@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SwapDataWriter {
 
-	private static final JsonMapper OBJECT_MAPPER = JsonMapper.getInstance();
-	private static final SwapFilePathCreator FILE_PATH_CREATOR = SwapFilePathCreator.getInstance();
+	private static final JsonMapper				OBJECT_MAPPER		= JsonMapper.getInstance();
+	private static final SwapFilePathCreator	FILE_PATH_CREATOR	= SwapFilePathCreator.getInstance();
 
 	private final IHdfsWriter writer;
 

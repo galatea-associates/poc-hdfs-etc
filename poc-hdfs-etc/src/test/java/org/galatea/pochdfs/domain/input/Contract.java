@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.domain.input;
 
+import org.galatea.pochdfs.domain.Defaults;
 import org.galatea.pochdfs.util.SwapDatasetFileManager;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -15,14 +16,14 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @SuppressWarnings("unused")
-public class Contract implements ISwapDataset {
+public class Contract implements SwapDataset {
 
-	public static int DEFAULT_CONTRACT_ID = 12345;
-	public static int DEFAULT_COUNTERPARTY_ID = 200;
+	private int	swap_contract_id;
+	private int	counterparty_id;
 
-	private int time_stamp = 20190101;
-	private int swap_contract_id;
-	private int counterparty_id;
+	public static Contract defaultContract() {
+		return new Contract().swap_contract_id(Defaults.CONTRACT_ID).counterparty_id(Defaults.COUNTERPARTY_ID);
+	}
 
 	@Override
 	@SneakyThrows
@@ -30,10 +31,6 @@ public class Contract implements ISwapDataset {
 		String path = "swapcontracts/" + counterparty_id + "-swapContracts.jsonl";
 		String json = MAPPER.writeValueAsString(this) + "\n";
 		SwapDatasetFileManager.writeToFile(path, json);
-	}
-
-	public static Contract defaultContract() {
-		return new Contract().swap_contract_id(DEFAULT_CONTRACT_ID).counterparty_id(DEFAULT_COUNTERPARTY_ID);
 	}
 
 }

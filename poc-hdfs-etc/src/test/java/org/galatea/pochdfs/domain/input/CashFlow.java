@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.domain.input;
 
+import org.galatea.pochdfs.domain.Defaults;
 import org.galatea.pochdfs.util.SwapDatasetFileManager;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -15,18 +16,24 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @SuppressWarnings("unused")
-public class CashFlow implements ISwapDataset {
+public class CashFlow implements SwapDataset {
 
-	private int time_stamp = 20190101;
-	private int cashflow_id;
-	private double amount;
-	private String long_short;
-	private int swap_contract_id;
-	private int instrument_id;
-	private String currency;
-	private String cashflow_type;
-	private int effective_date;
-	private int pay_date;
+	private int		cashflow_id;
+	private double	amount;
+	private String	long_short;
+	private int		swap_contract_id;
+	private int		instrument_id;
+	private String	currency;
+	private String	cashflow_type;
+	private int		effective_date;
+	private int		pay_date;
+
+	public static CashFlow defaultCashFlow() {
+		return new CashFlow().cashflow_id(Defaults.CASHFLOW_ID).amount(Defaults.AMOUNT).long_short(Defaults.LONG_SHORT)
+				.swap_contract_id(Defaults.CONTRACT_ID).instrument_id(Defaults.INSTRUMENT_ID)
+				.currency(Defaults.CURRENCY).cashflow_type(Defaults.CASHFLOW_TYPE)
+				.effective_date(Defaults.EFFECTIVE_DATE).pay_date(Defaults.PAYDATE);
+	}
 
 	@Override
 	@SneakyThrows

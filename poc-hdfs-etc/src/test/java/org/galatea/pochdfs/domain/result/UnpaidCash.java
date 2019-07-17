@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class UnpaidCash {
 
-	private int instId;
-	private int swapId;
-	private double unpaidDiv;
-	private double unpaidInt;
+	private int		instId;
+	private int		swapId;
+	private double	unpaidDiv;
+	private double	unpaidInt;
 
 	public boolean equalsRow(final Row row) {
 		return (equalsInstId(row) && equalsSwapId(row) && equalsUnpaidDiv(row) && equalsUnpaidInt(row));
