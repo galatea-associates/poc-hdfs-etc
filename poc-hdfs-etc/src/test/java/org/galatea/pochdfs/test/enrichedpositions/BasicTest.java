@@ -15,8 +15,6 @@ public class BasicTest extends SwapQueryTest {
 
 	private static final long	serialVersionUID	= 1L;
 	private static final int	S_TD_QUANTITY		= 100;
-	private static final int	E_TD_QUANTITY		= 100;
-	private static final int	I_TD_QUANTITY		= 100;
 
 	@BeforeClass
 	public static void writeData() {
@@ -24,8 +22,8 @@ public class BasicTest extends SwapQueryTest {
 		CounterParty.defaultCounterParty().write();
 		Instrument.defaultInstrument().write();
 		Position.defaultPosition().position_type("S").td_quantity(S_TD_QUANTITY).write();
-		Position.defaultPosition().position_type("E").td_quantity(E_TD_QUANTITY).write();
-		Position.defaultPosition().position_type("I").td_quantity(I_TD_QUANTITY).write();
+		Position.defaultPosition().position_type("E").td_quantity(50).write();
+		Position.defaultPosition().position_type("I").td_quantity(75).write();
 	}
 
 	@Test
@@ -36,15 +34,17 @@ public class BasicTest extends SwapQueryTest {
 		result.assertCounterPartyIdEquals(Defaults.COUNTERPARTY_ID);
 		result.assertEffectiveDateEquals(Defaults.EFFECTIVE_DATE);
 		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
-		result.assertCounterPartyFiel1Equals(Defaults.COUNTERPARTY_FIELD1);
+		result.assertCounterPartyField1Equals(Defaults.COUNTERPARTY_FIELD1);
 		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertTdQuantityEquals(S_TD_QUANTITY);
+		result.assertBookEquals(Defaults.BOOK);
 	}
 
 	@Test
 	public void testNoEffectiveDatePositions() {
-		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults(Defaults.BOOK, 20190102);
+		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults(Defaults.BOOK,
+				Defaults.EFFECTIVE_DATE + 1);
 		results.assertResultCountEquals(0);
 	}
 

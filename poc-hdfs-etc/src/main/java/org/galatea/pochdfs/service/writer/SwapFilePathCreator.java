@@ -2,10 +2,10 @@ package org.galatea.pochdfs.service.writer;
 
 public class SwapFilePathCreator {
 
-	private static final SwapFilePathCreator INSTANCE = new SwapFilePathCreator();
+	private static final SwapFilePathCreator	INSTANCE		= new SwapFilePathCreator();
 
-	private static final String	BASE_PATH		= "/cs/data/";
-	private static final String	FILE_EXTENSION	= ".jsonl";
+	private static final String					BASE_PATH		= "/cs/data/";
+	private static final String					FILE_EXTENSION	= ".jsonl";
 
 	private SwapFilePathCreator() {
 	}

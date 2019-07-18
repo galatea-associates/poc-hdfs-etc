@@ -22,9 +22,9 @@ import scala.collection.Seq;
 @Service
 public class SwapDataAnalyzer {
 
-	private static final DatasetQueryExecutor QUERY_EXECUTOR = DatasetQueryExecutor.getInstance();
+	private static final DatasetQueryExecutor	QUERY_EXECUTOR	= DatasetQueryExecutor.getInstance();
 
-	private final SwapDataAccessor dataAccessor;
+	private final SwapDataAccessor				dataAccessor;
 
 	/**
 	 *
@@ -153,10 +153,7 @@ public class SwapDataAnalyzer {
 			if (swapContractCashFlows.isPresent()) {
 				Dataset<Row> cashFlows = swapContractCashFlows.get();
 				Dataset<Row> unpaidCashFlows = getUnpaidCashFlows(cashFlows, effectiveDate);
-				if (unpaidCashFlows.isEmpty()) {
-					Dataset<Row> zeroAmountCashFlows = getZeroAmountCashFlows(cashFlows);
-					unpaidCash.add(sumUnpaidCashFlows(zeroAmountCashFlows));
-				} else {
+				if (!unpaidCashFlows.isEmpty()) {
 					unpaidCash.add(sumUnpaidCashFlows(unpaidCashFlows));
 				}
 			}
@@ -167,11 +164,6 @@ public class SwapDataAnalyzer {
 	private Dataset<Row> getUnpaidCashFlows(final Dataset<Row> cashFlows, final int effectiveDate) {
 		return cashFlows.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type").where(
 				cashFlows.col("effective_date").leq(effectiveDate).and(cashFlows.col("pay_date").gt(effectiveDate)));
-	}
-
-	private Dataset<Row> getZeroAmountCashFlows(final Dataset<Row> cashFlows) {
-		Dataset<Row> result = cashFlows.select("instrument_id", "long_short", "swap_contract_id", "cashflow_type");
-		return result.withColumn("amount", functions.lit(0.0));
 	}
 
 	private Dataset<Row> sumUnpaidCashFlows(final Dataset<Row> cashFlows) {
@@ -212,16 +204,6 @@ public class SwapDataAnalyzer {
 		List<String> cashFlowTypes = getCashFlowTypes(unpaidCash);
 		Dataset<Row> distributedUnpaidCashByType = dataAccessor
 				.executeSql(buildUnpaidCashDistributionQuery(cashFlowTypes));
-//		Dataset<Row> distributedUnpaidCashByType = dataAccessor
-//				.executeSql("SELECT instrument_id, long_short, swap_contract_id, "
-//						+ "CASE WHEN cashflow_type=\"DIV\" THEN unpaid_cash ELSE 0 END unpaid_div, CASE WHEN cashflow_type=\"INT\" "
-//						+ "THEN unpaid_cash ELSE 0 END unpaid_int FROM unpaid_cash");
-		// String[] test = cashFlowTypes.toArray(new String[cashFlowTypes.size()]);
-
-//		distributedUnpaidCashByType = distributedUnpaidCashByType
-//				.select("instrument_id", "long_short", "swap_contract_id", convertListToSeq(cashFlowTypes))
-//				.groupBy("instrument_id", "long_short", "swap_contract_id")
-//				.agg(functions.sum("unpaid_div").as("unpaid_div"), functions.sum("unpaid_int").as("unpaid_int"));
 		distributedUnpaidCashByType = sumDistUnpaidCash(cashFlowTypes, distributedUnpaidCashByType);
 		distributedUnpaidCashByType = distributedUnpaidCashByType
 				.withColumnRenamed("instrument_id", "droppable-instrument_id")
@@ -266,9 +248,6 @@ public class SwapDataAnalyzer {
 		selectedColumns.add("swap_contract_id");
 		Dataset<Row> result = distUnpaidCash.select("instrument_id", convertListToSeq(selectedColumns))
 				.groupBy("instrument_id", "long_short", "swap_contract_id").sum(convertListToSeq(unpaidCashTypes));
-		// .add(functions.sum(convertListToSeq(cashFlowTypes)));
-		// .agg(functions.sum("unpaid_div").as("unpaid_div"),
-		// functions.sum("unpaid_int").as("unpaid_int"));
 		return renameSummedCashFlowColumns(result, cashFlowTypes);
 	}
 

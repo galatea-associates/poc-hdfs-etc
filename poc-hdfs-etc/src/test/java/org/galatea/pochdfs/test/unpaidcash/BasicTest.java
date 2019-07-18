@@ -5,20 +5,24 @@ import org.galatea.pochdfs.domain.input.CashFlow;
 import org.galatea.pochdfs.domain.input.Contract;
 import org.galatea.pochdfs.domain.input.CounterParty;
 import org.galatea.pochdfs.domain.result.UnpaidCashResult;
+import org.galatea.pochdfs.domain.result.UnpaidCashResults;
 import org.galatea.pochdfs.util.SwapQueryTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BasicTest extends SwapQueryTest {
 
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
+
+	private static final double	DIV_AMT				= 100;
+	private static final double	INT_AMT				= -50;
 
 	@BeforeClass
 	public static void writeData() {
 		CounterParty.defaultCounterParty().write();
 		Contract.defaultContract().write();
-		CashFlow.defaultCashFlow().amount(100).cashflow_type("DIV").write();
-		CashFlow.defaultCashFlow().amount(-50).cashflow_type("INT").write();
+		CashFlow.defaultCashFlow().amount(DIV_AMT).cashflow_type("DIV").write();
+		CashFlow.defaultCashFlow().amount(INT_AMT).cashflow_type("INT").write();
 	}
 
 	@Test
@@ -27,8 +31,14 @@ public class BasicTest extends SwapQueryTest {
 
 		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
-		result.assertUnpaidIntEquals(-50.0);
-		result.assertUnpaidDivEquals(100.0);
+		result.assertUnpaidIntEquals(INT_AMT);
+		result.assertUnpaidDivEquals(DIV_AMT);
+	}
+
+	@Test
+	public void testNoEffectiveDateUnpaidCash() {
+		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, Defaults.EFFECTIVE_DATE + 1);
+		results.assertResultCountEquals(0);
 	}
 
 }

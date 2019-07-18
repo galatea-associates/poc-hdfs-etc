@@ -27,7 +27,7 @@ public class EnrichedPositionResult {
 		assertEquals(Long.valueOf(counterPartyId), result.getAs("counterparty_id"));
 	}
 
-	public void assertCounterPartyFiel1Equals(final String value) {
+	public void assertCounterPartyField1Equals(final String value) {
 		assertEquals(value, result.getAs("counterparty_field1"));
 	}
 
@@ -39,4 +39,7 @@ public class EnrichedPositionResult {
 		assertEquals(Long.valueOf(tdQuantity), result.getAs("td_quantity"));
 	}
 
+	public void assertBookEquals(final String book) {
+		assertEquals(book, result.getAs("book"));
+	}
 }

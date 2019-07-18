@@ -26,7 +26,7 @@ public class SwapDataWriter {
 	private static final JsonMapper				OBJECT_MAPPER		= JsonMapper.getInstance();
 	private static final SwapFilePathCreator	FILE_PATH_CREATOR	= SwapFilePathCreator.getInstance();
 
-	private final IHdfsWriter writer;
+	private final IHdfsWriter					writer;
 
 	public void writeSwapData(final File file) {
 		log.info("Writing {} data", file.getName());

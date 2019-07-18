@@ -15,9 +15,9 @@ import lombok.SneakyThrows;
 @RequiredArgsConstructor
 public class HdfsWriter implements IHdfsWriter {
 
-	private static final ObjectMapper MAPPER = new ObjectMapper();
+	private static final ObjectMapper	MAPPER	= new ObjectMapper();
 
-	private final FileSystem fileSystem;
+	private final FileSystem			fileSystem;
 
 	@Override
 	@SneakyThrows
