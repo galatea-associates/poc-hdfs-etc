@@ -14,11 +14,11 @@ public class MultipleAccrualDatesTest extends SwapQueryTest {
 
 	private static final long	serialVersionUID	= 1L;
 
-	private static final int	PAY_DATE			= 20190102;
+	private static final String	PAY_DATE			= "2019-01-02";
 
-	private static final int	EFFECTIVE_DATE_1	= 20181230;
-	private static final int	EFFECTIVE_DATE_2	= 20181231;
-	private static final int	EFFECTIVE_DATE_3	= 20190101;
+	private static final String	EFFECTIVE_DATE_1	= "2018-12-30";
+	private static final String	EFFECTIVE_DATE_2	= "2018-12-31";
+	private static final String	EFFECTIVE_DATE_3	= "2019-01-01";
 
 	private static final double	CASHFLOW_1_AMT_DIV	= 25;
 	private static final double	CASHFLOW_1_AMT_INT	= -10;
@@ -49,7 +49,7 @@ public class MultipleAccrualDatesTest extends SwapQueryTest {
 	public void testEffectiveDate1UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_1_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_1_AMT_DIV);
@@ -59,7 +59,7 @@ public class MultipleAccrualDatesTest extends SwapQueryTest {
 	public void testEffectiveDate2UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_2);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_1_AMT_INT + CASHFLOW_2_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_1_AMT_DIV + CASHFLOW_2_AMT_DIV);
@@ -69,7 +69,7 @@ public class MultipleAccrualDatesTest extends SwapQueryTest {
 	public void testEffectiveDate3UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_3);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_1_AMT_INT + CASHFLOW_2_AMT_INT + CASHFLOW_3_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_1_AMT_DIV + CASHFLOW_2_AMT_DIV + CASHFLOW_3_AMT_DIV);
@@ -77,7 +77,7 @@ public class MultipleAccrualDatesTest extends SwapQueryTest {
 
 	@Test
 	public void testNoEffectiveDateUnpaidCash() {
-		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, EFFECTIVE_DATE_3 + 1);
+		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, "2019-12-12");
 		results.assertResultCountEquals(0);
 	}
 

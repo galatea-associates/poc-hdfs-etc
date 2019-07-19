@@ -27,7 +27,7 @@ public class SwapDataAccessor {
 		return swapContracts;
 	}
 
-	public Optional<Dataset<Row>> getPositions(final long swapId, final int effectiveDate) {
+	public Optional<Dataset<Row>> getPositions(final long swapId, final String effectiveDate) {
 		Optional<Dataset<Row>> positions = accessor
 				.getData(baseFilePath + "positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
 		return positions;
@@ -84,7 +84,8 @@ public class SwapDataAccessor {
 	 * @return a dataset of all the positions across all swap contracts that a
 	 *         specific counter party has for a specific effective date
 	 */
-	public Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds, final int effectiveDate) {
+	public Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds,
+			final String effectiveDate) {
 		Stack<Dataset<Row>> totalPositions = new Stack<>();
 		for (Long swapId : swapIds) {
 			Optional<Dataset<Row>> positions = getPositions(swapId, effectiveDate);

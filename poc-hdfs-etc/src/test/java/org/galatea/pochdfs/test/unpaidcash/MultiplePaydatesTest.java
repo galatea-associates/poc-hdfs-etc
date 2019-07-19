@@ -14,13 +14,13 @@ public class MultiplePaydatesTest extends SwapQueryTest {
 
 	private static final long	serialVersionUID	= 1L;
 
-	private static final int	PAY_DATE_1			= 20181226;
-	private static final int	PAY_DATE_2			= 20190102;
-	private static final int	PAY_DATE_3			= 20190109;
+	private static final String	PAY_DATE_1			= "2018-12-26";
+	private static final String	PAY_DATE_2			= "2019-01-02";
+	private static final String	PAY_DATE_3			= "2019-01-09";
 
-	private static final int	EFFECTIVE_DATE_1	= 20181220;
-	private static final int	EFFECTIVE_DATE_2	= 20190101;
-	private static final int	EFFECTIVE_DATE_3	= 20190102;
+	private static final String	EFFECTIVE_DATE_1	= "2018-12-20";
+	private static final String	EFFECTIVE_DATE_2	= "2019-01-01";
+	private static final String	EFFECTIVE_DATE_3	= "2019-01-02";
 
 	private static final double	CASHFLOW_1_AMT_DIV	= 10;
 	private static final double	CASHFLOW_1_AMT_INT	= -10;
@@ -51,7 +51,7 @@ public class MultiplePaydatesTest extends SwapQueryTest {
 	public void testEffectiveDate1UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_1_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_1_AMT_DIV);
@@ -61,7 +61,7 @@ public class MultiplePaydatesTest extends SwapQueryTest {
 	public void testEffectiveDate2UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_2);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_2_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_2_AMT_DIV);
@@ -71,7 +71,7 @@ public class MultiplePaydatesTest extends SwapQueryTest {
 	public void testEffectiveDate3UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, EFFECTIVE_DATE_3);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_3_AMT_INT);
 		result.assertUnpaidDivEquals(CASHFLOW_3_AMT_DIV);

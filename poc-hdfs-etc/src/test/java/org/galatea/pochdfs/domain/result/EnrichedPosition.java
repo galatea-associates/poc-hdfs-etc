@@ -16,7 +16,7 @@ public class EnrichedPosition {
 	private String	ric;
 	private int		counterPartyId;
 	private String	counterPartyField1;
-	private int		effectiveDate;
+	private String		effectiveDate;
 	private int		tdQuantity;
 	private String	book;
 
@@ -46,8 +46,8 @@ public class EnrichedPosition {
 	}
 
 	private boolean equalsEffectiveDate(final Row row) {
-		Long effectiveDate = row.getAs("effective_date");
-		return effectiveDate.equals(Long.valueOf(this.effectiveDate));
+		String effectiveDate = row.getAs("effective_date");
+		return effectiveDate.equals(this.effectiveDate);
 	}
 
 	private boolean equalsRic(final Row row) {

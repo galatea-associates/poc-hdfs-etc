@@ -29,7 +29,7 @@ public class BasicTest extends SwapQueryTest {
 	public void testUnpaidCashQuery() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, Defaults.EFFECTIVE_DATE);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(INT_AMT);
 		result.assertUnpaidDivEquals(DIV_AMT);
@@ -37,7 +37,7 @@ public class BasicTest extends SwapQueryTest {
 
 	@Test
 	public void testNoEffectiveDateUnpaidCash() {
-		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, Defaults.EFFECTIVE_DATE + 1);
+		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, "2019-01-02");
 		results.assertResultCountEquals(0);
 	}
 

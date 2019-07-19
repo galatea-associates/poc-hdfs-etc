@@ -140,7 +140,8 @@ public class MultipleInstrumentsOnMultipleContracts extends SwapQueryTest {
 
 	@Test
 	public void testNoCounterParty() {
-		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults("missingBook", 20190101);
+		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults("missingBook",
+				Defaults.EFFECTIVE_DATE);
 		results.assertResultCountEquals(0);
 	}
 

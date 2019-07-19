@@ -31,8 +31,8 @@ public class EnrichedPositionResult {
 		assertEquals(value, result.getAs("counterparty_field1"));
 	}
 
-	public void assertEffectiveDateEquals(final int effectiveDate) {
-		assertEquals(Long.valueOf(effectiveDate), result.getAs("effective_date"));
+	public void assertEffectiveDateEquals(final String effectiveDate) {
+		assertEquals(effectiveDate, result.getAs("effective_date"));
 	}
 
 	public void assertTdQuantityEquals(final int tdQuantity) {

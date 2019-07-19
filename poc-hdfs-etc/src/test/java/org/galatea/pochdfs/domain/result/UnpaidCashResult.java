@@ -12,8 +12,8 @@ public class UnpaidCashResult {
 
 	private final Row result;
 
-	public void assertInstIdEquals(final int instId) {
-		assertEquals(Long.valueOf(instId), result.getAs("instrument_id"));
+	public void assertRicEquals(final String ric) {
+		assertEquals(ric, result.getAs("ric"));
 	}
 
 	public void assertSwapIdEquals(final int swapId) {

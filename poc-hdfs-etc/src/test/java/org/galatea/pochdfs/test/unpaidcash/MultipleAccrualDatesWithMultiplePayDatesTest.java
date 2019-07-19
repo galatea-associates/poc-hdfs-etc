@@ -14,15 +14,15 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 
 	private static final long	serialVersionUID			= 1L;
 
-	private static final int	PAY_DATE_1					= 20181231;
-	private static final int	PAY_DATE_2					= 20190103;
+	private static final String	PAY_DATE_1					= "2018-12-31";
+	private static final String	PAY_DATE_2					= "2019-01-03";
 
-	private static final int	PAY_DATE_1_EFFECTIVE_DATE_1	= 20181228;
-	private static final int	PAY_DATE_1_EFFECTIVE_DATE_2	= 20181229;
-	private static final int	PAY_DATE_1_EFFECTIVE_DATE_3	= 20181230;
-	private static final int	PAY_DATE_2_EFFECTIVE_DATE_1	= 20181231;
-	private static final int	PAY_DATE_2_EFFECTIVE_DATE_2	= 20190101;
-	private static final int	PAY_DATE_2_EFFECTIVE_DATE_3	= 20190102;
+	private static final String	PAY_DATE_1_EFFECTIVE_DATE_1	= "2018-12-28";
+	private static final String	PAY_DATE_1_EFFECTIVE_DATE_2	= "2018-12-29";
+	private static final String	PAY_DATE_1_EFFECTIVE_DATE_3	= "2018-12-30";
+	private static final String	PAY_DATE_2_EFFECTIVE_DATE_1	= "2018-12-31";
+	private static final String	PAY_DATE_2_EFFECTIVE_DATE_2	= "2019-01-01";
+	private static final String	PAY_DATE_2_EFFECTIVE_DATE_3	= "2019-01-02";
 
 	private static final double	PAY_DATE_1_AMT_DIV_1		= 10;
 	private static final double	PAY_DATE_1_AMT_DIV_2		= 30;
@@ -53,7 +53,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate1EffectiveDate1UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_1_EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_1_AMT_DIV_1);
 		result.assertUnpaidIntEquals(PAY_DATE_1_AMT_INT_1);
@@ -63,7 +63,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate1EffectiveDate2UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_1_EFFECTIVE_DATE_2);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_1_AMT_DIV_1 + PAY_DATE_1_AMT_DIV_2);
 		result.assertUnpaidIntEquals(PAY_DATE_1_AMT_INT_1 + PAY_DATE_1_AMT_INT_2);
@@ -73,7 +73,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate1EffectiveDate3UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_1_EFFECTIVE_DATE_3);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_1_AMT_DIV_1 + PAY_DATE_1_AMT_DIV_2 + PAY_DATE_1_AMT_DIV_3);
 		result.assertUnpaidIntEquals(PAY_DATE_1_AMT_INT_1 + PAY_DATE_1_AMT_INT_2 + PAY_DATE_1_AMT_INT_3);
@@ -83,7 +83,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate2EffectiveDate1UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_2_EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_2_AMT_DIV_1);
 		result.assertUnpaidIntEquals(PAY_DATE_2_AMT_INT_1);
@@ -93,7 +93,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate2EffectiveDate2UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_2_EFFECTIVE_DATE_2);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_2_AMT_DIV_1 + PAY_DATE_2_AMT_DIV_2);
 		result.assertUnpaidIntEquals(PAY_DATE_2_AMT_INT_1 + PAY_DATE_2_AMT_INT_2);
@@ -103,7 +103,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 	public void testPayDate2EffectiveDate3UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, PAY_DATE_2_EFFECTIVE_DATE_3);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidDivEquals(PAY_DATE_2_AMT_DIV_1 + PAY_DATE_2_AMT_DIV_2 + PAY_DATE_2_AMT_DIV_3);
 		result.assertUnpaidIntEquals(PAY_DATE_2_AMT_INT_1 + PAY_DATE_2_AMT_INT_2 + PAY_DATE_2_AMT_INT_3);
@@ -111,7 +111,7 @@ public class MultipleAccrualDatesWithMultiplePayDatesTest extends SwapQueryTest 
 
 	@Test
 	public void testNoEffectiveDateUnpaidCash() {
-		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, PAY_DATE_2_EFFECTIVE_DATE_3 + 1);
+		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, "2019-12-12");
 		results.assertResultCountEquals(0);
 	}
 

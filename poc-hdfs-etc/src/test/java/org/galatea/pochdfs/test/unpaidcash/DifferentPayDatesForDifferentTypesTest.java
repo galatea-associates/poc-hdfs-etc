@@ -14,13 +14,13 @@ public class DifferentPayDatesForDifferentTypesTest extends SwapQueryTest {
 
 	private static final long	serialVersionUID		= 1L;
 
-	private static final int	DIV_PAY_DATE			= 20190601;
-	private static final int	INT_PAY_DATE			= 20190102;
+	private static final String	DIV_PAY_DATE			= "2019-06-01";
+	private static final String	INT_PAY_DATE			= "2019-01-02";
 
-	private static final int	DIV_EFFECTIVE_DATE_1	= 20181201;
-	private static final int	INT_EFFECTIVE_DATE_1	= 20181230;
-	private static final int	INT_EFFECTIVE_DATE_2	= 20181231;
-	private static final int	INT_EFFECTIVE_DATE_3	= 20190101;
+	private static final String	DIV_EFFECTIVE_DATE_1	= "2018-12-01";
+	private static final String	INT_EFFECTIVE_DATE_1	= "2018-12-30";
+	private static final String	INT_EFFECTIVE_DATE_2	= "2018-12-31";
+	private static final String	INT_EFFECTIVE_DATE_3	= "2019-01-01";
 
 	private static final double	CASHFLOW_DIV_1_AMT		= 125;
 	private static final double	CASHFLOW_INT_1_AMT		= 30;
@@ -45,7 +45,7 @@ public class DifferentPayDatesForDifferentTypesTest extends SwapQueryTest {
 	public void testDivEffectiveDateUnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, DIV_EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidTypeDoesNotExist("INT");
 		result.assertUnpaidDivEquals(CASHFLOW_DIV_1_AMT);
@@ -55,7 +55,7 @@ public class DifferentPayDatesForDifferentTypesTest extends SwapQueryTest {
 	public void testIntEffectiveDate1UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, INT_EFFECTIVE_DATE_1);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_INT_1_AMT);
 		result.assertUnpaidDivEquals(CASHFLOW_DIV_1_AMT);
@@ -65,7 +65,7 @@ public class DifferentPayDatesForDifferentTypesTest extends SwapQueryTest {
 	public void testIntEffectiveDate2UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, INT_EFFECTIVE_DATE_2);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_INT_1_AMT + CASHFLOW_INT_2_AMT);
 		result.assertUnpaidDivEquals(CASHFLOW_DIV_1_AMT);
@@ -75,7 +75,7 @@ public class DifferentPayDatesForDifferentTypesTest extends SwapQueryTest {
 	public void testIntEffectiveDate3UnpaidCash() {
 		UnpaidCashResult result = resultGetter.getSingleUnpaidCashResult(Defaults.BOOK, INT_EFFECTIVE_DATE_3);
 
-		result.assertInstIdEquals(Defaults.INSTRUMENT_ID);
+		result.assertRicEquals(Defaults.RIC);
 		result.assertSwapIdEquals(Defaults.CONTRACT_ID);
 		result.assertUnpaidIntEquals(CASHFLOW_INT_1_AMT + CASHFLOW_INT_2_AMT + CASHFLOW_INT_3_AMT);
 		result.assertUnpaidDivEquals(CASHFLOW_DIV_1_AMT);

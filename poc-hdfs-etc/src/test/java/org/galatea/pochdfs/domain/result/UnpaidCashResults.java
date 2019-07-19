@@ -23,7 +23,7 @@ public class UnpaidCashResults {
 		assertEquals(expected, unpaidCashRows.count());
 	}
 
-	public void assertHasCashflow(final UnpaidCash unpaidCash) {
+	public void assertHasUnpaidCash(final UnpaidCash unpaidCash) {
 		log.info("Asserting unpaid cash results has cashflow with data: {}", unpaidCash);
 		for (Row row : unpaidCashRows.collectAsList()) {
 			if (unpaidCash.equalsRow(row)) {

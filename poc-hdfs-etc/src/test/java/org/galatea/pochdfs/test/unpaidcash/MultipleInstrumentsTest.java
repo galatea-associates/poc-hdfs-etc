@@ -14,9 +14,9 @@ public class MultipleInstrumentsTest extends SwapQueryTest {
 
 	private static final long	serialVersionUID		= 1L;
 
-	private static final int	INSTRUMENT_1_ID			= 11;
-	private static final int	INSTRUMENT_2_ID			= 22;
-	private static final int	INSTRUMENT_3_ID			= 33;
+	private static final String	RIC_1					= "ABC";
+	private static final String	RIC_2					= "DEF";
+	private static final String	RIC_3					= "GHI";
 
 	private static final double	INSTRUMENT_1_DIV_AMT	= 10;
 	private static final double	INSTRUMENT_1_INT_AMT	= 20;
@@ -29,18 +29,12 @@ public class MultipleInstrumentsTest extends SwapQueryTest {
 	public static void writeData() {
 		CounterParty.defaultCounterParty().write();
 		Contract.defaultContract().write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_1_DIV_AMT).cashflow_type("DIV").instrument_id(INSTRUMENT_1_ID)
-				.write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_1_INT_AMT).cashflow_type("INT").instrument_id(INSTRUMENT_1_ID)
-				.write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_2_DIV_AMT).cashflow_type("DIV").instrument_id(INSTRUMENT_2_ID)
-				.write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_2_INT_AMT).cashflow_type("INT").instrument_id(INSTRUMENT_2_ID)
-				.write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_3_DIV_AMT).cashflow_type("DIV").instrument_id(INSTRUMENT_3_ID)
-				.write();
-		CashFlow.defaultCashFlow().amount(INSTRUMENT_3_INT_AMT).cashflow_type("INT").instrument_id(INSTRUMENT_3_ID)
-				.write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_1_DIV_AMT).cashflow_type("DIV").ric(RIC_1).write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_1_INT_AMT).cashflow_type("INT").ric(RIC_1).write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_2_DIV_AMT).cashflow_type("DIV").ric(RIC_2).write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_2_INT_AMT).cashflow_type("INT").ric(RIC_2).write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_3_DIV_AMT).cashflow_type("DIV").ric(RIC_3).write();
+		CashFlow.defaultCashFlow().amount(INSTRUMENT_3_INT_AMT).cashflow_type("INT").ric(RIC_3).write();
 	}
 
 	@Test
@@ -49,17 +43,17 @@ public class MultipleInstrumentsTest extends SwapQueryTest {
 
 		results.assertResultCountEquals(3);
 
-		results.assertHasCashflow(new UnpaidCash().instId(INSTRUMENT_1_ID).swapId(Defaults.CONTRACT_ID)
+		results.assertHasUnpaidCash(new UnpaidCash().ric(RIC_1).swapId(Defaults.CONTRACT_ID)
 				.unpaidDiv(INSTRUMENT_1_DIV_AMT).unpaidInt(INSTRUMENT_1_INT_AMT));
-		results.assertHasCashflow(new UnpaidCash().instId(INSTRUMENT_2_ID).swapId(Defaults.CONTRACT_ID)
+		results.assertHasUnpaidCash(new UnpaidCash().ric(RIC_2).swapId(Defaults.CONTRACT_ID)
 				.unpaidDiv(INSTRUMENT_2_DIV_AMT).unpaidInt(INSTRUMENT_2_INT_AMT));
-		results.assertHasCashflow(new UnpaidCash().instId(INSTRUMENT_3_ID).swapId(Defaults.CONTRACT_ID)
+		results.assertHasUnpaidCash(new UnpaidCash().ric(RIC_3).swapId(Defaults.CONTRACT_ID)
 				.unpaidDiv(INSTRUMENT_3_DIV_AMT).unpaidInt(INSTRUMENT_3_INT_AMT));
 	}
 
 	@Test
 	public void testNoEffectiveDateUnpaidCash() {
-		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, Defaults.EFFECTIVE_DATE + 1);
+		UnpaidCashResults results = resultGetter.getUnpaidCashResults(Defaults.BOOK, "2019-12-12");
 		results.assertResultCountEquals(0);
 	}
 

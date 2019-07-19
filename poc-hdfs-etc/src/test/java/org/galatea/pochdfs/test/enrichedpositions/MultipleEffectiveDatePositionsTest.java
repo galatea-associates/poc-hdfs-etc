@@ -18,8 +18,8 @@ public class MultipleEffectiveDatePositionsTest extends SwapQueryTest {
 	private static final int	CONTRACT_1_ID		= 12345;
 	private static final int	CONTRACT_2_ID		= 67890;
 
-	private static final int	EFFECTIVE_DATE_1	= 20181231;
-	private static final int	EFFECTIVE_DATE_2	= 20190101;
+	private static final String	EFFECTIVE_DATE_1	= "2018-12-31";
+	private static final String	EFFECTIVE_DATE_2	= "2019-01-01";
 
 	private static final String	INST_1_RIC			= "ABC";
 	private static final int	INST_1_ID			= 11;
@@ -104,7 +104,8 @@ public class MultipleEffectiveDatePositionsTest extends SwapQueryTest {
 
 	@Test
 	public void testNoCounterParty() {
-		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults("missingBook", 20190101);
+		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults("missingBook",
+				Defaults.EFFECTIVE_DATE);
 		results.assertResultCountEquals(0);
 	}
 

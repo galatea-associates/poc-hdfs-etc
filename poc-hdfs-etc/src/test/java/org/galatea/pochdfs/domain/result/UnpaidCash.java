@@ -11,18 +11,18 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class UnpaidCash {
 
-	private int		instId;
+	private String		ric;
 	private int		swapId;
 	private double	unpaidDiv;
 	private double	unpaidInt;
 
 	public boolean equalsRow(final Row row) {
-		return (equalsInstId(row) && equalsSwapId(row) && equalsUnpaidDiv(row) && equalsUnpaidInt(row));
+		return (equalsRic(row) && equalsSwapId(row) && equalsUnpaidDiv(row) && equalsUnpaidInt(row));
 	}
 
-	private boolean equalsInstId(final Row row) {
-		Long instId = row.getAs("instrument_id");
-		return instId.equals(Long.valueOf(this.instId));
+	private boolean equalsRic(final Row row) {
+		String ric = row.getAs("ric");
+		return ric.equals(this.ric);
 	}
 
 	private boolean equalsSwapId(final Row row) {

@@ -22,17 +22,19 @@ public class CashFlow implements SwapDataset {
 	private double	amount;
 	private String	long_short;
 	private int		swap_contract_id;
-	private int		instrument_id;
+	// private int instrument_id;
+	private String	ric;
 	private String	currency;
 	private String	cashflow_type;
-	private int		effective_date;
-	private int		pay_date;
+	private String	effective_date;
+	// private int pay_date;
+	private String	pay_date;
 
 	public static CashFlow defaultCashFlow() {
 		return new CashFlow().cashflow_id(Defaults.CASHFLOW_ID).amount(Defaults.AMOUNT).long_short(Defaults.LONG_SHORT)
-				.swap_contract_id(Defaults.CONTRACT_ID).instrument_id(Defaults.INSTRUMENT_ID)
-				.currency(Defaults.CURRENCY).cashflow_type(Defaults.CASHFLOW_TYPE)
-				.effective_date(Defaults.EFFECTIVE_DATE).pay_date(Defaults.PAYDATE);
+				.swap_contract_id(Defaults.CONTRACT_ID).ric(Defaults.RIC).currency(Defaults.CURRENCY)
+				.cashflow_type(Defaults.CASHFLOW_TYPE).effective_date(Defaults.EFFECTIVE_DATE)
+				.pay_date(Defaults.PAYDATE);
 	}
 
 	@Override

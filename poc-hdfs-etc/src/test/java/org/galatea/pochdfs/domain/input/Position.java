@@ -21,7 +21,7 @@ public class Position implements SwapDataset {
 	private int		time_stamp	= 20190101;
 	private String	position_type;
 	private int		swap_contract_id;
-	private int		effective_date;
+	private String	effective_date;
 	private String	ric;
 	private int		td_quantity;
 

@@ -13,6 +13,7 @@ import org.galatea.pochdfs.utils.analytics.DatasetQueryExecutor;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scala.collection.JavaConverters;
 import scala.collection.Seq;
@@ -24,6 +25,8 @@ public class SwapDataAnalyzer {
 
 	private static final DatasetQueryExecutor	QUERY_EXECUTOR	= DatasetQueryExecutor.getInstance();
 
+	// private static final String
+
 	private final SwapDataAccessor				dataAccessor;
 
 	/**
@@ -33,7 +36,7 @@ public class SwapDataAnalyzer {
 	 * @return a dataset of all enriched positions with unpaid cash for the counter
 	 *         party on the effective date
 	 */
-	public Dataset<Row> getEnrichedPositionsWithUnpaidCash(final String book, final int effectiveDate) {
+	public Dataset<Row> getEnrichedPositionsWithUnpaidCash(final String book, final String effectiveDate) {
 		log.info("Starting Enriched Positions with Unpaid Cash query");
 		Long startTime = System.currentTimeMillis();
 		Dataset<Row> enrichedPositions = getEnrichedPositions(book, effectiveDate);
@@ -74,7 +77,7 @@ public class SwapDataAnalyzer {
 	 * @return a dataset of all enriched positions for the counter party on the
 	 *         effective date
 	 */
-	public Dataset<Row> getEnrichedPositions(final String book, final int effectiveDate) {
+	public Dataset<Row> getEnrichedPositions(final String book, final String effectiveDate) {
 		log.info("Getting enriched positions for book {} on effective date {}", book, effectiveDate);
 		Long startTime = System.currentTimeMillis();
 		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
@@ -114,7 +117,7 @@ public class SwapDataAnalyzer {
 		});
 	}
 
-	public Dataset<Row> getUnpaidCash(final String book, final int effectiveDate) {
+	public Dataset<Row> getUnpaidCash(final String book, final String effectiveDate) {
 		log.info("Getting unpaid cash for book {} on effective date {}", book, effectiveDate);
 		Long startTime = System.currentTimeMillis();
 
@@ -146,7 +149,7 @@ public class SwapDataAnalyzer {
 	}
 
 	private Optional<Dataset<Row>> getUnpaidCashForContracts(final Collection<Long> swapIds, final Long counterPartyId,
-			final int effectiveDate) {
+			final String effectiveDate) {
 		Stack<Dataset<Row>> unpaidCash = new Stack<>();
 		for (Long swapId : dataAccessor.getCounterPartySwapIds(counterPartyId)) {
 			Optional<Dataset<Row>> swapContractCashFlows = dataAccessor.getCashFlows(swapId);
@@ -161,13 +164,20 @@ public class SwapDataAnalyzer {
 		return combineUnpaidCashResults(unpaidCash);
 	}
 
-	private Dataset<Row> getUnpaidCashFlows(final Dataset<Row> cashFlows, final int effectiveDate) {
-		return cashFlows.select("instrument_id", "long_short", "amount", "swap_contract_id", "cashflow_type").where(
-				cashFlows.col("effective_date").leq(effectiveDate).and(cashFlows.col("pay_date").gt(effectiveDate)));
+	@SneakyThrows
+	private Dataset<Row> getUnpaidCashFlows(final Dataset<Row> cashFlows, final String effectiveDate) {
+//		Date date = QUERY_DATE_FORMAT.parse(((Integer) effectiveDate).toString());
+//		String newFormat = DATABASE_DATE_FORMAT.format(date);
+
+		// cashFlows.filter(condition)
+
+		return cashFlows.select("ric", "long_short", "amount", "swap_contract_id", "cashflow_type")
+				.where(cashFlows.col("effective_date").leq(functions.lit(effectiveDate))
+						.and(cashFlows.col("pay_date").gt(functions.lit(effectiveDate))));
 	}
 
 	private Dataset<Row> sumUnpaidCashFlows(final Dataset<Row> cashFlows) {
-		return cashFlows.groupBy("instrument_id", "long_short", "swap_contract_id", "cashflow_type")
+		return cashFlows.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
 				.agg(functions.sum("amount").as("unpaid_cash"));
 	}
 
@@ -205,15 +215,14 @@ public class SwapDataAnalyzer {
 		Dataset<Row> distributedUnpaidCashByType = dataAccessor
 				.executeSql(buildUnpaidCashDistributionQuery(cashFlowTypes));
 		distributedUnpaidCashByType = sumDistUnpaidCash(cashFlowTypes, distributedUnpaidCashByType);
-		distributedUnpaidCashByType = distributedUnpaidCashByType
-				.withColumnRenamed("instrument_id", "droppable-instrument_id")
+		distributedUnpaidCashByType = distributedUnpaidCashByType.withColumnRenamed("ric", "droppable-ric")
 				.withColumnRenamed("swap_contract_id", "droppable-swap_contract_id");
 		distributedUnpaidCashByType = unpaidCash.join(distributedUnpaidCashByType,
-				unpaidCash.col("instrument_id").equalTo(distributedUnpaidCashByType.col("droppable-instrument_id"))
+				unpaidCash.col("ric").equalTo(distributedUnpaidCashByType.col("droppable-ric"))
 						.and(unpaidCash.col("long_short").equalTo(distributedUnpaidCashByType.col("long_short"))
 								.and(unpaidCash.col("swap_contract_id")
 										.equalTo(distributedUnpaidCashByType.col("droppable-swap_contract_id")))));
-		distributedUnpaidCashByType = distributedUnpaidCashByType.drop("droppable-instrument_id").drop("long_short")
+		distributedUnpaidCashByType = distributedUnpaidCashByType.drop("droppable-ric").drop("long_short")
 				.drop("droppable-swap_contract_id").drop("unpaid_cash").drop("cashflow_type");
 		return distributedUnpaidCashByType.distinct();
 	}
@@ -228,7 +237,7 @@ public class SwapDataAnalyzer {
 	}
 
 	private String buildUnpaidCashDistributionQuery(final Collection<String> cashFlowTypes) {
-		StringBuilder builder = new StringBuilder("SELECT instrument_id, long_short, swap_contract_id");
+		StringBuilder builder = new StringBuilder("SELECT ric, long_short, swap_contract_id");
 		for (String type : cashFlowTypes) {
 			builder.append(", CASE WHEN cashflow_type=\"").append(type).append("\"");
 			builder.append(" THEN unpaid_cash ELSE 0 END unpaid_").append(type);
@@ -246,8 +255,8 @@ public class SwapDataAnalyzer {
 		selectedColumns.addAll(unpaidCashTypes);
 		selectedColumns.add("long_short");
 		selectedColumns.add("swap_contract_id");
-		Dataset<Row> result = distUnpaidCash.select("instrument_id", convertListToSeq(selectedColumns))
-				.groupBy("instrument_id", "long_short", "swap_contract_id").sum(convertListToSeq(unpaidCashTypes));
+		Dataset<Row> result = distUnpaidCash.select("ric", convertListToSeq(selectedColumns))
+				.groupBy("ric", "long_short", "swap_contract_id").sum(convertListToSeq(unpaidCashTypes));
 		return renameSummedCashFlowColumns(result, cashFlowTypes);
 	}
 
