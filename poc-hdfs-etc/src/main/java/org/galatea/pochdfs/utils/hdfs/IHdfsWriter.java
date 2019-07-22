@@ -20,6 +20,10 @@ public interface IHdfsWriter {
 	 */
 	public void appendFile(final Path path, final Object object);
 
+	public void createFileFromByteArray(final Path path, final byte[] source);
+
+	public void appendByteArrayToFile(final Path path, final byte[] source);
+
 	/**
 	 *
 	 * @param path the HDFS path to the file

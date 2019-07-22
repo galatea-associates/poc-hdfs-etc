@@ -3,6 +3,7 @@ package org.galatea.pochdfs.service.writer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
 import java.util.Map;
 
 import org.apache.hadoop.fs.Path;
@@ -32,10 +33,14 @@ public class SwapDataWriter {
 		log.info("Writing {} data", file.getName());
 		switch (file.getName()) {
 		case "counterparties.json":
-			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR.createCounterpartyFilepath());
+			// writeSwapRecordsToHdfs(file, (jsonObject) ->
+			// FILE_PATH_CREATOR.createCounterpartyFilepath());
+			writeEntireFileToHdfs(file, FILE_PATH_CREATOR.createCounterpartyFilepath());
 			break;
 		case "instruments.json":
-			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR.createInstrumentsFilepath());
+			// writeSwapRecordsToHdfs(file, (jsonObject) ->
+			// FILE_PATH_CREATOR.createInstrumentsFilepath());
+			writeEntireFileToHdfs(file, FILE_PATH_CREATOR.createInstrumentsFilepath());
 			break;
 		case "swapContracts.json":
 			writeSwapRecordsToHdfs(file, (jsonObject) -> FILE_PATH_CREATOR
@@ -74,6 +79,10 @@ public class SwapDataWriter {
 		}
 	}
 
+	private void writeEntireFileToHdfs(final File file, final String path) {
+		writeBytesToHdfs(new Path(path), file);
+	}
+
 	/**
 	 *
 	 * @param path   the HDFS path to write to
@@ -85,6 +94,15 @@ public class SwapDataWriter {
 			writer.appendFile(path, object);
 		} else {
 			writer.createFile(path, object);
+		}
+	}
+
+	@SneakyThrows
+	private void writeBytesToHdfs(final Path path, final File file) {
+		if (writer.fileExists(path)) {
+			writer.appendByteArrayToFile(path, Files.readAllBytes(file.toPath()));
+		} else {
+			writer.createFileFromByteArray(path, Files.readAllBytes(file.toPath()));
 		}
 	}
 

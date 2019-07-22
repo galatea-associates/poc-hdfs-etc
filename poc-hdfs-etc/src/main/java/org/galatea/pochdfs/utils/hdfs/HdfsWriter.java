@@ -25,8 +25,9 @@ public class HdfsWriter implements IHdfsWriter {
 		createFileFromByteArray(path, createByteArray(object));
 	}
 
+	@Override
 	@SneakyThrows
-	private void createFileFromByteArray(final Path path, final byte[] source) {
+	public void createFileFromByteArray(final Path path, final byte[] source) {
 		try (InputStream inputStream = new ByteArrayInputStream(source);
 				FSDataOutputStream outputStream = fileSystem.create(path)) {
 			byte[] b = new byte[1024];
@@ -43,8 +44,9 @@ public class HdfsWriter implements IHdfsWriter {
 		appendByteArrayToFile(path, createByteArray(object));
 	}
 
+	@Override
 	@SneakyThrows
-	private void appendByteArrayToFile(final Path path, final byte[] source) {
+	public void appendByteArrayToFile(final Path path, final byte[] source) {
 		try (FSDataOutputStream outputStream = fileSystem.append(path);
 				InputStream inputStream = new ByteArrayInputStream(source)) {
 			byte[] b = new byte[1024];
