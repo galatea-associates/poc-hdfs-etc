@@ -70,8 +70,10 @@ public class SwapDataAccessor {
 		Dataset<Row> contracts = swapContracts.get();
 		Dataset<Row> swapIdRows = contracts.select("swap_contract_id")
 				.where(contracts.col("counterparty_id").equalTo(counterPartyId)).distinct();
+		// Iterator<Row> idRows = swapIdRows.toLocalIterator();
 		List<Long> swapIds = new ArrayList<>();
 		for (Row row : swapIdRows.collectAsList()) {
+			// while (idRows.hasNext()) {
 			swapIds.add((Long) row.getAs("swap_contract_id"));
 		}
 		return swapIds;

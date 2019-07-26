@@ -14,8 +14,9 @@ import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 
 public abstract class SwapQueryTest extends SharedJavaSparkContext implements Serializable {
 
-	private static final long		serialVersionUID	= 1L;
-	protected SwapQueryResultGetter	resultGetter;
+	private static final long				serialVersionUID	= 1L;
+
+	protected static SwapQueryResultGetter	resultGetter;
 
 	@Before
 	public void initializeResultGetter() {

@@ -10,22 +10,18 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
 import org.galatea.pochdfs.utils.analytics.DatasetQueryExecutor;
-import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scala.collection.JavaConverters;
 import scala.collection.Seq;
 
 @Slf4j
-@RequiredArgsConstructor
-@Service
+@AllArgsConstructor
 public class SwapDataAnalyzer {
 
 	private static final DatasetQueryExecutor	QUERY_EXECUTOR	= DatasetQueryExecutor.getInstance();
-
-	// private static final String
 
 	private final SwapDataAccessor				dataAccessor;
 
@@ -40,10 +36,11 @@ public class SwapDataAnalyzer {
 		log.info("Starting Enriched Positions with Unpaid Cash query");
 		Long startTime = System.currentTimeMillis();
 		Dataset<Row> enrichedPositions = getEnrichedPositions(book, effectiveDate);
+		// log.info("Enriched Positions set has {} records", enrichedPositions.count());
 		Dataset<Row> unpaidCash = getUnpaidCash(book, effectiveDate);
+		// log.info("Unpaid Cash set has {} records", unpaidCash.count());
 		Dataset<Row> enrichedPositionsWithUnpaidCash = joinEnrichedPositionsAndUnpaidCash(enrichedPositions,
 				unpaidCash);
-		debugLogDatasetcontent(enrichedPositionsWithUnpaidCash);
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
 				System.currentTimeMillis() - startTime);
 		return enrichedPositionsWithUnpaidCash;
@@ -60,12 +57,12 @@ public class SwapDataAnalyzer {
 		log.info("Joining Enriched Positions with Unpaid Cash");
 		Long startTime = System.currentTimeMillis();
 		Dataset<Row> dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
-		dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(dataset, "instrument_id");
+		dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(dataset, "ric");
 		dataset = dataset
 				.join(unpaidCash,
 						dataset.col("droppable-swap_contract_id").equalTo(unpaidCash.col("swap_contract_id"))
-								.and(dataset.col("droppable-instrument_id").equalTo(unpaidCash.col("instrument_id"))))
-				.drop("droppable-swap_contract_id").drop("droppable-instrument_id");
+								.and(dataset.col("droppable-ric").equalTo(unpaidCash.col("ric"))))
+				.drop("droppable-swap_contract_id").drop("droppable-ric");
 		log.info("Enriched Positions join with Unpaid Cash finished in {} ms", System.currentTimeMillis() - startTime);
 		return dataset;
 	}
@@ -94,7 +91,6 @@ public class SwapDataAnalyzer {
 			enrichedPositions = dataAccessor.getBlankDataset();
 		}
 		log.info("Completed Enriched Positions query in {} ms", System.currentTimeMillis() - startTime);
-		debugLogDatasetcontent(enrichedPositions);
 		return enrichedPositions;
 	}
 
@@ -108,13 +104,6 @@ public class SwapDataAnalyzer {
 		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, counterParties, "counterparty_id");
 		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, instruments, "ric");
 		return enrichedPositions.drop("time_stamp");
-	}
-
-	private void debugLogDatasetcontent(final Dataset<Row> dataset) {
-		log.debug(dataset.schema().toString());
-		dataset.foreach((row) -> {
-			log.debug(row.toString());
-		});
 	}
 
 	public Dataset<Row> getUnpaidCash(final String book, final String effectiveDate) {
@@ -141,10 +130,11 @@ public class SwapDataAnalyzer {
 	private Long getCounterPartyId(final String book, final Dataset<Row> counterParties) {
 		Dataset<Row> counterParty = counterParties.select("counterparty_id")
 				.where(counterParties.col("book").equalTo(book));
-		if (counterParty.count() != 1) {
+		if (counterParty.isEmpty()) {
 			return -1L;
 		} else {
-			return counterParty.collectAsList().get(0).getAs("counterparty_id");
+			// return counterParty.collectAsList().get(0).getAs("counterparty_id");
+			return counterParty.first().getAs("counterparty_id");
 		}
 	}
 
@@ -166,11 +156,6 @@ public class SwapDataAnalyzer {
 
 	@SneakyThrows
 	private Dataset<Row> getUnpaidCashFlows(final Dataset<Row> cashFlows, final String effectiveDate) {
-//		Date date = QUERY_DATE_FORMAT.parse(((Integer) effectiveDate).toString());
-//		String newFormat = DATABASE_DATE_FORMAT.format(date);
-
-		// cashFlows.filter(condition)
-
 		return cashFlows.select("ric", "long_short", "amount", "swap_contract_id", "cashflow_type")
 				.where(cashFlows.col("effective_date").leq(functions.lit(effectiveDate))
 						.and(cashFlows.col("pay_date").gt(functions.lit(effectiveDate))));
@@ -212,6 +197,7 @@ public class SwapDataAnalyzer {
 	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash) {
 		dataAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaid_cash");
 		List<String> cashFlowTypes = getCashFlowTypes(unpaidCash);
+		// Dataset<Row> cashFlowTypes = getCashFlowTypes(unpaidCash);
 		Dataset<Row> distributedUnpaidCashByType = dataAccessor
 				.executeSql(buildUnpaidCashDistributionQuery(cashFlowTypes));
 		distributedUnpaidCashByType = sumDistUnpaidCash(cashFlowTypes, distributedUnpaidCashByType);
@@ -229,8 +215,13 @@ public class SwapDataAnalyzer {
 
 	private List<String> getCashFlowTypes(final Dataset<Row> unpaidCash) {
 		Dataset<Row> cashFlowTypeRows = unpaidCash.select("cashflow_type").distinct();
+		unpaidCash.select("cashflow_type").distinct();
+//		Iterator<Row> types = cashFlowTypeRows.toLocalIterator();
 		List<String> cashFlowTypes = new ArrayList<>();
+
 		for (Row row : cashFlowTypeRows.collectAsList()) {
+			// while (types.hasNext()) {
+
 			cashFlowTypes.add((String) row.getAs("cashflow_type"));
 		}
 		return cashFlowTypes;

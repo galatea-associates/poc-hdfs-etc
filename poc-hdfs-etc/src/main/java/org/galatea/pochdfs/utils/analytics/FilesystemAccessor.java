@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 
@@ -42,6 +43,11 @@ public class FilesystemAccessor {
 
 	public Dataset<Row> executeSql(final String command) {
 		return sparkSession.sql(command);
+	}
+
+	public void writeDataset(final Dataset<Row> dataset, final String path) {
+		log.info("Writing dataset to path {}", path);
+		dataset.write().mode(SaveMode.Overwrite).json(path);
 	}
 
 }

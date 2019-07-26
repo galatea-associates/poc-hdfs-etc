@@ -1,9 +1,14 @@
 package org.galatea.pochdfs;
 
 import org.apache.commons.cli.MissingOptionException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.galatea.pochdfs.service.analytics.SwapDataAccessor;
+import org.galatea.pochdfs.service.analytics.SwapDataAnalyzer;
+import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import lombok.SneakyThrows;
@@ -15,10 +20,20 @@ public class Application implements ApplicationRunner {
 
 	@SneakyThrows
 	public static void main(final String[] args) {
-		for (String arg : args) {
-			log.info("Command Line Arg is {}", arg);
+		// SpringApplication.run(Application.class, args);
+		SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer").getOrCreate();
+		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
+		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
+		Dataset<Row> result = analyzer.getEnrichedPositionsWithUnpaidCash("AGPCF", "2019-07-01");
+		result = analyzer.getEnrichedPositionsWithUnpaidCash("AGPCF", "2019-07-01");
+		result = result.drop("timeStamp").drop("timestamp").drop("time_stamp");
+		log.info("Result set has {} records", result.count());
+		// fileSystemAccessor.writeDataset(result, "/result.json");
+		// result.show();
+		while (true) {
+			Thread.sleep(5000);
+
 		}
-		SpringApplication.run(Application.class, args);
 	}
 
 	/**

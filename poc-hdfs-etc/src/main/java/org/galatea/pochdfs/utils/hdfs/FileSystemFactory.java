@@ -11,7 +11,7 @@ import lombok.SneakyThrows;
 @Getter
 public class FileSystemFactory {
 
-	private static final String DEFAULT_FS = "hdfs://ec2-18-222-172-50.us-east-2.compute.amazonaws.com:9000";
+	private static final String DEFAULT_FS = "hdfs://ec2-3-13-178-241.us-east-2.compute.amazonaws.com:9000";
 
 	private FileSystemFactory(final String defaultFs) {
 
@@ -29,7 +29,7 @@ public class FileSystemFactory {
 		configuration.set("fs.file.impl", LocalFileSystem.class.getName());
 		configuration.setBoolean("dfs.support.append", true);
 		configuration.setBoolean("dfs.client.use.datanode.hostname", true);
-		configuration.set("dfs.replication", "1");
+		configuration.set("dfs.replication", "3");
 		return configuration;
 	}
 }

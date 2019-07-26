@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class HdfsWriter implements IHdfsWriter {
 
@@ -28,6 +30,8 @@ public class HdfsWriter implements IHdfsWriter {
 	@Override
 	@SneakyThrows
 	public void createFileFromByteArray(final Path path, final byte[] source) {
+		log.info("Create file from byte array");
+		Long startTime = System.currentTimeMillis();
 		try (InputStream inputStream = new ByteArrayInputStream(source);
 				FSDataOutputStream outputStream = fileSystem.create(path)) {
 			byte[] b = new byte[1024];
@@ -36,6 +40,7 @@ public class HdfsWriter implements IHdfsWriter {
 				outputStream.write(b, 0, numBytes);
 			}
 		}
+		log.info("Finished in {} ms", System.currentTimeMillis() - startTime);
 	}
 
 	@Override
@@ -47,6 +52,8 @@ public class HdfsWriter implements IHdfsWriter {
 	@Override
 	@SneakyThrows
 	public void appendByteArrayToFile(final Path path, final byte[] source) {
+		log.info("Apppending byte array to file");
+		Long startTime = System.currentTimeMillis();
 		try (FSDataOutputStream outputStream = fileSystem.append(path);
 				InputStream inputStream = new ByteArrayInputStream(source)) {
 			byte[] b = new byte[1024];
@@ -54,14 +61,18 @@ public class HdfsWriter implements IHdfsWriter {
 			while ((numBytes = inputStream.read(b)) > 0) {
 				outputStream.write(b, 0, numBytes);
 			}
-
 		}
+		log.info("Finished in {} ms", System.currentTimeMillis() - startTime);
 	}
 
 	@SneakyThrows
 	private byte[] createByteArray(final Object object) {
+		log.info("Creating byte array out of object");
+		Long startTime = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(object));
-		return builder.append("\n").toString().getBytes();
+		byte[] result = builder.append("\n").toString().getBytes();
+		log.info("Byte array creation finished in {} ms", System.currentTimeMillis() - startTime);
+		return result;
 	}
 
 	@Override
