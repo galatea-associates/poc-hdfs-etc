@@ -1,10 +1,12 @@
 package org.galatea.pochdfs.service.analytics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -83,12 +85,25 @@ public class SwapDataAccessor {
 		Dataset<Row> swapIdRows = contracts.select("swap_contract_id")
 				.where(contracts.col("counterparty_id").equalTo(counterPartyId)).distinct();
 		// Iterator<Row> idRows = swapIdRows.toLocalIterator();
-		List<Long> swapIds = new ArrayList<>();
-		for (Row row : swapIdRows.collectAsList()) {
-			// while (idRows.hasNext()) {
-			swapIds.add((Long) row.getAs("swap_contract_id"));
-		}
-		return swapIds;
+
+		swapIdRows.cache();
+
+//		List<Long> swapIds = new ArrayList<>();
+//		for (Row row : swapIdRows.collectAsList()) {
+//			// while (idRows.hasNext()) {
+//			swapIds.add((Long) row.getAs("swap_contract_id"));
+//		}
+//		return swapIds;
+
+		Dataset<Row> pivotSet = swapIdRows.withColumn("tempGroupCol", functions.lit(0)).withColumn("tempSumCol",
+				functions.lit(0));
+
+		// unpaidCash.select("cashflow_type").distinct();
+//		Iterator<Row> types = cashFlowTypeRows.toLocalIterator();
+
+		List<String> stringList = Arrays.asList(pivotSet.groupBy("tempGroupCol").pivot("swap_contract_id")
+				.sum("tempSumCol").drop("tempGroupCol").columns());
+		return stringList.stream().map(s -> Long.valueOf(s)).collect(Collectors.toList());
 	}
 
 	/**

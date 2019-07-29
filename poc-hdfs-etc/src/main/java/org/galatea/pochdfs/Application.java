@@ -21,7 +21,9 @@ public class Application implements ApplicationRunner {
 	@SneakyThrows
 	public static void main(final String[] args) {
 		// SpringApplication.run(Application.class, args);
-		SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer").getOrCreate();
+		SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
+				.config("spark.sql.shuffle.partitions", 64).config("spark.default.parallelism", 20).getOrCreate();
+
 		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
 		Dataset<Row> result = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);

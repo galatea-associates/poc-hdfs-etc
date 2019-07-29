@@ -1,6 +1,7 @@
 package org.galatea.pochdfs.service.analytics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +36,13 @@ public class SwapDataAnalyzer {
 	public Dataset<Row> getEnrichedPositionsWithUnpaidCash(final String book, final String effectiveDate) {
 		log.info("Starting Enriched Positions with Unpaid Cash query");
 		Long startTime = System.currentTimeMillis();
-		Dataset<Row> enrichedPositions = getEnrichedPositions(book, effectiveDate);
-		// log.info("Enriched Positions set has {} records", enrichedPositions.count());
-		Dataset<Row> unpaidCash = getUnpaidCash(book, effectiveDate);
-		// log.info("Unpaid Cash set has {} records", unpaidCash.count());
+
+		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
+		Long counterPartyId = getCounterPartyId(book, counterParties.get());
+		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+
+		Dataset<Row> enrichedPositions = getEnrichedPositions(counterPartyId, effectiveDate, swapIds);
+		Dataset<Row> unpaidCash = getUnpaidCash(counterPartyId, effectiveDate, swapIds);
 		Dataset<Row> enrichedPositionsWithUnpaidCash = joinEnrichedPositionsAndUnpaidCash(enrichedPositions,
 				unpaidCash);
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
@@ -80,25 +84,57 @@ public class SwapDataAnalyzer {
 		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
 		Long counterPartyId = getCounterPartyId(book, counterParties.get());
 		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+//		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
+//		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
+//		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
+//		Dataset<Row> enrichedPositions;
+//		if (datasetsNotEmpty(positions, swapContracts, counterParties, instruments)) {
+//			enrichedPositions = createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
+//					instruments.get());
+//		} else {
+//			enrichedPositions = dataAccessor.getBlankDataset();
+//		}
+		Dataset<Row> result = getEnrichedPositions(counterPartyId, effectiveDate, swapIds);
+		log.info("Completed Enriched Positions query in {} ms", System.currentTimeMillis() - startTime);
+		return result;
+	}
+
+	/**
+	 *
+	 * @param counterPartyId the counter party ID
+	 * @param effectiveDate  the effective date
+	 * @return a dataset of all enriched positions for the counter party on the
+	 *         effective date
+	 */
+	public Dataset<Row> getEnrichedPositions(final Long counterPartyId, final String effectiveDate,
+			final Collection<Long> swapIds) {
+		// log.info("Getting enriched positions for book {} on effective date {}", book,
+		// effectiveDate);
+		// Long startTime = System.currentTimeMillis();
+		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
+		// Long counterPartyId = getCounterPartyId(book, counterParties.get());
+		// Collection<Long> swapIds =
+		// dataAccessor.getCounterPartySwapIds(counterPartyId);
 		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
 		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
 		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
-		Dataset<Row> enrichedPositions;
+		// Dataset<Row> enrichedPositions;
 		if (datasetsNotEmpty(positions, swapContracts, counterParties, instruments)) {
-			enrichedPositions = createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
+			return createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
 					instruments.get());
 		} else {
-			enrichedPositions = dataAccessor.getBlankDataset();
+			return dataAccessor.getBlankDataset();
 		}
-		log.info("Completed Enriched Positions query in {} ms", System.currentTimeMillis() - startTime);
-		return enrichedPositions;
+		// log.info("Completed Enriched Positions query in {} ms",
+		// System.currentTimeMillis() - startTime);
+		// return enrichedPositions;
 	}
 
 	private Dataset<Row> createEnrichedPositions(final Dataset<Row> positions, final Dataset<Row> swapContracts,
 			final Dataset<Row> counterParties, final Dataset<Row> instruments) {
-		Dataset<Row> startOfDatePositions = positions.select("*").where(positions.col("position_type").equalTo("S"))
-				.distinct();
-		log.debug("TEST COUNT IS {}", startOfDatePositions.count());
+		Dataset<Row> startOfDatePositions = positions.filter(positions.col("position_type").equalTo("S"));
+//		Dataset<Row> startOfDatePositions = positions.select("*").where(positions.col("position_type").equalTo("S"))
+//				.distinct();
 		Dataset<Row> enrichedPositions = QUERY_EXECUTOR.leftJoin(startOfDatePositions, swapContracts,
 				"swap_contract_id");
 		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, counterParties, "counterparty_id");
@@ -114,16 +150,28 @@ public class SwapDataAnalyzer {
 		Long counterPartyId = getCounterPartyId(book, counterParties.get());
 
 		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+		Dataset<Row> result = getUnpaidCash(counterPartyId, effectiveDate, swapIds);
+		log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
+		return result;
+	}
+
+	private Dataset<Row> getUnpaidCash(final Long counterPartyId, final String effectiveDate,
+			final Collection<Long> swapIds) {
+		// log.info("Getting unpaid cash for book {} on effective date {}", book,
+		// effectiveDate);
+		// Long startTime = System.currentTimeMillis();
+
+		// Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
+		// Long counterPartyId = getCounterPartyId(book, counterParties.get());
+
+		// Collection<Long> swapIds =
+		// dataAccessor.getCounterPartySwapIds(counterPartyId);
 		Optional<Dataset<Row>> unpaidCash = getUnpaidCashForContracts(swapIds, counterPartyId, effectiveDate);
 
 		if (datasetsNotEmpty(unpaidCash)) {
-			Dataset<Row> distributeUnpaidCash = distributeUnpaidCashByType(unpaidCash.get());
-			log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
-			return distributeUnpaidCash;
+			return distributeUnpaidCashByType(unpaidCash.get());
 		} else {
-			Dataset<Row> blankSet = dataAccessor.getBlankDataset();
-			log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
-			return blankSet;
+			return dataAccessor.getBlankDataset();
 		}
 	}
 
@@ -195,8 +243,9 @@ public class SwapDataAnalyzer {
 	 * @return a dataset including columns for unpaidDiv and unpaidInt
 	 */
 	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash) {
-		dataAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaid_cash");
 		List<String> cashFlowTypes = getCashFlowTypes(unpaidCash);
+		dataAccessor.createOrReplaceSqlTempView(unpaidCash, "unpaid_cash");
+
 		// Dataset<Row> cashFlowTypes = getCashFlowTypes(unpaidCash);
 		Dataset<Row> distributedUnpaidCashByType = dataAccessor
 				.executeSql(buildUnpaidCashDistributionQuery(cashFlowTypes));
@@ -214,17 +263,30 @@ public class SwapDataAnalyzer {
 	}
 
 	private List<String> getCashFlowTypes(final Dataset<Row> unpaidCash) {
-		Dataset<Row> cashFlowTypeRows = unpaidCash.select("cashflow_type").distinct();
-		unpaidCash.select("cashflow_type").distinct();
+		Dataset<Row> cashFlowTypeRows = unpaidCash.select("cashflow_type").dropDuplicates();
+		cashFlowTypeRows.cache();
+
+		// cashFlowTypeRows.coalesce(4);
+
+		Dataset<Row> pivotSet = cashFlowTypeRows.withColumn("tempGroupCol", functions.lit(0)).withColumn("tempSumCol",
+				functions.lit(0));
+
+		// unpaidCash.select("cashflow_type").distinct();
 //		Iterator<Row> types = cashFlowTypeRows.toLocalIterator();
-		List<String> cashFlowTypes = new ArrayList<>();
 
-		for (Row row : cashFlowTypeRows.collectAsList()) {
-			// while (types.hasNext()) {
+		return Arrays.asList(pivotSet.groupBy("tempGroupCol").pivot("cashflow_type").sum("tempSumCol")
+				.drop("tempGroupCol").columns());
 
-			cashFlowTypes.add((String) row.getAs("cashflow_type"));
-		}
-		return cashFlowTypes;
+//		List<String> cashFlowTypes = new ArrayList<>();
+//		// cashFlowTypeRows.
+//		// cashFlowTypeRows.partitio
+//		List<Row> types = cashFlowTypeRows.collectAsList();
+//		for (Row row : types) {
+//			// while (types.hasNext()) {
+//
+//			cashFlowTypes.add((String) row.getAs("cashflow_type"));
+//		}
+//		return cashFlowTypes;
 	}
 
 	private String buildUnpaidCashDistributionQuery(final Collection<String> cashFlowTypes) {

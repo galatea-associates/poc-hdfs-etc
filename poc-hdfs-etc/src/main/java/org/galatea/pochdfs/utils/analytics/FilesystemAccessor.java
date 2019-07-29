@@ -50,4 +50,8 @@ public class FilesystemAccessor {
 		dataset.write().mode(SaveMode.Overwrite).json(path);
 	}
 
+//	public void test() {
+//		sparkSession.par
+//	}
+
 }
