@@ -24,8 +24,8 @@ public class Application implements ApplicationRunner {
 		SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer").getOrCreate();
 		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
-		Dataset<Row> result = analyzer.getEnrichedPositionsWithUnpaidCash("AGPCF", "2019-07-01");
-		result = analyzer.getEnrichedPositionsWithUnpaidCash("AGPCF", "2019-07-01");
+		Dataset<Row> result = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+		result = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
 		result = result.drop("timeStamp").drop("timestamp").drop("time_stamp");
 		log.info("Result set has {} records", result.count());
 		// fileSystemAccessor.writeDataset(result, "/result.json");
@@ -45,7 +45,7 @@ public class Application implements ApplicationRunner {
 	@Override
 	@SneakyThrows
 	public void run(final ApplicationArguments args) {
-		if (!args.containsOption("server.port") && System.getProperty("server.port") == null) {
+		if (!args.containsOption("server.port") && (System.getProperty("server.port") == null)) {
 			throw new MissingOptionException("Server port must be set via command line parameter");
 		}
 	}

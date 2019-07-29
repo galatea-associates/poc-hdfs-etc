@@ -44,12 +44,11 @@ public class SwapFilePathCreator {
 
 	/**
 	 *
-	 * @param swapId        the position's swap id
-	 * @param effectiveDate the effective date of the position
+	 * @param swapId the position's swap id
 	 * @return the HDFS file path for the position
 	 */
-	public String createPositionFilepath(final int swapId, final String effectiveDate) {
-		return buildFilepath(BASE_PATH, "positions/", String.valueOf(swapId), "-", String.valueOf(effectiveDate), "-",
+	public String createPositionFilepath(final int swapId) {
+		return buildFilepath(BASE_PATH, "positions/", String.valueOf(swapId), "-",
 				SwapBaseFilename.Filename.POSITIONS.getFilename(), FILE_EXTENSION);
 	}
 

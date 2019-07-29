@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.StructType;
 import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 
@@ -27,9 +28,20 @@ public class SwapDataAccessor {
 		return swapContracts;
 	}
 
-	public Optional<Dataset<Row>> getPositions(final long swapId, final String effectiveDate) {
+	public Optional<Dataset<Row>> getEffectiveDateSwapPositions(final long swapId, final String effectiveDate) {
+		Optional<Dataset<Row>> positions = getPositions(swapId);
+		if (positions.isPresent()) {
+			Dataset<Row> actualPositions = positions.get();
+			return Optional.of(actualPositions
+					.filter(actualPositions.col("effective_date").equalTo(functions.lit(effectiveDate))));
+		} else {
+			return positions;
+		}
+	}
+
+	public Optional<Dataset<Row>> getPositions(final long swapId) {
 		Optional<Dataset<Row>> positions = accessor
-				.getData(baseFilePath + "positions/" + swapId + "-" + effectiveDate + "-" + "positions.jsonl");
+				.getData(baseFilePath + "positions/" + swapId + "-" + "positions.jsonl");
 		return positions;
 	}
 
@@ -90,7 +102,7 @@ public class SwapDataAccessor {
 			final String effectiveDate) {
 		Stack<Dataset<Row>> totalPositions = new Stack<>();
 		for (Long swapId : swapIds) {
-			Optional<Dataset<Row>> positions = getPositions(swapId, effectiveDate);
+			Optional<Dataset<Row>> positions = getEffectiveDateSwapPositions(swapId, effectiveDate);
 			if (positions.isPresent()) {
 				totalPositions.add(positions.get());
 			}
