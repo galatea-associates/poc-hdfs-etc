@@ -1,7 +1,9 @@
 package org.galatea.pochdfs.utils.hdfs;
 
 import org.apache.hadoop.fs.Path;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface IHdfsWriter {
 
 	/**

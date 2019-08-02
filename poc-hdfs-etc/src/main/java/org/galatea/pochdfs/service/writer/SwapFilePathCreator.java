@@ -1,18 +1,21 @@
 package org.galatea.pochdfs.service.writer;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class SwapFilePathCreator {
 
-	private static final SwapFilePathCreator	INSTANCE		= new SwapFilePathCreator();
+//	private static final SwapFilePathCreator	INSTANCE		= new SwapFilePathCreator();
 
-	private static final String					BASE_PATH		= "/cs/data/";
-	private static final String					FILE_EXTENSION	= ".jsonl";
+	private static final String	BASE_PATH		= "/cs/data/";
+	private static final String	FILE_EXTENSION	= ".jsonl";
 
-	private SwapFilePathCreator() {
-	}
+//	private SwapFilePathCreator() {
+//	}
 
-	public static SwapFilePathCreator getInstance() {
-		return INSTANCE;
-	}
+//	public static SwapFilePathCreator getInstance() {
+//		return INSTANCE;
+//	}
 
 	/**
 	 *

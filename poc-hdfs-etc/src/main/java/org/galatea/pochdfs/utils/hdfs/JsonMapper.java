@@ -5,30 +5,33 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
 
+@Component
 public class JsonMapper {
 
-	private static final JsonMapper								INSTANCE			= new JsonMapper();
+	// private static final JsonMapper INSTANCE = new JsonMapper();
 	private static final DateTimeFormatter						DATE_TIME_FORMATTER	= DateTimeFormatter
 			.ofPattern("yyyyMMddss");
 	private static final ObjectMapper							objectMapper		= new ObjectMapper();
 	private static final TypeReference<HashMap<String, Object>>	TYPE_REFERENCE		= new TypeReference<HashMap<String, Object>>() {
 																					};
 
-	private JsonMapper() {
-	}
-
-	/**
-	 *
-	 * @return the instance of UpstreamObjectMapper
-	 */
-	public static JsonMapper getInstance() {
-		return INSTANCE;
-	}
+//	private JsonMapper() {
+//	}
+//
+//	/**
+//	 *
+//	 * @return the instance of UpstreamObjectMapper
+//	 */
+//	public static JsonMapper getInstance() {
+//		return INSTANCE;
+//	}
 
 	/**
 	 *

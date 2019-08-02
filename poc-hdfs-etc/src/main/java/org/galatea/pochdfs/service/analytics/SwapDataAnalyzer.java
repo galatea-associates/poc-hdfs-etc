@@ -5,26 +5,32 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
-import org.galatea.pochdfs.utils.analytics.DatasetQueryExecutor;
+import org.galatea.pochdfs.domain.analytics.BookSwapDataState;
+import org.galatea.pochdfs.domain.analytics.SwapStateGetter;
+import org.galatea.pochdfs.utils.analytics.DatasetTransformer;
 
-import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scala.collection.JavaConverters;
 import scala.collection.Seq;
 
 @Slf4j
-@AllArgsConstructor
 public class SwapDataAnalyzer {
 
-	private static final DatasetQueryExecutor	QUERY_EXECUTOR	= DatasetQueryExecutor.getInstance();
+	private static final DatasetTransformer	TRANSFORMER	= DatasetTransformer.getInstance();
 
-	private final SwapDataAccessor				dataAccessor;
+	private final SwapDataAccessor			dataAccessor;
+
+	private final SwapStateGetter			stateGetter;
+
+	public SwapDataAnalyzer(final SwapDataAccessor dataAccessor) {
+		this.dataAccessor = dataAccessor;
+		stateGetter = new SwapStateGetter(dataAccessor);
+	}
 
 	/**
 	 *
@@ -37,14 +43,27 @@ public class SwapDataAnalyzer {
 		log.info("Starting Enriched Positions with Unpaid Cash query");
 		Long startTime = System.currentTimeMillis();
 
-		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
-		Long counterPartyId = getCounterPartyId(book, counterParties.get());
-		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
+		Long subStartTime = System.currentTimeMillis();
+		log.info("Reading in current state");
+		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+		log.info("Current state read took {} ms", System.currentTimeMillis() - subStartTime);
 
-		Dataset<Row> enrichedPositions = getEnrichedPositions(counterPartyId, effectiveDate, swapIds);
-		Dataset<Row> unpaidCash = getUnpaidCash(counterPartyId, effectiveDate, swapIds);
+		subStartTime = System.currentTimeMillis();
+		log.info("Creating enriched positions for book {} with effective date {}", book, effectiveDate);
+		Dataset<Row> enrichedPositions = getEnrichedPositions(currentState);
+		log.info("Completed enriched positions creation in {} ms", System.currentTimeMillis() - subStartTime);
+
+		subStartTime = System.currentTimeMillis();
+		log.info("Getting unpaid cash for book {} with effective date {}", book, effectiveDate);
+		Dataset<Row> unpaidCash = getUnpaidCash(currentState);
+		log.info("Completed unpaid cash creation in {} ms", System.currentTimeMillis() - subStartTime);
+
+		subStartTime = System.currentTimeMillis();
+		log.info("Joining enriched positions with unpaid cash");
 		Dataset<Row> enrichedPositionsWithUnpaidCash = joinEnrichedPositionsAndUnpaidCash(enrichedPositions,
 				unpaidCash);
+		log.info("Completed join in {} ms", System.currentTimeMillis() - subStartTime);
+
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
 				System.currentTimeMillis() - startTime);
 		return enrichedPositionsWithUnpaidCash;
@@ -58,115 +77,57 @@ public class SwapDataAnalyzer {
 	 */
 	private Dataset<Row> joinEnrichedPositionsAndUnpaidCash(final Dataset<Row> enrichedPositions,
 			final Dataset<Row> unpaidCash) {
-		log.info("Joining Enriched Positions with Unpaid Cash");
-		Long startTime = System.currentTimeMillis();
-		Dataset<Row> dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
-		dataset = QUERY_EXECUTOR.getDatasetWithDroppableColumn(dataset, "ric");
+		Dataset<Row> dataset = TRANSFORMER.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
+		dataset = TRANSFORMER.getDatasetWithDroppableColumn(dataset, "ric");
 		dataset = dataset
 				.join(unpaidCash,
 						dataset.col("droppable-swap_contract_id").equalTo(unpaidCash.col("swap_contract_id"))
 								.and(dataset.col("droppable-ric").equalTo(unpaidCash.col("ric"))))
 				.drop("droppable-swap_contract_id").drop("droppable-ric");
-		log.info("Enriched Positions join with Unpaid Cash finished in {} ms", System.currentTimeMillis() - startTime);
 		return dataset;
 	}
 
 	/**
 	 *
-	 * @param counterPartyId the counter party ID
-	 * @param effectiveDate  the effective date
+	 * @param book          the book
+	 * @param effectiveDate the effective date
 	 * @return a dataset of all enriched positions for the counter party on the
 	 *         effective date
 	 */
 	public Dataset<Row> getEnrichedPositions(final String book, final String effectiveDate) {
-		log.info("Getting enriched positions for book {} on effective date {}", book, effectiveDate);
-		Long startTime = System.currentTimeMillis();
-		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
-		Long counterPartyId = getCounterPartyId(book, counterParties.get());
-		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
-//		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
-//		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
-//		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
-//		Dataset<Row> enrichedPositions;
-//		if (datasetsNotEmpty(positions, swapContracts, counterParties, instruments)) {
-//			enrichedPositions = createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
-//					instruments.get());
-//		} else {
-//			enrichedPositions = dataAccessor.getBlankDataset();
-//		}
-		Dataset<Row> result = getEnrichedPositions(counterPartyId, effectiveDate, swapIds);
-		log.info("Completed Enriched Positions query in {} ms", System.currentTimeMillis() - startTime);
-		return result;
+		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+		return getEnrichedPositions(currentState);
 	}
 
-	/**
-	 *
-	 * @param counterPartyId the counter party ID
-	 * @param effectiveDate  the effective date
-	 * @return a dataset of all enriched positions for the counter party on the
-	 *         effective date
-	 */
-	public Dataset<Row> getEnrichedPositions(final Long counterPartyId, final String effectiveDate,
-			final Collection<Long> swapIds) {
-		// log.info("Getting enriched positions for book {} on effective date {}", book,
-		// effectiveDate);
-		// Long startTime = System.currentTimeMillis();
-		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
-		// Long counterPartyId = getCounterPartyId(book, counterParties.get());
-		// Collection<Long> swapIds =
-		// dataAccessor.getCounterPartySwapIds(counterPartyId);
-		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
-		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
-		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
-		// Dataset<Row> enrichedPositions;
+	private Dataset<Row> getEnrichedPositions(final BookSwapDataState currentState) {
+		Optional<Dataset<Row>> counterParties = currentState.counterParties();
+		Optional<Dataset<Row>> positions = currentState.positions();
+		Optional<Dataset<Row>> swapContracts = currentState.swapContracts();
+		Optional<Dataset<Row>> instruments = currentState.instruments();
 		if (datasetsNotEmpty(positions, swapContracts, counterParties, instruments)) {
 			return createEnrichedPositions(positions.get(), swapContracts.get(), counterParties.get(),
 					instruments.get());
 		} else {
 			return dataAccessor.getBlankDataset();
 		}
-		// log.info("Completed Enriched Positions query in {} ms",
-		// System.currentTimeMillis() - startTime);
-		// return enrichedPositions;
 	}
 
 	private Dataset<Row> createEnrichedPositions(final Dataset<Row> positions, final Dataset<Row> swapContracts,
 			final Dataset<Row> counterParties, final Dataset<Row> instruments) {
 		Dataset<Row> startOfDatePositions = positions.filter(positions.col("position_type").equalTo("S"));
-//		Dataset<Row> startOfDatePositions = positions.select("*").where(positions.col("position_type").equalTo("S"))
-//				.distinct();
-		Dataset<Row> enrichedPositions = QUERY_EXECUTOR.leftJoin(startOfDatePositions, swapContracts,
-				"swap_contract_id");
-		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, counterParties, "counterparty_id");
-		enrichedPositions = QUERY_EXECUTOR.join(enrichedPositions, instruments, "ric");
+		Dataset<Row> enrichedPositions = TRANSFORMER.leftJoin(startOfDatePositions, swapContracts, "swap_contract_id");
+		enrichedPositions = TRANSFORMER.join(enrichedPositions, counterParties, "counterparty_id");
+		enrichedPositions = TRANSFORMER.join(enrichedPositions, instruments, "ric");
 		return enrichedPositions.drop("time_stamp");
 	}
 
 	public Dataset<Row> getUnpaidCash(final String book, final String effectiveDate) {
-		log.info("Getting unpaid cash for book {} on effective date {}", book, effectiveDate);
-		Long startTime = System.currentTimeMillis();
-
-		Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
-		Long counterPartyId = getCounterPartyId(book, counterParties.get());
-
-		Collection<Long> swapIds = dataAccessor.getCounterPartySwapIds(counterPartyId);
-		Dataset<Row> result = getUnpaidCash(counterPartyId, effectiveDate, swapIds);
-		log.info("Completed Unpaid Cash query in {} ms", System.currentTimeMillis() - startTime);
-		return result;
+		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+		return getUnpaidCash(currentState);
 	}
 
-	private Dataset<Row> getUnpaidCash(final Long counterPartyId, final String effectiveDate,
-			final Collection<Long> swapIds) {
-		// log.info("Getting unpaid cash for book {} on effective date {}", book,
-		// effectiveDate);
-		// Long startTime = System.currentTimeMillis();
-
-		// Optional<Dataset<Row>> counterParties = dataAccessor.getCounterParties();
-		// Long counterPartyId = getCounterPartyId(book, counterParties.get());
-
-		// Collection<Long> swapIds =
-		// dataAccessor.getCounterPartySwapIds(counterPartyId);
-		Optional<Dataset<Row>> unpaidCash = getUnpaidCashForContracts(swapIds, counterPartyId, effectiveDate);
+	private Dataset<Row> getUnpaidCash(final BookSwapDataState currentState) {
+		Optional<Dataset<Row>> unpaidCash = getUnpaidCashForContracts(currentState);
 
 		if (datasetsNotEmpty(unpaidCash)) {
 			return distributeUnpaidCashByType(unpaidCash.get());
@@ -175,31 +136,15 @@ public class SwapDataAnalyzer {
 		}
 	}
 
-	private Long getCounterPartyId(final String book, final Dataset<Row> counterParties) {
-		Dataset<Row> counterParty = counterParties.select("counterparty_id")
-				.where(counterParties.col("book").equalTo(book));
-		if (counterParty.isEmpty()) {
-			return -1L;
+	private Optional<Dataset<Row>> getUnpaidCashForContracts(final BookSwapDataState currentState) {
+		Optional<Dataset<Row>> cashflows = currentState.cashFlows();
+		if (cashflows.isPresent()) {
+			Dataset<Row> unpaidCash = getUnpaidCashFlows(cashflows.get(), currentState.effectiveDate());
+			unpaidCash = sumUnpaidCashFlows(unpaidCash);
+			return Optional.of(unpaidCash);
 		} else {
-			// return counterParty.collectAsList().get(0).getAs("counterparty_id");
-			return counterParty.first().getAs("counterparty_id");
+			return Optional.empty();
 		}
-	}
-
-	private Optional<Dataset<Row>> getUnpaidCashForContracts(final Collection<Long> swapIds, final Long counterPartyId,
-			final String effectiveDate) {
-		Stack<Dataset<Row>> unpaidCash = new Stack<>();
-		for (Long swapId : dataAccessor.getCounterPartySwapIds(counterPartyId)) {
-			Optional<Dataset<Row>> swapContractCashFlows = dataAccessor.getCashFlows(swapId);
-			if (swapContractCashFlows.isPresent()) {
-				Dataset<Row> cashFlows = swapContractCashFlows.get();
-				Dataset<Row> unpaidCashFlows = getUnpaidCashFlows(cashFlows, effectiveDate);
-				if (!unpaidCashFlows.isEmpty()) {
-					unpaidCash.add(sumUnpaidCashFlows(unpaidCashFlows));
-				}
-			}
-		}
-		return combineUnpaidCashResults(unpaidCash);
 	}
 
 	@SneakyThrows
@@ -209,21 +154,9 @@ public class SwapDataAnalyzer {
 						.and(cashFlows.col("pay_date").gt(functions.lit(effectiveDate))));
 	}
 
-	private Dataset<Row> sumUnpaidCashFlows(final Dataset<Row> cashFlows) {
-		return cashFlows.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
+	private Dataset<Row> sumUnpaidCashFlows(final Dataset<Row> unpaidCash) {
+		return unpaidCash.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
 				.agg(functions.sum("amount").as("unpaid_cash"));
-	}
-
-	private Optional<Dataset<Row>> combineUnpaidCashResults(final Stack<Dataset<Row>> unpaidCash) {
-		if (unpaidCash.isEmpty()) {
-			return Optional.empty();
-		} else {
-			Dataset<Row> result = unpaidCash.pop();
-			while (!unpaidCash.isEmpty()) {
-				result = result.union(unpaidCash.pop());
-			}
-			return Optional.of(result.distinct());
-		}
 	}
 
 	private boolean datasetsNotEmpty(final Optional<?>... datasets) {

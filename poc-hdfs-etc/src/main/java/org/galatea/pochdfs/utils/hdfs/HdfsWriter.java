@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,19 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class HdfsWriter implements IHdfsWriter {
+@Component
+public class HdfsWriter {
 
 	private static final ObjectMapper	MAPPER	= new ObjectMapper();
 
 	private final FileSystem			fileSystem;
 
-	@Override
+	// @Override
 	@SneakyThrows
 	public void createFile(final Path path, final Object object) {
 		createFileFromByteArray(path, createByteArray(object));
 	}
 
-	@Override
+	// @Override
 	@SneakyThrows
 	public void createFileFromByteArray(final Path path, final byte[] source) {
 		log.info("Create file from byte array");
@@ -43,13 +45,13 @@ public class HdfsWriter implements IHdfsWriter {
 		log.info("Finished in {} ms", System.currentTimeMillis() - startTime);
 	}
 
-	@Override
+	// @Override
 	@SneakyThrows
 	public void appendFile(final Path path, final Object object) {
 		appendByteArrayToFile(path, createByteArray(object));
 	}
 
-	@Override
+	// @Override
 	@SneakyThrows
 	public void appendByteArrayToFile(final Path path, final byte[] source) {
 		log.info("Apppending byte array to file");
@@ -75,7 +77,7 @@ public class HdfsWriter implements IHdfsWriter {
 		return result;
 	}
 
-	@Override
+	// @Override
 	@SneakyThrows
 	public boolean fileExists(final Path path) {
 		return fileSystem.exists(path);

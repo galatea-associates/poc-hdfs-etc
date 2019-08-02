@@ -1,8 +1,11 @@
 package org.galatea.pochdfs.service.writer;
 
+import org.springframework.stereotype.Service;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Service
 public class SwapBaseFilename {
 
 	private SwapBaseFilename() {

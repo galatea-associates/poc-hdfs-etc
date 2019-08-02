@@ -57,6 +57,16 @@ public class SwapDataAccessor {
 		return counterparties;
 	}
 
+	public Long getCounterPartyId(final String book, final Dataset<Row> counterParties) {
+		Dataset<Row> counterParty = counterParties.select("counterparty_id")
+				.where(counterParties.col("book").equalTo(book));
+		if (counterParty.isEmpty()) {
+			return -1L;
+		} else {
+			return counterParty.first().getAs("counterparty_id");
+		}
+	}
+
 	public Optional<Dataset<Row>> getCashFlows(final long swapId) {
 		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
 		Long startTime = System.currentTimeMillis();

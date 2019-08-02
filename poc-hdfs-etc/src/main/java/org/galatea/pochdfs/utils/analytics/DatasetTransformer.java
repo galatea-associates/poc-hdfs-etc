@@ -3,15 +3,15 @@ package org.galatea.pochdfs.utils.analytics;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-public class DatasetQueryExecutor {
+public class DatasetTransformer {
 
-	private static final DatasetQueryExecutor INSTANCE = new DatasetQueryExecutor();
+	private static final DatasetTransformer INSTANCE = new DatasetTransformer();
 
-	private DatasetQueryExecutor() {
+	private DatasetTransformer() {
 
 	}
 
-	public static DatasetQueryExecutor getInstance() {
+	public static DatasetTransformer getInstance() {
 		return INSTANCE;
 	}
 

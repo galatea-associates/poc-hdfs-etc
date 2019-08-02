@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.fs.Path;
+import org.galatea.pochdfs.utils.hdfs.HdfsWriter;
 import org.galatea.pochdfs.utils.hdfs.IHdfsFilePathGetter;
-import org.galatea.pochdfs.utils.hdfs.IHdfsWriter;
 import org.galatea.pochdfs.utils.hdfs.JsonMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,15 +25,16 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Service
+@Component
 public class SwapDataWriter {
 
-	private static final JsonMapper				OBJECT_MAPPER		= JsonMapper.getInstance();
-	private static final ObjectMapper			MAPPER				= new ObjectMapper();
+	private static final ObjectMapper	MAPPER	= new ObjectMapper();
 
-	private static final SwapFilePathCreator	FILE_PATH_CREATOR	= SwapFilePathCreator.getInstance();
+	private final JsonMapper			objectMapper;
 
-	private final IHdfsWriter					writer;
+	private final SwapFilePathCreator	pathCreator;
+
+	private final HdfsWriter			writer;
 
 	@SneakyThrows
 	public void writeSwapData(final File file) {
@@ -41,27 +42,27 @@ public class SwapDataWriter {
 		log.info("Writing {} data", filename);
 
 		if (filename.toLowerCase().contains("counterparties")) {
-			writeEntireFileToHdfs(file, FILE_PATH_CREATOR.createCounterpartyFilepath());
+			writeEntireFileToHdfs(file, pathCreator.createCounterpartyFilepath());
 		} else if (filename.toLowerCase().contains("instruments")) {
-			writeEntireFileToHdfs(file, FILE_PATH_CREATOR.createInstrumentsFilepath());
+			writeEntireFileToHdfs(file, pathCreator.createInstrumentsFilepath());
 		} else if (filename.toLowerCase().contains("swapcontracts")) {
 			writeSwapRecordsToHdfs(file, (jsonObject) -> {
 				Long startTime = System.currentTimeMillis();
-				String path = FILE_PATH_CREATOR.constructSwapContractFilepath((int) jsonObject.get("counterparty_id"));
+				String path = pathCreator.constructSwapContractFilepath((int) jsonObject.get("counterparty_id"));
 				log.info("Created path in {} ms", System.currentTimeMillis() - startTime);
 				return path;
 			});
 		} else if (filename.toLowerCase().contains("positions")) {
 			writeSwapRecordsToHdfs(file, (jsonObject) -> {
 				Long startTime = System.currentTimeMillis();
-				String path = FILE_PATH_CREATOR.createPositionFilepath((int) jsonObject.get("swap_contract_id"));
+				String path = pathCreator.createPositionFilepath((int) jsonObject.get("swap_contract_id"));
 				log.info("Created path in {} ms", System.currentTimeMillis() - startTime);
 				return path;
 			});
 		} else if (filename.toLowerCase().contains("cashflows")) {
 			writeSwapRecordsToHdfs(file, (jsonObject) -> {
 				Long startTime = System.currentTimeMillis();
-				String path = FILE_PATH_CREATOR.createCashFlowFilepath((int) jsonObject.get("swap_contract_id"));
+				String path = pathCreator.createCashFlowFilepath((int) jsonObject.get("swap_contract_id"));
 				log.info("Created path in {} ms", System.currentTimeMillis() - startTime);
 				return path;
 			});
@@ -85,7 +86,7 @@ public class SwapDataWriter {
 			String jsonLine = reader.readLine();
 			while (jsonLine != null) {
 				Long beginTime = System.currentTimeMillis();
-				Map<String, Object> jsonObject = OBJECT_MAPPER.getTimestampedObject(jsonLine);
+				Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
 				log.info("Mapped object {} in {} ms", recordCount, System.currentTimeMillis() - beginTime);
 
 				String filePath = pathGetter.getFilePath(jsonObject);
