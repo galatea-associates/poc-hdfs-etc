@@ -58,6 +58,12 @@ public class SwapDataAnalyzer {
 		Dataset<Row> unpaidCash = getUnpaidCash(currentState);
 		log.info("Completed unpaid cash creation in {} ms", System.currentTimeMillis() - subStartTime);
 
+		subStartTime = startTime;
+		log.info("Enriched Positions count is {} and unpaid cash count is {}", enrichedPositions.count(),
+				unpaidCash.count());
+
+		startTime = subStartTime;
+
 		subStartTime = System.currentTimeMillis();
 		log.info("Joining enriched positions with unpaid cash");
 		Dataset<Row> enrichedPositionsWithUnpaidCash = joinEnrichedPositionsAndUnpaidCash(enrichedPositions,
@@ -67,24 +73,6 @@ public class SwapDataAnalyzer {
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
 				System.currentTimeMillis() - startTime);
 		return enrichedPositionsWithUnpaidCash;
-	}
-
-	/**
-	 *
-	 * @param enrichedPositions the dataset of enriched positions
-	 * @param unpaidCash        the dataset of unpaid cash
-	 * @return a dataset of all enriched positions with unpaid cash
-	 */
-	private Dataset<Row> joinEnrichedPositionsAndUnpaidCash(final Dataset<Row> enrichedPositions,
-			final Dataset<Row> unpaidCash) {
-		Dataset<Row> dataset = TRANSFORMER.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
-		dataset = TRANSFORMER.getDatasetWithDroppableColumn(dataset, "ric");
-		dataset = dataset
-				.join(unpaidCash,
-						dataset.col("droppable-swap_contract_id").equalTo(unpaidCash.col("swap_contract_id"))
-								.and(dataset.col("droppable-ric").equalTo(unpaidCash.col("ric"))))
-				.drop("droppable-swap_contract_id").drop("droppable-ric");
-		return dataset;
 	}
 
 	/**
@@ -257,6 +245,24 @@ public class SwapDataAnalyzer {
 			result = result.withColumnRenamed("sum(unpaid_" + type + ")", "unpaid_" + type);
 		}
 		return result;
+	}
+
+	/**
+	 *
+	 * @param enrichedPositions the dataset of enriched positions
+	 * @param unpaidCash        the dataset of unpaid cash
+	 * @return a dataset of all enriched positions with unpaid cash
+	 */
+	private Dataset<Row> joinEnrichedPositionsAndUnpaidCash(final Dataset<Row> enrichedPositions,
+			final Dataset<Row> unpaidCash) {
+		Dataset<Row> dataset = TRANSFORMER.getDatasetWithDroppableColumn(enrichedPositions, "swap_contract_id");
+		dataset = TRANSFORMER.getDatasetWithDroppableColumn(dataset, "ric");
+		dataset = dataset
+				.join(unpaidCash,
+						dataset.col("droppable-swap_contract_id").equalTo(unpaidCash.col("swap_contract_id"))
+								.and(dataset.col("droppable-ric").equalTo(unpaidCash.col("ric"))))
+				.drop("droppable-swap_contract_id").drop("droppable-ric").distinct();
+		return dataset;
 	}
 
 }

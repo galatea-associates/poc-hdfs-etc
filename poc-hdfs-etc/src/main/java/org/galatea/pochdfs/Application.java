@@ -32,6 +32,7 @@ public class Application implements ApplicationRunner {
 		result = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
 		result = result.drop("timeStamp").drop("timestamp").drop("time_stamp");
 		log.info("Result set has {} records", result.count());
+		fileSystemAccessor.writeDataset(result, "/result.json");
 //		// fileSystemAccessor.writeDataset(result, "/result.json");
 //		// result.show();
 
