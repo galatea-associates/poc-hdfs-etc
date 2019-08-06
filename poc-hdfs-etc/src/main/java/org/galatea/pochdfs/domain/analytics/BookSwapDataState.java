@@ -25,4 +25,13 @@ public class BookSwapDataState {
 	private Collection<Long>		swapIds;
 	private Optional<Dataset<Row>>	cashFlows;
 
+	public boolean positionDataExists() {
+		return counterParties.isPresent() && positions.isPresent() && swapContracts.isPresent()
+				&& instruments.isPresent();
+	}
+
+	public boolean cashflowDataExists() {
+		return cashFlows.isPresent();
+	}
+
 }
