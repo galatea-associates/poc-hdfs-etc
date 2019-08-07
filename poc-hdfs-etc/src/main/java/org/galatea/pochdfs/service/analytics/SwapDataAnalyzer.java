@@ -9,9 +9,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
 import org.galatea.pochdfs.domain.analytics.BookSwapDataState;
-import org.galatea.pochdfs.domain.analytics.SwapStateGetter;
 import org.galatea.pochdfs.utils.analytics.DatasetTransformer;
-import org.galatea.pochdfs.utils.benchmarking.MethodStats;
+import org.galatea.pochdfs.utils.analytics.SwapStateGetter;
 
 import lombok.extern.slf4j.Slf4j;
 import scala.collection.JavaConverters;
@@ -80,7 +79,6 @@ public class SwapDataAnalyzer {
 		return getEnrichedPositions(currentState);
 	}
 
-	@MethodStats
 	private Dataset<Row> getEnrichedPositions(final BookSwapDataState currentState) {
 		if (currentState.positionDataExists()) {
 			return createEnrichedPositions(currentState);
@@ -89,7 +87,6 @@ public class SwapDataAnalyzer {
 		}
 	}
 
-	@MethodStats
 	private Dataset<Row> createEnrichedPositions(final BookSwapDataState currentState) {
 		final Dataset<Row> positions = currentState.positions().get();
 		final Dataset<Row> swapContracts = currentState.swapContracts().get();
@@ -103,13 +100,11 @@ public class SwapDataAnalyzer {
 		return enrichedPositions.drop("time_stamp");
 	}
 
-	@MethodStats
 	public Dataset<Row> getUnpaidCash(final String book, final String effectiveDate) {
 		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
 		return getUnpaidCash(currentState);
 	}
 
-	@MethodStats
 	private Dataset<Row> getUnpaidCash(final BookSwapDataState currentState) {
 		if (currentState.cashflowDataExists()) {
 			return createUnpaidCash(currentState);
@@ -118,7 +113,6 @@ public class SwapDataAnalyzer {
 		}
 	}
 
-	@MethodStats
 	private Dataset<Row> createUnpaidCash(final BookSwapDataState currentState) {
 		Dataset<Row> unpaidCash = calculateUnpaidCash(currentState);
 		Dataset<Row> normalizedUnpaidCash = normalizeUnpaidCashByType(unpaidCash);
@@ -126,7 +120,11 @@ public class SwapDataAnalyzer {
 		return normalizedUnpaidCash;
 	}
 
-	@MethodStats
+	/**
+	 *
+	 * @param currentState the current effective date swap data for the book
+	 * @return the summed unpaid cash for the effective date
+	 */
 	private Dataset<Row> calculateUnpaidCash(final BookSwapDataState currentState) {
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
@@ -139,10 +137,13 @@ public class SwapDataAnalyzer {
 
 	/**
 	 * Creates an unpaid cash dataset with additional columns that merge the
-	 * cashflow type with the unpaid cash
+	 * cashflow type with the unpaid cash. For example, an unpaid cash result might
+	 * have two records for one position because there are two types, INT and DIV.
+	 * This method would join those two records into one record by creating
+	 * unpaid_INT and unpaid_DIV columns for the position.
 	 *
 	 * @param unpaidCash the unpaid cash
-	 * @return a dataset including columns for unpaidDiv and unpaidInt
+	 * @return a normalized unpaid cash dataset
 	 */
 	private Dataset<Row> normalizeUnpaidCashByType(final Dataset<Row> unpaidCash) {
 		List<String> cashFlowTypes = getCashFlowTypes(unpaidCash);
@@ -152,7 +153,11 @@ public class SwapDataAnalyzer {
 		return normalizedUnpaidCash;
 	}
 
-	@MethodStats
+	/**
+	 *
+	 * @param unpaidCash the unpaid cash
+	 * @return a list of unique cash flow types (e.g., ["INT", "DIV"])
+	 */
 	private List<String> getCashFlowTypes(final Dataset<Row> unpaidCash) {
 		Dataset<Row> cashFlowTypeRows = unpaidCash.select("cashflow_type").dropDuplicates();
 		cashFlowTypeRows.cache();
@@ -165,7 +170,13 @@ public class SwapDataAnalyzer {
 
 	}
 
-	@MethodStats
+	/**
+	 * Creates the extra unpaid columns for the different cashflow types
+	 *
+	 * @param unpaidCash    the unpaid cash
+	 * @param cashFlowTypes the list of cash flow types
+	 * @return unpaid cash with unpaid columns for the different cashflow types
+	 */
 	private Dataset<Row> distributeUnpaidCashByType(final Dataset<Row> unpaidCash, final List<String> cashFlowTypes) {
 		String sqlView = "unpaid_cash";
 		dataAccessor.createOrReplaceSqlTempView(unpaidCash, sqlView);
@@ -173,7 +184,6 @@ public class SwapDataAnalyzer {
 		return dataAccessor.executeSql(distributionQuery);
 	}
 
-	@MethodStats
 	private String buildUnpaidCashDistributionByTypeQuery(final Collection<String> cashFlowTypes,
 			final String sqlView) {
 		StringBuilder builder = new StringBuilder("SELECT * ");
@@ -185,7 +195,14 @@ public class SwapDataAnalyzer {
 		return builder.toString();
 	}
 
-	@MethodStats
+	/**
+	 * Combines the unpaid cash for each effective date position into one record
+	 *
+	 * @param cashFlowTypes         the list of cash flow types
+	 * @param distributedUnpaidCash the unpaid cash with unpaid columns for the
+	 *                              different cashflow types
+	 * @return a normalized unpaid cash dataset
+	 */
 	private Dataset<Row> combineDistributedUnpaidCash(final List<String> cashFlowTypes,
 			final Dataset<Row> distributedUnpaidCash) {
 		List<String> unpaidCashTypes = new ArrayList<>();
@@ -197,12 +214,10 @@ public class SwapDataAnalyzer {
 		return renameSummedTypeColumns(result, cashFlowTypes);
 	}
 
-	@MethodStats
 	private Seq<String> convertListToSeq(final List<String> inputList) {
 		return JavaConverters.asScalaIteratorConverter(inputList.iterator()).asScala().toSeq();
 	}
 
-	@MethodStats
 	private Dataset<Row> renameSummedTypeColumns(final Dataset<Row> unpaidCash,
 			final Collection<String> cashFlowTypes) {
 		Dataset<Row> result = unpaidCash;

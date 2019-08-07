@@ -1,6 +1,6 @@
 package org.galatea.pochdfs.entrypoint;
 
-import org.galatea.pochdfs.LocalSwapFileWriter;
+import org.galatea.pochdfs.service.writer.LocalSwapFileWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

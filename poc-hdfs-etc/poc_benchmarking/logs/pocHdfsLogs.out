@@ -1,0 +1,814 @@
+390  [main] INFO  org.galatea.pochdfs.Application  - Starting Application on Kyles-MacBook-Pro.local with PID 4750 (/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/target/classes started by kylepayne in /Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc)
+400  [main] INFO  org.galatea.pochdfs.Application  - No active profile set, falling back to default profiles: default
+284  [main] INFO  org.galatea.pochdfs.Application  - Starting Application on Kyles-MacBook-Pro.local with PID 21907 (/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/target/classes started by kylepayne in /Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc)
+287  [main] INFO  org.galatea.pochdfs.Application  - No active profile set, falling back to default profiles: default
+3853 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+13063 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+14926 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 67890] swaps
+14926 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+14980 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+14980 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+15036 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/67890-positions.jsonl;. Returning empty Optional instead
+15037 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+15360 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+15440 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+15441 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+15441 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+15853 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 412 ms
+15853 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+15853 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+16270 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 417 ms
+19528 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+20680 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+21157 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+21586 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 67890] swaps
+21586 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+21592 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+21592 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+21606 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/67890-positions.jsonl;. Returning empty Optional instead
+21606 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+21739 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+21746 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+21746 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+21746 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+21884 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 138 ms
+21884 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+21884 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+22011 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 127 ms
+23833 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+24309 [Executor task launch worker for task 58] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,10.0,20.0]
+24326 [Executor task launch worker for task 58] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,67890,30.0,40.0]
+24327 [Executor task launch worker for task 58] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,67890,50.0,60.0]
+24779 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=12345, unpaidDiv=10.0, unpaidInt=20.0)
+25215 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=67890, unpaidDiv=30.0, unpaidInt=40.0)
+25316 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=67890, unpaidDiv=50.0, unpaidInt=60.0)
+25780 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+26288 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+26868 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+26869 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+26874 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+26874 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+26992 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+26996 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+26996 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+26996 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+27117 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 121 ms
+28175 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+28735 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+29140 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+29369 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+29369 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+29372 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+29372 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+29464 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+29466 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+29467 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+29467 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+29559 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 92 ms
+30343 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+30567 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,125.0,40.0]
+30996 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+31325 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+31536 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+31536 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+31539 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+31539 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+31626 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+31629 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+31629 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+31629 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+31799 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 170 ms
+32522 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+32695 [Executor task launch worker for task 75] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,25.0,-10.0]
+33078 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+33382 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+33558 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+33559 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+33562 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+33562 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+33691 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+33698 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+33698 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+33698 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+33854 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 156 ms
+34501 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+34688 [Executor task launch worker for task 103] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,425.0,15.0]
+35398 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+35661 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+36022 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+36022 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+36025 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+36026 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+36097 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+36100 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+36100 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+36100 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+36173 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 73 ms
+36765 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+37054 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+37303 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+37478 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+37478 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+37484 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+37484 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+37550 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+37553 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+37553 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+37553 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+37648 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 95 ms
+38246 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+38456 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,100.0,-50.0]
+39104 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+39450 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+39716 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 67890] swaps
+39716 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+39783 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+39888 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+40009 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+40091 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+40091 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+40094 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+40094 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+40094 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+40094 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+40099 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl;. Returning empty Optional instead
+40099 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 5 ms
+40641 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+41503 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+41771 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+42035 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 67890] swaps
+42035 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+42118 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+42212 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+42440 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+42519 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+42520 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+42523 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+42523 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+42523 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+42523 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+42525 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl;. Returning empty Optional instead
+42525 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+42952 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 3 records
+43482 [Executor task launch worker for task 50] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2018-12-31,S,90,12345,ABCDE,CPField1,200,11,ABC]
+43483 [Executor task launch worker for task 49] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2018-12-31,S,97,67890,ABCDE,CPField1,200,33,GHI]
+43488 [Executor task launch worker for task 50] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2018-12-31,S,95,12345,ABCDE,CPField1,200,22,DEF]
+44068 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=11, swapId=12345, ric=ABC, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2018-12-31, tdQuantity=90, book=ABCDE)
+44454 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=22, swapId=12345, ric=DEF, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2018-12-31, tdQuantity=95, book=ABCDE)
+44539 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=33, swapId=67890, ric=GHI, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2018-12-31, tdQuantity=97, book=ABCDE)
+44584 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+44836 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+45018 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 67890] swaps
+45019 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+45070 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+45121 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+45180 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+45246 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+45247 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+45250 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+45250 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+45250 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+45250 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+45254 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl;. Returning empty Optional instead
+45254 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 4 ms
+45551 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 3 records
+46026 [Executor task launch worker for task 86] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,67,67890,ABCDE,CPField1,200,33,GHI]
+46029 [Executor task launch worker for task 87] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,60,12345,ABCDE,CPField1,200,11,ABC]
+46029 [Executor task launch worker for task 87] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,55,12345,ABCDE,CPField1,200,22,DEF]
+46399 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=11, swapId=12345, ric=ABC, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=60, book=ABCDE)
+46742 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=22, swapId=12345, ric=DEF, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=55, book=ABCDE)
+46803 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=33, swapId=67890, ric=GHI, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=67, book=ABCDE)
+46881 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+47023 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+47027 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+47027 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [] swaps
+47027 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+47029 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+47030 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+47219 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+47479 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+47850 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+48129 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+48129 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+48132 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+48132 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+48228 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+48232 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+48232 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+48232 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+48309 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 77 ms
+49007 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+49275 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+49461 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+49600 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+49600 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+49605 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+49605 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+49696 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+49702 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+49708 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+49709 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+49790 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 82 ms
+50574 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+50831 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,100.0,50.0]
+51284 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+51528 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+51694 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+51694 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+51699 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+51701 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+51779 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+51782 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+51782 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+51782 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+51838 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 55 ms
+52502 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+52684 [Executor task launch worker for task 75] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,10.0,-10.0]
+52991 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+53339 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+53480 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+53480 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+53482 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+53482 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+53529 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+53531 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+53531 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+53532 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+53592 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 60 ms
+54100 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+54342 [Executor task launch worker for task 103] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,25.0,-75.0]
+54827 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+55055 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+55249 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 54321, 67890] swaps
+55249 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+55331 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/54321-positions.jsonl into spark dataset
+55379 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+55433 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+55482 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+55528 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+55528 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+55530 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+55530 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+55530 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [54321] from HDFS into Spark Dataset
+55530 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/54321-cashFlows.jsonl into spark dataset
+55533 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/54321-cashFlows.jsonl;. Returning empty Optional instead
+55533 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+55533 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+55533 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+55535 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl;. Returning empty Optional instead
+55535 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+56197 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+57416 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+57641 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+57645 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+57645 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [] swaps
+57645 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+57650 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+57650 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+57780 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+57857 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+58168 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+58370 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345, 54321, 67890] swaps
+58372 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+58452 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/54321-positions.jsonl into spark dataset
+58561 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/67890-positions.jsonl into spark dataset
+58650 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+58725 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+58845 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+58845 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+58848 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+58848 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+58848 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [54321] from HDFS into Spark Dataset
+58848 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/54321-cashFlows.jsonl into spark dataset
+58853 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/54321-cashFlows.jsonl;. Returning empty Optional instead
+58853 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 5 ms
+58854 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [67890] from HDFS into Spark Dataset
+58854 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl into spark dataset
+58857 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/67890-cashFlows.jsonl;. Returning empty Optional instead
+58857 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+59394 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 9 records
+59903 [Executor task launch worker for task 64] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,95,67890,ABCDE,CPField1,200,44,JKL]
+59903 [Executor task launch worker for task 65] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,97,54321,ABCDE,CPField1,200,77,STU]
+59903 [Executor task launch worker for task 64] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,65,67890,ABCDE,CPField1,200,55,MNO]
+59903 [Executor task launch worker for task 65] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,67,54321,ABCDE,CPField1,200,88,VWX]
+59903 [Executor task launch worker for task 64] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,35,67890,ABCDE,CPField1,200,66,PQR]
+59903 [Executor task launch worker for task 65] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,37,54321,ABCDE,CPField1,200,99,YZA]
+59906 [Executor task launch worker for task 66] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,100,12345,ABCDE,CPField1,200,11,ABC]
+59907 [Executor task launch worker for task 66] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,70,12345,ABCDE,CPField1,200,22,DEF]
+59907 [Executor task launch worker for task 66] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,40,12345,ABCDE,CPField1,200,33,GHI]
+60287 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=11, swapId=12345, ric=ABC, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=100, book=ABCDE)
+60701 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=22, swapId=12345, ric=DEF, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=70, book=ABCDE)
+60764 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=33, swapId=12345, ric=GHI, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=40, book=ABCDE)
+60821 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=44, swapId=67890, ric=JKL, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=95, book=ABCDE)
+60886 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=55, swapId=67890, ric=MNO, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=65, book=ABCDE)
+60953 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=66, swapId=67890, ric=PQR, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=35, book=ABCDE)
+60999 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=77, swapId=54321, ric=STU, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=97, book=ABCDE)
+61053 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=88, swapId=54321, ric=VWX, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=67, book=ABCDE)
+61112 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=99, swapId=54321, ric=YZA, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=37, book=ABCDE)
+61353 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+61705 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+62008 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+62008 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+62077 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+62141 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+62239 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+62245 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+62271 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+62271 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 26 ms
+62771 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+63330 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+63570 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+63573 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+63573 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [] swaps
+63573 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+63576 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+63576 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+63713 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+63790 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+64121 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+64333 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+64333 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+64394 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+64454 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+64575 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+64575 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+64578 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+64578 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 3 ms
+64950 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 3 records
+65184 [Executor task launch worker for task 52] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,100,12345,ABCDE,CPField1,200,11,ABC]
+65184 [Executor task launch worker for task 52] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,25,12345,ABCDE,CPField1,200,22,DEF]
+65184 [Executor task launch worker for task 52] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,15,12345,ABCDE,CPField1,200,33,GHI]
+65440 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=11, swapId=12345, ric=ABC, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=100, book=ABCDE)
+65687 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=22, swapId=12345, ric=DEF, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=25, book=ABCDE)
+65720 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Asserting enriched positions results has enriched position with data: EnrichedPosition(instId=33, swapId=12345, ric=GHI, counterPartyId=200, counterPartyField1=CPField1, effectiveDate=2019-01-01, tdQuantity=15, book=ABCDE)
+66008 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+66293 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+66596 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [101, 102] swaps
+66596 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/101-positions.jsonl into spark dataset
+66599 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/101-positions.jsonl;. Returning empty Optional instead
+66600 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/102-positions.jsonl into spark dataset
+66608 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/102-positions.jsonl;. Returning empty Optional instead
+66608 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+66728 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+66733 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+66733 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [101] from HDFS into Spark Dataset
+66733 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/101-cashFlows.jsonl into spark dataset
+66807 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 74 ms
+66810 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [102] from HDFS into Spark Dataset
+66810 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/102-cashFlows.jsonl into spark dataset
+66897 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 87 ms
+68080 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 5 records
+68474 [Executor task launch worker for task 27] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,101,1000.0,70.0]
+68474 [Executor task launch worker for task 27] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,101,15000.0,800.0]
+68474 [Executor task launch worker for task 27] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [GHI,Long,101,150001.0,8002.0]
+68474 [Executor task launch worker for task 27] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,102,25000.0,60.0]
+68474 [Executor task launch worker for task 27] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [JKL,Long,102,250050.0,610.0]
+68687 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=101, unpaidDiv=1000.0, unpaidInt=70.0)
+68891 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=101, unpaidDiv=15000.0, unpaidInt=800.0)
+68938 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=GHI, swapId=101, unpaidDiv=150001.0, unpaidInt=8002.0)
+68975 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=102, unpaidDiv=25000.0, unpaidInt=60.0)
+69002 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=JKL, swapId=102, unpaidDiv=250050.0, unpaidInt=610.0)
+69041 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+69356 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+69598 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [201, 202] swaps
+69599 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/201-positions.jsonl into spark dataset
+69604 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/201-positions.jsonl;. Returning empty Optional instead
+69604 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/202-positions.jsonl into spark dataset
+69608 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/202-positions.jsonl;. Returning empty Optional instead
+69608 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+69659 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+69664 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+69664 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [201] from HDFS into Spark Dataset
+69665 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/201-cashFlows.jsonl into spark dataset
+69784 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 119 ms
+69784 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [202] from HDFS into Spark Dataset
+69784 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/202-cashFlows.jsonl into spark dataset
+69830 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 46 ms
+70620 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+70812 [Executor task launch worker for task 67] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,201,5000.0,-70.0]
+70813 [Executor task launch worker for task 67] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,202,500.0,-60.0]
+70813 [Executor task launch worker for task 67] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,202,5500.0,-1060.0]
+71010 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=201, unpaidDiv=5000.0, unpaidInt=-70.0)
+71173 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=202, unpaidDiv=500.0, unpaidInt=-60.0)
+71223 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=202, unpaidDiv=5500.0, unpaidInt=-1060.0)
+71262 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+71495 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+71613 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [101, 102] swaps
+71613 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/101-positions.jsonl into spark dataset
+71616 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/101-positions.jsonl;. Returning empty Optional instead
+71616 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/102-positions.jsonl into spark dataset
+71618 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/102-positions.jsonl;. Returning empty Optional instead
+71618 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+71661 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+71664 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+71664 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [101] from HDFS into Spark Dataset
+71664 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/101-cashFlows.jsonl into spark dataset
+71716 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 52 ms
+71716 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [102] from HDFS into Spark Dataset
+71717 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/102-cashFlows.jsonl into spark dataset
+71778 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 61 ms
+72441 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 5 records
+72599 [Executor task launch worker for task 104] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,101,1000.0,30.0]
+72599 [Executor task launch worker for task 104] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,101,15000.0,350.0]
+72599 [Executor task launch worker for task 104] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [GHI,Long,101,150001.0,3501.0]
+72599 [Executor task launch worker for task 104] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,102,25000.0,25.0]
+72599 [Executor task launch worker for task 104] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [JKL,Long,102,250050.0,255.0]
+72826 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=101, unpaidDiv=1000.0, unpaidInt=30.0)
+73042 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=101, unpaidDiv=15000.0, unpaidInt=350.0)
+73086 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=GHI, swapId=101, unpaidDiv=150001.0, unpaidInt=3501.0)
+73125 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=102, unpaidDiv=25000.0, unpaidInt=25.0)
+73165 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=JKL, swapId=102, unpaidDiv=250050.0, unpaidInt=255.0)
+73205 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+73412 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+73608 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [201, 202] swaps
+73612 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/201-positions.jsonl into spark dataset
+73616 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/201-positions.jsonl;. Returning empty Optional instead
+73617 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/202-positions.jsonl into spark dataset
+73623 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/202-positions.jsonl;. Returning empty Optional instead
+73623 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+73707 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+73710 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+73710 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [201] from HDFS into Spark Dataset
+73710 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/201-cashFlows.jsonl into spark dataset
+73809 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 99 ms
+73809 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [202] from HDFS into Spark Dataset
+73809 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/202-cashFlows.jsonl into spark dataset
+73879 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 70 ms
+74454 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+74667 [Executor task launch worker for task 143] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,201,5000.0,-30.0]
+74667 [Executor task launch worker for task 143] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,202,500.0,-25.0]
+74667 [Executor task launch worker for task 143] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,202,5500.0,-525.0]
+74791 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=201, unpaidDiv=5000.0, unpaidInt=-30.0)
+74917 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=202, unpaidDiv=500.0, unpaidInt=-25.0)
+74944 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=202, unpaidDiv=5500.0, unpaidInt=-525.0)
+74973 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+75253 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+75440 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [101, 102] swaps
+75440 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/101-positions.jsonl into spark dataset
+75443 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/101-positions.jsonl;. Returning empty Optional instead
+75443 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/102-positions.jsonl into spark dataset
+75445 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/102-positions.jsonl;. Returning empty Optional instead
+75445 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+75487 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+75489 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+75489 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [101] from HDFS into Spark Dataset
+75489 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/101-cashFlows.jsonl into spark dataset
+75530 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 41 ms
+75531 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [102] from HDFS into Spark Dataset
+75531 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/102-cashFlows.jsonl into spark dataset
+75579 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 47 ms
+76283 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 5 records
+76478 [Executor task launch worker for task 180] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,101,1000.0,30.0]
+76478 [Executor task launch worker for task 180] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,101,15000.0,400.0]
+76478 [Executor task launch worker for task 180] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [GHI,Long,101,150001.0,4002.0]
+76478 [Executor task launch worker for task 180] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,102,25000.0,20.0]
+76478 [Executor task launch worker for task 180] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [JKL,Long,102,250050.0,210.0]
+76693 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=101, unpaidDiv=1000.0, unpaidInt=30.0)
+76900 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=101, unpaidDiv=15000.0, unpaidInt=400.0)
+76943 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=GHI, swapId=101, unpaidDiv=150001.0, unpaidInt=4002.0)
+77038 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=102, unpaidDiv=25000.0, unpaidInt=20.0)
+77075 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=JKL, swapId=102, unpaidDiv=250050.0, unpaidInt=210.0)
+77118 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+77290 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+77421 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [201, 202] swaps
+77421 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/201-positions.jsonl into spark dataset
+77424 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/201-positions.jsonl;. Returning empty Optional instead
+77424 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/202-positions.jsonl into spark dataset
+77426 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/202-positions.jsonl;. Returning empty Optional instead
+77426 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+77477 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+77481 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+77481 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [201] from HDFS into Spark Dataset
+77481 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/201-cashFlows.jsonl into spark dataset
+77541 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 60 ms
+77542 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [202] from HDFS into Spark Dataset
+77542 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/202-cashFlows.jsonl into spark dataset
+77621 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 79 ms
+78356 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+78514 [Executor task launch worker for task 219] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,201,5000.0,-30.0]
+78514 [Executor task launch worker for task 219] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,202,500.0,-20.0]
+78514 [Executor task launch worker for task 219] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,202,5500.0,-570.0]
+78669 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=201, unpaidDiv=5000.0, unpaidInt=-30.0)
+78870 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=202, unpaidDiv=500.0, unpaidInt=-20.0)
+78896 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=202, unpaidDiv=5500.0, unpaidInt=-570.0)
+78927 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+79117 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+79254 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [101, 102] swaps
+79254 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/101-positions.jsonl into spark dataset
+79257 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/101-positions.jsonl;. Returning empty Optional instead
+79257 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/102-positions.jsonl into spark dataset
+79259 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/102-positions.jsonl;. Returning empty Optional instead
+79259 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+79323 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+79331 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+79331 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [101] from HDFS into Spark Dataset
+79331 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/101-cashFlows.jsonl into spark dataset
+79413 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 82 ms
+79413 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [102] from HDFS into Spark Dataset
+79413 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/102-cashFlows.jsonl into spark dataset
+79497 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 84 ms
+79966 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 5 records
+80162 [Executor task launch worker for task 256] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,101,1000.0,10.0]
+80162 [Executor task launch worker for task 256] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,101,15000.0,150.0]
+80162 [Executor task launch worker for task 256] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [GHI,Long,101,150001.0,1501.0]
+80162 [Executor task launch worker for task 256] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,102,25000.0,5.0]
+80162 [Executor task launch worker for task 256] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [JKL,Long,102,250050.0,55.0]
+80310 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=101, unpaidDiv=1000.0, unpaidInt=10.0)
+80437 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=101, unpaidDiv=15000.0, unpaidInt=150.0)
+80472 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=GHI, swapId=101, unpaidDiv=150001.0, unpaidInt=1501.0)
+80505 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=102, unpaidDiv=25000.0, unpaidInt=5.0)
+80550 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=JKL, swapId=102, unpaidDiv=250050.0, unpaidInt=55.0)
+80588 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+80950 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+81084 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [201, 202] swaps
+81084 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/201-positions.jsonl into spark dataset
+81086 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/201-positions.jsonl;. Returning empty Optional instead
+81086 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/202-positions.jsonl into spark dataset
+81088 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/202-positions.jsonl;. Returning empty Optional instead
+81088 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+81133 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+81135 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+81135 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [201] from HDFS into Spark Dataset
+81135 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/201-cashFlows.jsonl into spark dataset
+81180 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 45 ms
+81181 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [202] from HDFS into Spark Dataset
+81181 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/202-cashFlows.jsonl into spark dataset
+81229 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 48 ms
+81823 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+81961 [Executor task launch worker for task 295] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,201,5000.0,-10.0]
+81961 [Executor task launch worker for task 295] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,202,500.0,-5.0]
+81961 [Executor task launch worker for task 295] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [MNO,Long,202,5500.0,-55.0]
+82101 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=201, unpaidDiv=5000.0, unpaidInt=-10.0)
+82279 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=202, unpaidDiv=500.0, unpaidInt=-5.0)
+82347 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=MNO, swapId=202, unpaidDiv=5500.0, unpaidInt=-55.0)
+82385 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+82542 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+82647 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [101, 102] swaps
+82648 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/101-positions.jsonl into spark dataset
+82650 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/101-positions.jsonl;. Returning empty Optional instead
+82650 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/102-positions.jsonl into spark dataset
+82651 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/102-positions.jsonl;. Returning empty Optional instead
+82651 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+82693 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+82695 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+82695 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [101] from HDFS into Spark Dataset
+82695 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/101-cashFlows.jsonl into spark dataset
+82744 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 49 ms
+82744 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [102] from HDFS into Spark Dataset
+82745 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/102-cashFlows.jsonl into spark dataset
+82788 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 43 ms
+83502 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+83951 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+84143 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+84291 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [201, 202] swaps
+84291 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/201-positions.jsonl into spark dataset
+84293 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/201-positions.jsonl;. Returning empty Optional instead
+84293 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/202-positions.jsonl into spark dataset
+84295 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/202-positions.jsonl;. Returning empty Optional instead
+84295 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/201-swapContracts.jsonl into spark dataset
+84342 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+84343 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+84343 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [201] from HDFS into Spark Dataset
+84343 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/201-cashFlows.jsonl into spark dataset
+84386 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 43 ms
+84386 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [202] from HDFS into Spark Dataset
+84386 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/202-cashFlows.jsonl into spark dataset
+84465 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 79 ms
+85292 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+85793 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+86078 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+86249 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+86249 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+86251 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+86251 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+86362 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+86365 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+86365 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+86365 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+86435 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 70 ms
+86846 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+87112 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+87348 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+87455 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+87455 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+87457 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+87458 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+87501 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+87503 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+87503 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+87503 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+87588 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 85 ms
+88408 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 3 records
+88622 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,10.0,20.0]
+88622 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [DEF,Long,12345,30.0,40.0]
+88622 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [GHI,Long,12345,50.0,60.0]
+88753 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=ABC, swapId=12345, unpaidDiv=10.0, unpaidInt=20.0)
+88918 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=DEF, swapId=12345, unpaidDiv=30.0, unpaidInt=40.0)
+88953 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Asserting unpaid cash results has cashflow with data: UnpaidCash(ric=GHI, swapId=12345, unpaidDiv=50.0, unpaidInt=60.0)
+89304 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+89487 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+89658 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+89658 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+89661 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+89661 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+89712 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+89715 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+89715 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+89715 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+89755 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 40 ms
+90188 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+90438 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+90685 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+90854 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+90854 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+90866 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+90866 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+90947 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+90950 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+90950 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+90950 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+91007 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 57 ms
+91538 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+91669 [Executor task launch worker for task 47] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,125.0,230.0]
+91911 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+92187 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+92314 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+92314 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+92317 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+92317 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+92379 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+92381 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+92381 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+92381 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+92424 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 43 ms
+92871 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+92983 [Executor task launch worker for task 75] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,125.0,30.0]
+93168 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+93396 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+93522 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+93522 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+93524 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+93524 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+93565 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+93567 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+93567 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+93567 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+93614 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 47 ms
+94043 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+94144 [Executor task launch worker for task 103] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,125.0,205.0]
+94331 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+94512 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+94659 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+94660 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+94662 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+94662 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+94702 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+94705 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+94705 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+94705 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+94750 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 45 ms
+95287 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+95442 [Executor task launch worker for task 131] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,125.0]
+95762 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+95971 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+96180 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+96180 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+96228 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+96275 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+96314 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+96314 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+96316 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+96316 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+96539 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+96978 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+97147 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+97149 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+97149 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [] swaps
+97149 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl into spark dataset
+97151 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/-1-swapContracts.jsonl;. Returning empty Optional instead
+97151 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+97239 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 0 records
+97303 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+97465 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+97633 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+97633 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+97690 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+97774 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+97841 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+97841 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+97843 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+97843 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+98032 [main] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - Created EnrichedPositionsResults with 1 records
+98217 [Executor task launch worker for task 52] INFO  org.galatea.pochdfs.domain.result.EnrichedPositionsResults  - [2019-01-01,S,100,12345,ABCDE,CPField1,200,11,ABC]
+98735 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+98913 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+99118 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+99118 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+99120 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+99120 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+99174 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+99176 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+99177 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+99177 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+99241 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 63 ms
+99627 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+99780 [Executor task launch worker for task 22] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,-170.0,-150.0]
+99999 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+100147 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+100245 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+100245 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+100247 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+100247 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+100293 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+100294 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+100295 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+100295 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+100335 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 40 ms
+100729 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+100926 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+101107 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+101237 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+101237 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+101239 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+101239 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+101315 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+101318 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+101318 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+101318 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+101368 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 50 ms
+101756 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+101856 [Executor task launch worker for task 75] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,90.0,120.0]
+102041 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+102169 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+102318 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+102318 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+102322 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+102322 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+102389 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+102391 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+102391 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+102391 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+102438 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 47 ms
+102779 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+102874 [Executor task launch worker for task 103] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,-95.0,-85.0]
+103061 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+103282 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+103412 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+103413 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+103414 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+103414 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+103451 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+103453 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+103453 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+103453 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+103494 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 41 ms
+103788 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+103875 [Executor task launch worker for task 131] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,40.0,60.0]
+104047 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+104235 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+104321 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+104321 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+104323 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+104323 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+104359 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+104361 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+104361 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+104361 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+104397 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 35 ms
+104687 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+104785 [Executor task launch worker for task 159] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,-225.0,-195.0]
+104953 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+105111 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+105235 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+105235 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+105237 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+105237 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+105277 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+105279 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+105279 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+105279 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+105325 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 46 ms
+105642 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 1 records
+105735 [Executor task launch worker for task 187] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - [ABC,Long,12345,10.0,20.0]
+106039 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+106246 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+106394 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [12345] swaps
+106394 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/positions/12345-positions.jsonl into spark dataset
+106396 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/positions/12345-positions.jsonl;. Returning empty Optional instead
+106396 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+106448 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+106450 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+106450 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - Reading cashflows for swapId [12345] from HDFS into Spark Dataset
+106450 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl into spark dataset
+106452 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/cashflows/12345-cashFlows.jsonl;. Returning empty Optional instead
+106452 [main] INFO  org.galatea.pochdfs.service.analytics.SwapDataAccessor  - CashFlows HDFS read took 2 ms
+106482 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
+106654 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/counterparty/counterparties.jsonl into spark dataset
+106829 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+106831 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl;. Returning empty Optional instead
+106831 [main] INFO  org.galatea.pochdfs.utils.analytics.SwapStateGetter  - counter party has [] swaps
+106831 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl into spark dataset
+106833 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/swapcontracts/200-swapContracts.jsonl;. Returning empty Optional instead
+106833 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Reading data from path src/test/resources/testInputData/swapData/instrument/instruments.jsonl into spark dataset
+106835 [main] INFO  org.galatea.pochdfs.utils.analytics.FilesystemAccessor  - Error reading data with error message: Path does not exist: file:/Users/kylepayne/git/poc-hdfs-etc/poc-hdfs-etc/src/test/resources/testInputData/swapData/instrument/instruments.jsonl;. Returning empty Optional instead
+106865 [main] INFO  org.galatea.pochdfs.domain.result.UnpaidCashResults  - Created UnpaidCashResults with 0 records
