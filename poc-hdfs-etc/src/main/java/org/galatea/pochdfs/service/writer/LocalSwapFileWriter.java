@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.galatea.pochdfs.utils.hdfs.IHdfsFilePathGetter;
@@ -62,20 +63,32 @@ public class LocalSwapFileWriter {
 
 	@SneakyThrows
 	private void writeRecords(final File file, final String targetBasePath, final IHdfsFilePathGetter pathGetter) {
+
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			int recordCount = 0;
 			String jsonLine = reader.readLine();
 			while (jsonLine != null) {
+				Long startTime = System.currentTimeMillis();
+				Long processStartTime = System.currentTimeMillis();
+
 				Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
 
+				log.info("Finished object mapping in {} ms", System.currentTimeMillis() - processStartTime);
+				processStartTime = System.currentTimeMillis();
+
 				String filePath = pathGetter.getFilePath(jsonObject);
+				log.info("Retrieved FilePath in {} ms", System.currentTimeMillis()-processStartTime);
+				processStartTime = System.currentTimeMillis();
+
 				StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(jsonObject));
 				String recordData = builder.append("\n").toString();
 
 				writeStringToFile(recordData, filePath, targetBasePath);
 				log.info("Wrote object {} to file", recordCount);
+				log.info("Wrote object to file in {} ms", System.currentTimeMillis()-processStartTime);
 				jsonLine = reader.readLine();
 				recordCount++;
+				log.info("Total time to write one object file {} ms", System.currentTimeMillis() - startTime);
 			}
 		}
 	}
@@ -90,5 +103,6 @@ public class LocalSwapFileWriter {
 
 		}
 	}
+
 
 }
