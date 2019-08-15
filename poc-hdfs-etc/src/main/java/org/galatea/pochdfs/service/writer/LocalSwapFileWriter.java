@@ -106,10 +106,10 @@ public class LocalSwapFileWriter {
             System.currentTimeMillis() - individualProcessStartTime);
         individualProcessStartTime = System.currentTimeMillis();
 
-        StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(jsonObject));
+        //StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(jsonObject));
+        StringBuilder builder = new StringBuilder(jsonLine);
         String recordData = builder.append("\n").toString();
 
-        //writeStringToFile(recordData, filePath, targetBasePath);
         addDataToDataMap(targetBasePath + filePath, recordData);
 
         log.debug("Added object {} to Map", recordCount);
