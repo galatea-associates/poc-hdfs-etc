@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.galatea.pochdfs.utils.hdfs.IHdfsFilePathGetter;
 import org.galatea.pochdfs.utils.hdfs.JsonMapper;
+import org.mortbay.log.Log;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,30 +66,46 @@ public class LocalSwapFileWriter {
 	private void writeRecords(final File file, final String targetBasePath, final IHdfsFilePathGetter pathGetter) {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
+			long recordsLoggedPerSecondStartTime = System.currentTimeMillis();
+			long recordsLoggedPerSecondCounter = 0;
+
 			int recordCount = 0;
 			String jsonLine = reader.readLine();
+
 			while (jsonLine != null) {
 				Long startTime = System.currentTimeMillis();
-				Long processStartTime = System.currentTimeMillis();
+				Long individualProcessStartTime = System.currentTimeMillis();
 
 				Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
 
-				log.info("Finished object mapping in {} ms", System.currentTimeMillis() - processStartTime);
-				processStartTime = System.currentTimeMillis();
+				log.info("Finished object mapping in {} ms", System.currentTimeMillis() - individualProcessStartTime);
+				individualProcessStartTime = System.currentTimeMillis();
 
 				String filePath = pathGetter.getFilePath(jsonObject);
-				log.info("Retrieved FilePath in {} ms", System.currentTimeMillis()-processStartTime);
-				processStartTime = System.currentTimeMillis();
+
+				log.info("Retrieved FilePath in {} ms", System.currentTimeMillis()-individualProcessStartTime);
+				individualProcessStartTime = System.currentTimeMillis();
 
 				StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(jsonObject));
 				String recordData = builder.append("\n").toString();
 
 				writeStringToFile(recordData, filePath, targetBasePath);
+
 				log.info("Wrote object {} to file", recordCount);
-				log.info("Wrote object to file in {} ms", System.currentTimeMillis()-processStartTime);
-				jsonLine = reader.readLine();
-				recordCount++;
+				log.info("Wrote object to file in {} ms", System.currentTimeMillis()-individualProcessStartTime);
 				log.info("Total time to write one object file {} ms", System.currentTimeMillis() - startTime);
+
+				recordCount++;
+				recordsLoggedPerSecondCounter++;
+				jsonLine = reader.readLine();
+
+				if(System.currentTimeMillis() - recordsLoggedPerSecondStartTime > 1000){
+					log.info("******** Records logged in last second: {} *********", recordsLoggedPerSecondCounter);
+					recordsLoggedPerSecondCounter = 0;
+					recordsLoggedPerSecondStartTime = System.currentTimeMillis();
+				}
+
 			}
 		}
 	}
