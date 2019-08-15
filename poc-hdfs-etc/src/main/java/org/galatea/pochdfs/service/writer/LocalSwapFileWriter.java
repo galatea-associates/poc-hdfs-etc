@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import java.util.Set;
@@ -34,7 +36,7 @@ public class LocalSwapFileWriter {
   private final SwapFilePathCreator pathCreator;
   private final JsonMapper objectMapper;
 
-  private Map<String, Set<String>> dataMap;
+  private Map<String, List<String>> dataMap;
   private final int BUFFER_SIZE = 1000;
 
   private long recordsLoggedPerSecondCounter = 0;
@@ -78,7 +80,7 @@ public class LocalSwapFileWriter {
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-      dataMap = new HashMap<String, Set<String>>();
+      dataMap = new HashMap<String, List<String>>();
 
       recordsLoggedPerSecondStartTime = System.currentTimeMillis();
       Long startTime = System.currentTimeMillis();
@@ -141,7 +143,7 @@ public class LocalSwapFileWriter {
     if (dataMap.containsKey(filePath)) {
       dataMap.get(filePath).add(data);
     } else {
-      HashSet<String> dataSet = new HashSet<String>();
+      List<String> dataSet = new LinkedList<String>();
       dataSet.add(data);
       dataMap.put(filePath, dataSet);
     }
@@ -167,12 +169,12 @@ public class LocalSwapFileWriter {
     log.info("Writing Data to File {} ", filePath);
     Files.createDirectories(Paths.get(filePath).getParent());
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-      Set<String> dataSet = dataMap.get(filePath);
+      List<String> dataSet = dataMap.get(filePath);
       for (String data : dataSet) {
         writer.write(data);
         recordsLoggedPerSecondCounter++;
       }
-      dataMap.put(filePath, new HashSet<String>());
+      dataMap.put(filePath, new LinkedList<String>());
     }
   }
 
