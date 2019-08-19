@@ -39,8 +39,8 @@ public class LocalSwapFileWriter {
   private Map<String, List<String>> dataMap;
   private int BUFFER_SIZE = 1000;
 
-  private long recordsLoggedPerSecondCounter = 0;
-  private long recordsLoggedPerSecondStartTime;
+  private long totalRecordsLogged = 0;
+  private long systemStartTime;
 
   @SneakyThrows
   public void writeSwapData(final String localFilePath, final String targetBasePath) {
@@ -79,13 +79,11 @@ public class LocalSwapFileWriter {
       final IHdfsFilePathGetter pathGetter) {
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+      long logTimeCounter = System.currentTimeMillis();
 
       dataMap = new HashMap<String, List<String>>();
 
-      recordsLoggedPerSecondStartTime = System.currentTimeMillis();
-      Long startTime = System.currentTimeMillis();
-      long totalSeconds = 0;
-      long totalRecordsProcessed = 0;
+      systemStartTime = System.currentTimeMillis();
 
       int recordCount = 0;
       String jsonLine = reader.readLine();
@@ -105,8 +103,6 @@ public class LocalSwapFileWriter {
         log.debug("Retrieved FilePath in {} ms",
             System.currentTimeMillis() - individualProcessStartTime);
         individualProcessStartTime = System.currentTimeMillis();
-
-        //StringBuilder builder = new StringBuilder(MAPPER.writeValueAsString(jsonObject));
         StringBuilder builder = new StringBuilder(jsonLine);
         String recordData = builder.append("\n").toString();
 
@@ -116,28 +112,23 @@ public class LocalSwapFileWriter {
         log.debug("Wrote object to file in {} ms",
             System.currentTimeMillis() - individualProcessStartTime);
         log.debug("Total time to write one object file {} ms",
-            System.currentTimeMillis() - startTime);
+            System.currentTimeMillis() - systemStartTime);
         recordCount++;
 
         jsonLine = reader.readLine();
 
-        if (System.currentTimeMillis() - recordsLoggedPerSecondStartTime > 1000) {
-          log.info("******** Records logged in last second: {} *********",
-              recordsLoggedPerSecondCounter);
-
-          totalRecordsProcessed += recordsLoggedPerSecondCounter;
-          totalSeconds++;
+        if (System.currentTimeMillis() - logTimeCounter > 1000) {
+          long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
           log.info("******** Average Records logged per second {} ********",
-              totalRecordsProcessed / totalSeconds);
-
-          recordsLoggedPerSecondCounter = 0;
-          recordsLoggedPerSecondStartTime = System.currentTimeMillis();
+              totalRecordsLogged / totalSeconds);
+          logTimeCounter = System.currentTimeMillis();
         }
       }
       clearMap();
-      log.info("Process Completed in {} ms", System.currentTimeMillis() - startTime);
+      long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
+      log.info("Process Completed in {} ms", System.currentTimeMillis() - systemStartTime);
       log.info("******** Average Records logged per second {} ********",
-          totalRecordsProcessed / totalSeconds);
+           totalRecordsLogged/ totalSeconds);
     }
   }
 
@@ -174,9 +165,10 @@ public class LocalSwapFileWriter {
       List<String> dataSet = dataMap.get(filePath);
       for (String data : dataSet) {
         writer.write(data);
-        recordsLoggedPerSecondCounter++;
+        totalRecordsLogged++;
       }
       dataMap.put(filePath, new LinkedList<String>());
+      //dataMap.remove(filePath);
     }
   }
 
