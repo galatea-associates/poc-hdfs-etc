@@ -19,8 +19,12 @@ public class LocalSwapWriterRestController {
 	@PostMapping(value = "/writelocal", produces = { MediaType.ALL_VALUE })
 	public ResponseEntity<String> writeEndpoint(
 			@RequestParam(value = "filePath", required = true) final String sourceFilePath,
-			@RequestParam(value = "targetBasePath", required = true) final String targetBasePath) {
+			@RequestParam(value = "targetBasePath", required = true) final String targetBasePath,
+			@RequestParam(value = "bufferSize", required = false) final Integer bufferSize){
 		try {
+			if(bufferSize != null){
+				writer.setBuffer(bufferSize);
+			}
 			writer.writeSwapData(sourceFilePath, targetBasePath);
 			return new ResponseEntity<>("Write Swap Data to HDFS Succeeded", HttpStatus.OK);
 		} catch (Exception e) {

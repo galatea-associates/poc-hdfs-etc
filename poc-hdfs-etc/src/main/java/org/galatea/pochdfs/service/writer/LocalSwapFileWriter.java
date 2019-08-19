@@ -37,7 +37,7 @@ public class LocalSwapFileWriter {
   private final JsonMapper objectMapper;
 
   private Map<String, List<String>> dataMap;
-  private final int BUFFER_SIZE = 1000;
+  private int BUFFER_SIZE = 1000;
 
   private long recordsLoggedPerSecondCounter = 0;
   private long recordsLoggedPerSecondStartTime;
@@ -136,6 +136,8 @@ public class LocalSwapFileWriter {
       }
       clearMap();
       log.info("Process Completed in {} ms", System.currentTimeMillis() - startTime);
+      log.info("******** Average Records logged per second {} ********",
+          totalRecordsProcessed / totalSeconds);
     }
   }
 
@@ -189,6 +191,12 @@ public class LocalSwapFileWriter {
       writer.write(data);
     }
   }
+
+  public void setBuffer(int size){
+    BUFFER_SIZE = size;
+  }
+
+
 
 
 }
