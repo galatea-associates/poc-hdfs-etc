@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,11 +37,13 @@ public class LocalSwapFileWriter {
   private final SwapFilePathCreator pathCreator;
   private final JsonMapper objectMapper;
 
-  private Map<String, List<String>> dataMap;
+  private Map<String, ArrayDeque<String>> dataMap;
   private int BUFFER_SIZE = 1000;
 
   private long totalRecordsLogged = 0;
   private long systemStartTime;
+
+  //String outline = "{\"cashflow_id\": %, \"swap_contract_id\": %, \"ric\": \"%\", \"cashflow_type\": \"%\", \"pay_date\": \"%\", \"effective_date\": \"%\", \"currency\": \"%\", \"amount\": %, \"long_short\": \"%\"}";
 
   @SneakyThrows
   public void writeSwapData(final String localFilePath, final String targetBasePath) {
@@ -78,65 +81,76 @@ public class LocalSwapFileWriter {
   private void writeRecords(final File file, final String targetBasePath,
       final IHdfsFilePathGetter pathGetter) {
 
+
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
       long logTimeCounter = System.currentTimeMillis();
-
-      dataMap = new HashMap<String, List<String>>();
-
+      dataMap = new HashMap<String, ArrayDeque<String>>();
       systemStartTime = System.currentTimeMillis();
 
-      int recordCount = 0;
       String jsonLine = reader.readLine();
-
       while (jsonLine != null) {
 
-        Long individualProcessStartTime = System.currentTimeMillis();
-
         Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
-
-        log.debug("Finished object mapping in {} ms",
-            System.currentTimeMillis() - individualProcessStartTime);
-        individualProcessStartTime = System.currentTimeMillis();
-
         String filePath = pathGetter.getFilePath(jsonObject);
 
-        log.debug("Retrieved FilePath in {} ms",
-            System.currentTimeMillis() - individualProcessStartTime);
-        individualProcessStartTime = System.currentTimeMillis();
+
         StringBuilder builder = new StringBuilder(jsonLine);
         String recordData = builder.append("\n").toString();
 
         addDataToDataMap(targetBasePath + filePath, recordData);
 
-        log.debug("Added object {} to Map", recordCount);
-        log.debug("Wrote object to file in {} ms",
-            System.currentTimeMillis() - individualProcessStartTime);
-        log.debug("Total time to write one object file {} ms",
-            System.currentTimeMillis() - systemStartTime);
-        recordCount++;
-
-        jsonLine = reader.readLine();
-
         if (System.currentTimeMillis() - logTimeCounter > 1000) {
-          long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
-          log.info("******** Average Records logged per second {} ********",
-              totalRecordsLogged / totalSeconds);
+          givePastSecondUpdate();
           logTimeCounter = System.currentTimeMillis();
         }
+
+        jsonLine = reader.readLine();
       }
-      clearMap();
-      long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
-      log.info("Process Completed in {} ms", System.currentTimeMillis() - systemStartTime);
-      log.info("******** Average Records logged per second {} ********",
-           totalRecordsLogged/ totalSeconds);
+      completeLogging();
+
     }
+  }
+
+//  private String[] getJsonObjectValues( Map<String, Object> jsonObject ){
+//    String[] values = new String[9];
+//    values[0] = (String) jsonObject.get("cashflow_id");
+//    values[1] = (String) jsonObject.get("swap_contract_id");
+//    values[2]= (String) jsonObject.get("ric");
+//    values[3] = (String) jsonObject.get("cashflow_type");
+//    values[4] = (String) jsonObject.get("pay_date");
+//    values[5] = (String) jsonObject.get("effective_date");
+//    values[6] = (String) jsonObject.get("currency");
+//    values[7] = (String) jsonObject.get("amount");
+//    values[8] = (String) jsonObject.get("long_short");
+//
+//    return values;
+//  }
+
+  private void givePastSecondUpdate(){
+    long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
+    log.info("******** Average Records logged per second {} ********",
+        totalRecordsLogged / totalSeconds);
+    log.info("******** Totol Recrods Logged {} ******** ",totalRecordsLogged);
+    log.info("******** Current Map Size {} ********", dataMap.size());
+  }
+
+
+  private void completeLogging(){
+    clearMap();
+    long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
+    log.info("Process Completed in {} ms", System.currentTimeMillis() - systemStartTime);
+    log.info("******** Average Records logged per second {} ********",
+        totalRecordsLogged/ totalSeconds);
+    log.info("******** Totol Recrods Logged {} ********",totalRecordsLogged);
+    log.info("******** Current Map Size {} ********", dataMap.size());
   }
 
   private void addDataToDataMap(String filePath, String data) {
     if (dataMap.containsKey(filePath)) {
       dataMap.get(filePath).add(data);
     } else {
-      List<String> dataSet = new LinkedList<String>();
+      ArrayDeque<String> dataSet = new ArrayDeque<String>();
       dataSet.add(data);
       dataMap.put(filePath, dataSet);
     }
@@ -144,6 +158,7 @@ public class LocalSwapFileWriter {
   }
 
   private void clearMap() {
+    log.info("******** Clearing map ********");
     for (String filePath : dataMap.keySet()) {
       writeDataSetToFile(filePath);
     }
@@ -162,13 +177,11 @@ public class LocalSwapFileWriter {
     log.info("Writing Data to File {} ", filePath);
     Files.createDirectories(Paths.get(filePath).getParent());
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-      List<String> dataSet = dataMap.get(filePath);
-      for (String data : dataSet) {
+      for (String data : dataMap.get(filePath)) {
         writer.write(data);
         totalRecordsLogged++;
       }
-      dataMap.put(filePath, new LinkedList<String>());
-      //dataMap.remove(filePath);
+      dataMap.put(filePath, new ArrayDeque<String>());
     }
   }
 
