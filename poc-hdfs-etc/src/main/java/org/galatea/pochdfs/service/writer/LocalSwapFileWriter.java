@@ -43,7 +43,13 @@ public class LocalSwapFileWriter {
   private long totalRecordsLogged = 0;
   private long systemStartTime;
 
-  //String outline = "{\"cashflow_id\": %, \"swap_contract_id\": %, \"ric\": \"%\", \"cashflow_type\": \"%\", \"pay_date\": \"%\", \"effective_date\": \"%\", \"currency\": \"%\", \"amount\": %, \"long_short\": \"%\"}";
+//  public void writeSwapData(final String localFolderPath, String targetBasePath){
+//    File directory = new File(localFolderPath);
+//    String[] filesInDirectory = directory.list();
+//    for(String file: filesInDirectory){
+//      writeSwapDataFromIndividualFile(file,targetBasePath);
+//    }
+//  }
 
   @SneakyThrows
   public void writeSwapData(final String localFilePath, final String targetBasePath) {
@@ -77,10 +83,13 @@ public class LocalSwapFileWriter {
     }
   }
 
+  public void setBuffer(int size) {
+    BUFFER_SIZE = size;
+  }
+
   @SneakyThrows
   private void writeRecords(final File file, final String targetBasePath,
       final IHdfsFilePathGetter pathGetter) {
-
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
@@ -93,11 +102,7 @@ public class LocalSwapFileWriter {
 
         Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
         String filePath = pathGetter.getFilePath(jsonObject);
-
-
-        StringBuilder builder = new StringBuilder(jsonLine);
-        String recordData = builder.append("\n").toString();
-
+        String recordData = new StringBuilder(jsonLine).append("\n").toString();
         addDataToDataMap(targetBasePath + filePath, recordData);
 
         if (System.currentTimeMillis() - logTimeCounter > 1000) {
@@ -107,42 +112,18 @@ public class LocalSwapFileWriter {
 
         jsonLine = reader.readLine();
       }
-      completeLogging();
-
+      clearMap();
+      log.info("******** Process Completed in {} ms ********",
+          System.currentTimeMillis() - systemStartTime);
+      givePastSecondUpdate();
     }
   }
 
-//  private String[] getJsonObjectValues( Map<String, Object> jsonObject ){
-//    String[] values = new String[9];
-//    values[0] = (String) jsonObject.get("cashflow_id");
-//    values[1] = (String) jsonObject.get("swap_contract_id");
-//    values[2]= (String) jsonObject.get("ric");
-//    values[3] = (String) jsonObject.get("cashflow_type");
-//    values[4] = (String) jsonObject.get("pay_date");
-//    values[5] = (String) jsonObject.get("effective_date");
-//    values[6] = (String) jsonObject.get("currency");
-//    values[7] = (String) jsonObject.get("amount");
-//    values[8] = (String) jsonObject.get("long_short");
-//
-//    return values;
-//  }
-
-  private void givePastSecondUpdate(){
-    long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
+  private void givePastSecondUpdate() {
+    long totalSeconds = (System.currentTimeMillis() - systemStartTime) / 1000;
     log.info("******** Average Records logged per second {} ********",
         totalRecordsLogged / totalSeconds);
-    log.info("******** Totol Recrods Logged {} ******** ",totalRecordsLogged);
-    log.info("******** Current Map Size {} ********", dataMap.size());
-  }
-
-
-  private void completeLogging(){
-    clearMap();
-    long totalSeconds = (System.currentTimeMillis() - systemStartTime)/1000;
-    log.info("Process Completed in {} ms", System.currentTimeMillis() - systemStartTime);
-    log.info("******** Average Records logged per second {} ********",
-        totalRecordsLogged/ totalSeconds);
-    log.info("******** Totol Recrods Logged {} ********",totalRecordsLogged);
+    log.info("******** Totol Recrods Logged {} ******** ", totalRecordsLogged);
     log.info("******** Current Map Size {} ********", dataMap.size());
   }
 
@@ -171,7 +152,6 @@ public class LocalSwapFileWriter {
     }
   }
 
-
   @SneakyThrows
   private void writeDataSetToFile(String filePath) {
     log.info("Writing Data to File {} ", filePath);
@@ -196,12 +176,6 @@ public class LocalSwapFileWriter {
       writer.write(data);
     }
   }
-
-  public void setBuffer(int size){
-    BUFFER_SIZE = size;
-  }
-
-
 
 
 }
