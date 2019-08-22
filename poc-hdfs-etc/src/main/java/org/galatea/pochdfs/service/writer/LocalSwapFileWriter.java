@@ -43,20 +43,26 @@ public class LocalSwapFileWriter {
   private long totalRecordsLogged = 0;
   private long systemStartTime;
 
-//  public void writeSwapData(final String localFolderPath, String targetBasePath){
-//    File directory = new File(localFolderPath);
-//    String[] filesInDirectory = directory.list();
-//    for(String file: filesInDirectory){
-//      writeSwapDataFromIndividualFile(file,targetBasePath);
-//    }
-//  }
+  public void writeSwapData(final String localFolderPath, String targetBasePath){
+    systemStartTime = System.currentTimeMillis();
+    File directory = new File(localFolderPath);
+    File[] filesInDirectory = directory.listFiles();
+    int filesProcessed = 0;
+    for(File file: filesInDirectory){
+      if(file.isDirectory() == false) {
+        writeSwapDataFromIndividualFile(file, targetBasePath);
+        filesProcessed++;
+        log.info("Total Files Processed: {} ", filesProcessed);
+      }
+    }
+    log.info("******** Process Completed in {} ms ********",System.currentTimeMillis() - systemStartTime);
+  }
 
   @SneakyThrows
-  public void writeSwapData(final String localFilePath, final String targetBasePath) {
-    File file = new File(localFilePath);
+  public void writeSwapDataFromIndividualFile(File file, final String targetBasePath) {
     String filename = file.getName();
 
-    log.info("Writing {} data", filename);
+    log.info("Reading data from {}", filename);
 
     if (filename.toLowerCase().contains("counterparties")) {
       writeStringToFile(new String(Files.readAllBytes(file.toPath())),
@@ -66,7 +72,7 @@ public class LocalSwapFileWriter {
       writeStringToFile(new String(Files.readAllBytes(file.toPath())),
           pathCreator.createInstrumentsFilepath(),
           targetBasePath);
-    } else if (filename.toLowerCase().contains("swapcontracts")) {
+    } else if (filename.toLowerCase().contains("contracts")) {
       writeRecords(file, targetBasePath, (jsonObject) -> {
         return pathCreator.constructSwapContractFilepath((int) jsonObject.get("counterparty_id"));
       });
@@ -90,15 +96,13 @@ public class LocalSwapFileWriter {
   @SneakyThrows
   private void writeRecords(final File file, final String targetBasePath,
       final IHdfsFilePathGetter pathGetter) {
-
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
       long logTimeCounter = System.currentTimeMillis();
       dataMap = new HashMap<String, ArrayDeque<String>>();
-      systemStartTime = System.currentTimeMillis();
 
       String jsonLine = reader.readLine();
-      while (jsonLine != null) {
+      while (jsonLine !=null) {
 
         Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
         String filePath = pathGetter.getFilePath(jsonObject);
@@ -113,7 +117,7 @@ public class LocalSwapFileWriter {
         jsonLine = reader.readLine();
       }
       clearMap();
-      log.info("******** Process Completed in {} ms ********",
+      log.info("******** File Processed in {} ms ********",
           System.currentTimeMillis() - systemStartTime);
       givePastSecondUpdate();
     }
@@ -121,8 +125,14 @@ public class LocalSwapFileWriter {
 
   private void givePastSecondUpdate() {
     long totalSeconds = (System.currentTimeMillis() - systemStartTime) / 1000;
-    log.info("******** Average Records logged per second {} ********",
-        totalRecordsLogged / totalSeconds);
+    if(totalSeconds != 0){
+      log.info("******** Average Records logged per second {} ********",
+          totalRecordsLogged / totalSeconds);
+    }
+    else{
+      log.info("******** Average Records logged per second {} ********",
+          totalRecordsLogged);
+    }
     log.info("******** Totol Recrods Logged {} ******** ", totalRecordsLogged);
     log.info("******** Current Map Size {} ********", dataMap.size());
   }
