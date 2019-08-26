@@ -31,7 +31,7 @@ public class SwapDataAccessor {
 	}
 
 	public Optional<Dataset<Row>> getEffectiveDateSwapPositions(final long swapId, final String effectiveDate) {
-		Optional<Dataset<Row>> positions = getPositions(swapId);
+		Optional<Dataset<Row>> positions = getPositions(effectiveDate, swapId);
 		if (positions.isPresent()) {
 			Dataset<Row> actualPositions = positions.get();
 			return Optional.of(actualPositions
@@ -41,7 +41,7 @@ public class SwapDataAccessor {
 		}
 	}
 
-	public Optional<Dataset<Row>> getPositions(final long swapId) {
+	public Optional<Dataset<Row>> getPositions(final String effectiveDate, final long swapId) {
 		Optional<Dataset<Row>> positions = accessor
 				.getData(baseFilePath + "positions/" + swapId + "-" + "positions.jsonl");
 		return positions;

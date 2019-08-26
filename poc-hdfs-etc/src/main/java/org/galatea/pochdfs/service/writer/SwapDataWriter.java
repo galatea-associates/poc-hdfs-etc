@@ -128,11 +128,11 @@ public class SwapDataWriter {
 		// System.currentTimeMillis() - startTime);
 	}
 
-	/**
-	 *
-	 * @param path   the HDFS path to write to
-	 * @param object the object bring written to HDFS
-	 */
+//	/**
+//	 *
+//	 * @param path   the HDFS path to write to
+//	 * @param object the object bring written to HDFS
+//	 */
 //	@SneakyThrows
 //	private void writeObjectToHdfs(final Path path, final Object object) {
 //		if (writer.fileExists(path)) {

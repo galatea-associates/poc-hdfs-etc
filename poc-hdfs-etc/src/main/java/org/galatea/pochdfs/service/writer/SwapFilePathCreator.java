@@ -50,7 +50,7 @@ public class SwapFilePathCreator {
 	 * @param swapId the position's swap id
 	 * @return the HDFS file path for the position
 	 */
-	public String createPositionFilepath(final int swapId) {
+	public String createPositionFilepath( final int swapId) {
 		return buildFilepath(BASE_PATH, "positions/", String.valueOf(swapId), "-",
 				SwapBaseFilename.Filename.POSITIONS.getFilename(), FILE_EXTENSION);
 	}

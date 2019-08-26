@@ -160,6 +160,9 @@ public class LocalSwapFileWriter {
     if (dataMap.get(filePath).size() >= BUFFER_SIZE) {
       writeDataSetToFile(filePath);
     }
+//    if(dataMap.size() >= BUFFER_SIZE){
+//      clearMap();
+//    }
   }
 
   @SneakyThrows

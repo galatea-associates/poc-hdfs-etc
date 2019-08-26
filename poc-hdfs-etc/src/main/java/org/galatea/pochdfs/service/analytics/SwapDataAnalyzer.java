@@ -32,7 +32,7 @@ public class SwapDataAnalyzer {
 
 	/**
 	 *
-	 * @param counterPartyId the counter party ID
+	 * @param book the book
 	 * @param effectiveDate  the effective Date
 	 * @return a dataset of all enriched positions with unpaid cash for the counter
 	 *         party on the effective date
@@ -49,11 +49,13 @@ public class SwapDataAnalyzer {
 		subStartTime = System.currentTimeMillis();
 		log.info("Creating enriched positions for book {} with effective date {}", book, effectiveDate);
 		Dataset<Row> enrichedPositions = getEnrichedPositions(currentState);
+
 		log.info("Completed enriched positions creation in {} ms", System.currentTimeMillis() - subStartTime);
 
 		subStartTime = System.currentTimeMillis();
 		log.info("Getting unpaid cash for book {} with effective date {}", book, effectiveDate);
 		Dataset<Row> unpaidCash = getUnpaidCash(currentState);
+
 		log.info("Completed unpaid cash creation in {} ms", System.currentTimeMillis() - subStartTime);
 
 		subStartTime = System.currentTimeMillis();
@@ -126,6 +128,12 @@ public class SwapDataAnalyzer {
 	 * @return the summed unpaid cash for the effective date
 	 */
 	private Dataset<Row> calculateUnpaidCash(final BookSwapDataState currentState) {
+
+		// mitigating for data gen incorrect cash flow effective date format
+		String formattedEffectiveDate = currentState.effectiveDate().replaceAll("-", "");
+
+		//String effectiveDate = currentState.effectiveDate();
+
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
 				.filter(cashFlows.col("effective_date").leq(functions.lit(currentState.effectiveDate()))
