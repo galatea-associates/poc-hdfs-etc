@@ -33,7 +33,7 @@ public class Position implements SwapDataset {
 	@Override
 	@SneakyThrows
 	public void write() {
-		String path = "positions/" + swap_contract_id + "-positions.jsonl";
+		String path = "positions/" + effective_date + "-" + swap_contract_id + "-positions.jsonl";
 		String json = MAPPER.writeValueAsString(this) + "\n";
 		SwapDatasetFileManager.writeToFile(path, json);
 	}

@@ -136,7 +136,7 @@ public class SwapDataAnalyzer {
 
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
-				.filter(cashFlows.col("effective_date").leq(functions.lit(currentState.effectiveDate()))
+				.filter(cashFlows.col("effective_date").leq(functions.lit(formattedEffectiveDate))
 						.and(cashFlows.col("pay_date").gt(functions.lit(currentState.effectiveDate()))));
 		unpaidCash = unpaidCash.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
 				.agg(functions.sum("amount").as("unpaid_cash"));

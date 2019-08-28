@@ -55,7 +55,7 @@ public class SwapDataWriter {
 		} else if (filename.toLowerCase().contains("positions")) {
 			writeSwapRecordsToHdfs(file, (jsonObject) -> {
 				Long startTime = System.currentTimeMillis();
-				String path = pathCreator.createPositionFilepath((int) jsonObject.get("swap_contract_id"));
+				String path = pathCreator.createPositionFilepath((String) jsonObject.get("effective_date"),(int) jsonObject.get("swap_contract_id"));
 				log.info("Created path in {} ms", System.currentTimeMillis() - startTime);
 				return path;
 			});

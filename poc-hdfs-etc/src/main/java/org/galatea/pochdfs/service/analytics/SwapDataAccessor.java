@@ -43,7 +43,7 @@ public class SwapDataAccessor {
 
 	public Optional<Dataset<Row>> getPositions(final String effectiveDate, final long swapId) {
 		Optional<Dataset<Row>> positions = accessor
-				.getData(baseFilePath + "positions/" + swapId + "-" + "positions.jsonl");
+				.getData(baseFilePath + "positions/" +effectiveDate + "-" + swapId + "-" + "positions.jsonl");
 		return positions;
 	}
 
