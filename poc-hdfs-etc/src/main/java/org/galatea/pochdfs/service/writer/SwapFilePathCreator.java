@@ -60,8 +60,8 @@ public class SwapFilePathCreator {
 	 * @param swapId the swap id the cash flow is associated with
 	 * @return the HDFS file path for the cash flow
 	 */
-	public String createCashFlowFilepath(final int swapId) {
-		return buildFilepath(BASE_PATH, "cashflows/", String.valueOf(swapId), "-",
+	public String createCashFlowFilepath(String effectiveDate, String payDate, final int swapId) {
+		return buildFilepath(BASE_PATH, "cashflows/", getMonthAndDay(effectiveDate),"-",getMonthAndDay(payDate),"-",String.valueOf(swapId), "-",
 				SwapBaseFilename.Filename.CASH_FLOWS.getFilename(), FILE_EXTENSION);
 	}
 
@@ -71,6 +71,12 @@ public class SwapFilePathCreator {
 			builder.append(part);
 		}
 		return builder.toString();
+	}
+
+	private String getMonthAndDay(String date){
+		date = date.replaceAll("-","");
+		date = date.substring(0,6);
+		return date;
 	}
 
 }

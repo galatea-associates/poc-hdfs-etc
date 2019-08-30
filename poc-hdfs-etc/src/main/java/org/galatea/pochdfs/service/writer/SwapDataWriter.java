@@ -62,7 +62,7 @@ public class SwapDataWriter {
 		} else if (filename.toLowerCase().contains("cashflows")) {
 			writeSwapRecordsToHdfs(file, (jsonObject) -> {
 				Long startTime = System.currentTimeMillis();
-				String path = pathCreator.createCashFlowFilepath((int) jsonObject.get("swap_contract_id"));
+				String path = pathCreator.createCashFlowFilepath((String) jsonObject.get("effective_date"),(String) jsonObject.get("pay_date"),(int) jsonObject.get("swap_contract_id"));
 				log.info("Created path in {} ms", System.currentTimeMillis() - startTime);
 				return path;
 			});
@@ -75,7 +75,6 @@ public class SwapDataWriter {
 	 * Writes each individual record in JSON format to HDFS
 	 *
 	 * @param file the file to be written to HDFS
-	 * @param path the path to write the records
 	 */
 	@SneakyThrows
 	private void writeSwapRecordsToHdfs(final File file, final IHdfsFilePathGetter pathGetter) {

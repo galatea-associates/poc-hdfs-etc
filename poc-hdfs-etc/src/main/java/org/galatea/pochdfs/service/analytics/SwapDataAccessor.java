@@ -3,11 +3,15 @@ package org.galatea.pochdfs.service.analytics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import lombok.Data;
+import lombok.SneakyThrows;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
@@ -67,11 +71,35 @@ public class SwapDataAccessor {
 		}
 	}
 
-	public Optional<Dataset<Row>> getCashFlows(final long swapId) {
-		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
-		Long startTime = System.currentTimeMillis();
-		Optional<Dataset<Row>> cashFlows = accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
-		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis() - startTime);
+	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId) {
+//		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
+//		Long startTime = System.currentTimeMillis();
+//	  Optional<Dataset<Row>> cashFlows = accessor.getData(baseFilePath + "cashflows/[12345-123456]-cashFlows.jsonl");
+//		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis()-startTime);
+
+		int year = Integer.parseInt(queryDate.substring(0,4));
+		int month = Integer.parseInt(queryDate.substring(6,7));
+
+		String [] queries = new String [6];
+		if(month<1){
+			queries[0] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-%s0[%s-9]",year,month,year,month) + "-" + swapId + "-cashFlows.jsonl";
+			queries[1] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-%s[10-12]",year,month,year) + "-" + swapId + "-cashFlows.jsonl";
+
+			queries[2] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s0[%s-9]",year-15, year-1,year,month) + "-" + swapId + "-cashFlows.jsonl";
+			queries[3] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s[10-12]",year-15,year-1,year) + "-" + swapId + "-cashFlows.jsonl";
+			queries[4] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-[%s-%s]*",year, month, year+1, year+15) + "-" + swapId + "-cashFlows.jsonl";
+		}
+		else{
+			queries[0] = baseFilePath + "cashflows/" + String.format("%s[10-%s]-%s[%s-12]",year,month,year,month) + "-" + swapId + "-cashFlows.jsonl";
+			queries[1] = baseFilePath + "cashflows/" + String.format("%s0[1-9]-%s[%s-12]", year, year, month) + "-" + swapId + "-cashFlows.jsonl";
+
+			queries[2] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s[%s-12]",year-15, year -1, year,month) + "-" + swapId + "-cashFlows.jsonl";
+			queries[3] = baseFilePath + "cashflows/" + String.format("%s[10-%s]-[%s-%s]*",year, month, year + 1, year+15) + "-" + swapId + "-cashFlows.jsonl";
+			queries[4] = baseFilePath + "cashflows/" + String.format("%s[1-9]-[%s -%s]*", year,year + 1, year + 15) + "-" + swapId + "-cashFlows.jsonl";
+		}
+		queries[5] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-[%s-%s]*",year-15, year-1, year+1, year+15) + "-" + swapId + "-cashFlows.jsonl";
+
+		Optional<Dataset<Row>> cashFlows = accessor.getDataFromSet(queries[0], queries[2],queries[1],queries[3],queries[4],queries[5]);
 		return cashFlows;
 	}
 

@@ -40,9 +40,14 @@ public class CashFlow implements SwapDataset {
 	@Override
 	@SneakyThrows
 	public void write() {
-		String path = "cashflows/" + swap_contract_id + "-cashFlows.jsonl";
+		String path = "cashflows/" + getYearAndMonth(effective_date) + "-" + getYearAndMonth(pay_date) + "-" + swap_contract_id + "-cashFlows.jsonl";
+		System.out.println(path);
 		String json = MAPPER.writeValueAsString(this) + "\n";
 		SwapDatasetFileManager.writeToFile(path, json);
+	}
+	private String getYearAndMonth(String date){
+		date = date.replaceAll("-","");
+		return date.substring(0,6);
 	}
 
 }

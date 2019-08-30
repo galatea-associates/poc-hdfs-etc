@@ -82,8 +82,9 @@ public class LocalSwapFileWriter {
       });
     } else if (filename.toLowerCase().contains("cashflows")) {
       writeRecords(file, targetBasePath, (jsonObject) -> {
-        return pathCreator.createCashFlowFilepath((int) jsonObject.get("swap_contract_id"));
+        return pathCreator.createCashFlowFilepath((String) jsonObject.get("effective_date"),(String) jsonObject.get("pay_date"),(int) jsonObject.get("swap_contract_id"));
       });
+
     } else {
       throw new FileNotFoundException("File " + filename + "not found");
     }

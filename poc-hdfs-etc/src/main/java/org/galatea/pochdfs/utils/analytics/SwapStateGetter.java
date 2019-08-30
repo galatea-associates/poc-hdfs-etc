@@ -24,17 +24,17 @@ public class SwapStateGetter {
 		Optional<Dataset<Row>> positions = dataAccessor.getSwapContractsPositions(swapIds, effectiveDate);
 		Optional<Dataset<Row>> swapContracts = dataAccessor.getCounterPartySwapContracts(counterPartyId);
 		Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
-		Optional<Dataset<Row>> cashFlows = getCashFlows(swapIds);
+		Optional<Dataset<Row>> cashFlows = getCashFlows(effectiveDate, swapIds);
 
 		return new BookSwapDataState().counterParties(counterParties).counterPartyId(counterPartyId)
 				.instruments(instruments).positions(positions).swapContracts(swapContracts).swapIds(swapIds).book(book)
 				.effectiveDate(effectiveDate).cashFlows(cashFlows);
 	}
 
-	private Optional<Dataset<Row>> getCashFlows(final Collection<Long> swapIds) {
+	private Optional<Dataset<Row>> getCashFlows(final String effectiveDate, final Collection<Long> swapIds) {
 		Optional<Dataset<Row>> counterpartyCashFlows = Optional.empty();
 		for (Long swapId : swapIds) {
-			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(swapId);
+			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(effectiveDate, swapId);
 			if (cashFlows.isPresent()) {
 				if (counterpartyCashFlows.isPresent()) {
 					Dataset<Row> previousCashFlows = counterpartyCashFlows.get();
