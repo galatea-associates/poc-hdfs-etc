@@ -34,7 +34,7 @@ public class SwapStateGetter {
 	private Optional<Dataset<Row>> getCashFlows(final String effectiveDate, final Collection<Long> swapIds) {
 		Optional<Dataset<Row>> counterpartyCashFlows = Optional.empty();
 		for (Long swapId : swapIds) {
-			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(effectiveDate, swapId);
+			Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(effectiveDate, swapId,true);
 			if (cashFlows.isPresent()) {
 				if (counterpartyCashFlows.isPresent()) {
 					Dataset<Row> previousCashFlows = counterpartyCashFlows.get();

@@ -77,19 +77,24 @@ public class SwapDataAccessor {
 		}
 	}
 
-	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId) {
-      FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
-      String regex = CashflowRegexBuilder.build(queryDate,swapId);
-      ArrayList<String> fileNames = new ArrayList<>();
-      for(int i = 0; i<status.length; i++){
-        String path = status[i].getPath().toString();
-        if(isInRange(queryDate,swapId,path)){
-        	fileNames.add(path);
+	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId,boolean sortWithDate) {
+		if(sortWithDate) {
+			FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
+			String regex = CashflowRegexBuilder.build(queryDate, swapId);
+			ArrayList<String> fileNames = new ArrayList<>();
+			for (int i = 0; i < status.length; i++) {
+				String path = status[i].getPath().toString();
+				if (isInRange(queryDate, swapId, path)) {
+					fileNames.add(path);
 				}
-      }
-      Object [] arr = fileNames.toArray();
-      String [] paths = Arrays.copyOf(arr, arr.length,String[].class);
-      return accessor.getDataFromSet(paths);
+			}
+			Object[] arr = fileNames.toArray();
+			String[] paths = Arrays.copyOf(arr, arr.length, String[].class);
+			return accessor.getDataFromSet(paths);
+		}
+		else{
+			return accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashflows.jsonl");
+		}
 	}
 
 	private boolean isInRange(String queryDate, long queryId, String path){
@@ -99,8 +104,8 @@ public class SwapDataAccessor {
 		YearMonth effectiveDate = YearMonth.parse(components[components.length-4].substring(components[components.length-4].length() - 6), dateFormat);
 		YearMonth payDate = YearMonth.parse(components[components.length-3],dateFormat);
 		YearMonth testDate = YearMonth.parse(queryDate.replace("-","").substring(0,6),dateFormat);
-
 		Long pathId = Long.parseLong(components[components.length - 2]);
+
 		if(pathId != queryId){
 			return false;
 		}

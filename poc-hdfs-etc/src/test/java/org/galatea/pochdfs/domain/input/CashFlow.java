@@ -41,6 +41,7 @@ public class CashFlow implements SwapDataset {
 	@SneakyThrows
 	public void write() {
 		String path = "cashflows/" + getYearAndMonth(effective_date) + "-" + getYearAndMonth(pay_date) + "-" + swap_contract_id + "-cashFlows.jsonl";
+		//String path = "cashflows/" + swap_contract_id + "-cashflows.jsonl";
 		System.out.println(path);
 		String json = MAPPER.writeValueAsString(this) + "\n";
 		SwapDatasetFileManager.writeToFile(path, json);
