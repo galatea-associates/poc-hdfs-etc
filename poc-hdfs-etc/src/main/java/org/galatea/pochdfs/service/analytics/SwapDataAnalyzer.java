@@ -130,13 +130,13 @@ public class SwapDataAnalyzer {
 	private Dataset<Row> calculateUnpaidCash(final BookSwapDataState currentState) {
 
 		// mitigating for data gen incorrect cash flow effective date format
-		String formattedEffectiveDate = currentState.effectiveDate().replaceAll("-", "");
+		//String formattedEffectiveDate = currentState.effectiveDate().replaceAll("-", "");
 
 		//String effectiveDate = currentState.effectiveDate();
 
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
-				.filter(cashFlows.col("effective_date").leq(functions.lit(formattedEffectiveDate))
+				.filter(cashFlows.col("effective_date").leq(functions.lit(currentState.effectiveDate()))
 						.and(cashFlows.col("pay_date").gt(functions.lit(currentState.effectiveDate()))));
 		unpaidCash = unpaidCash.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
 				.agg(functions.sum("amount").as("unpaid_cash"));

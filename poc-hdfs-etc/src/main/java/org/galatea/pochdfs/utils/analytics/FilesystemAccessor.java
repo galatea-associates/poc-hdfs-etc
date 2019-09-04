@@ -1,5 +1,6 @@
 package org.galatea.pochdfs.utils.analytics;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Optional;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.spark.ml.feature.RegexTokenizer;
@@ -46,6 +48,18 @@ public class FilesystemAccessor {
 		} catch (AnalysisException e) {
 			log.info("Error reading data with error message: {}. Returning empty Optional instead", e.getMessage());
 			return Optional.empty();
+		}
+	}
+	public FileStatus[] getStatusArray(String filePath) {
+		try {
+			Path path = new Path(filePath);
+			FileSystem fs = path.getFileSystem(sparkSession.sparkContext().hadoopConfiguration());
+			FileStatus[] status = fs.listStatus(path);
+			return status;
+		}
+		catch(IOException e){
+			log.info("Error Reading File: " + e.getMessage());
+			return new FileStatus[0];
 		}
 	}
 

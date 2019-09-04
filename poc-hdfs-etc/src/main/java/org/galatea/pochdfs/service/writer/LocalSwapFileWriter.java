@@ -50,9 +50,11 @@ public class LocalSwapFileWriter {
     int filesProcessed = 0;
     for(File file: filesInDirectory){
       if(file.isDirectory() == false) {
-        writeSwapDataFromIndividualFile(file, targetBasePath);
-        filesProcessed++;
-        log.info("Total Files Processed: {} ", filesProcessed);
+        if(file.getName().toLowerCase().contains("cashflows")) {
+          writeSwapDataFromIndividualFile(file, targetBasePath);
+          filesProcessed++;
+          log.info("Total Files Processed: {} ", filesProcessed);
+        }
       }
     }
     log.info("******** Process Completed in {} ms ********",System.currentTimeMillis() - systemStartTime);
@@ -172,8 +174,10 @@ public class LocalSwapFileWriter {
     Files.createDirectories(Paths.get(filePath).getParent());
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
       for (String data : dataMap.get(filePath)) {
-        writer.write(data);
-        totalRecordsLogged++;
+        if(filePath.toLowerCase().contains("cashflows")) {
+          writer.write(data);
+          totalRecordsLogged++;
+        }
       }
       dataMap.put(filePath, new ArrayDeque<String>());
     }

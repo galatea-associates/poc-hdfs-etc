@@ -1,5 +1,8 @@
 package org.galatea.pochdfs.service.analytics;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
@@ -20,6 +24,8 @@ import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.pochdfs.utils.hdfs.CashflowRegexBuilder;
+import scala.Int;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -72,35 +78,36 @@ public class SwapDataAccessor {
 	}
 
 	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId) {
-//		log.info("Reading cashflows for swapId [{}] from HDFS into Spark Dataset", swapId);
-//		Long startTime = System.currentTimeMillis();
-//	  Optional<Dataset<Row>> cashFlows = accessor.getData(baseFilePath + "cashflows/[12345-123456]-cashFlows.jsonl");
-//		log.info("CashFlows HDFS read took {} ms", System.currentTimeMillis()-startTime);
+      FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
+      String regex = CashflowRegexBuilder.build(queryDate,swapId);
+      ArrayList<String> fileNames = new ArrayList<>();
+      for(int i = 0; i<status.length; i++){
+        String path = status[i].getPath().toString();
+        if(isInRange(queryDate,swapId,path)){
+        	fileNames.add(path);
+				}
+      }
+      Object [] arr = fileNames.toArray();
+      String [] paths = Arrays.copyOf(arr, arr.length,String[].class);
+      return accessor.getDataFromSet(paths);
+	}
 
-		int year = Integer.parseInt(queryDate.substring(0,4));
-		int month = Integer.parseInt(queryDate.substring(6,7));
+	private boolean isInRange(String queryDate, long queryId, String path){
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMM");
 
-		String [] queries = new String [6];
-		if(month<1){
-			queries[0] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-%s0[%s-9]",year,month,year,month) + "-" + swapId + "-cashFlows.jsonl";
-			queries[1] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-%s[10-12]",year,month,year) + "-" + swapId + "-cashFlows.jsonl";
+		String[] components = path.split("-");
+		YearMonth effectiveDate = YearMonth.parse(components[components.length-4].substring(components[components.length-4].length() - 6), dateFormat);
+		YearMonth payDate = YearMonth.parse(components[components.length-3],dateFormat);
+		YearMonth testDate = YearMonth.parse(queryDate.replace("-","").substring(0,6),dateFormat);
 
-			queries[2] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s0[%s-9]",year-15, year-1,year,month) + "-" + swapId + "-cashFlows.jsonl";
-			queries[3] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s[10-12]",year-15,year-1,year) + "-" + swapId + "-cashFlows.jsonl";
-			queries[4] = baseFilePath + "cashflows/" + String.format("%s0[1-%s]-[%s-%s]*",year, month, year+1, year+15) + "-" + swapId + "-cashFlows.jsonl";
+		Long pathId = Long.parseLong(components[components.length - 2]);
+		if(pathId != queryId){
+			return false;
 		}
-		else{
-			queries[0] = baseFilePath + "cashflows/" + String.format("%s[10-%s]-%s[%s-12]",year,month,year,month) + "-" + swapId + "-cashFlows.jsonl";
-			queries[1] = baseFilePath + "cashflows/" + String.format("%s0[1-9]-%s[%s-12]", year, year, month) + "-" + swapId + "-cashFlows.jsonl";
-
-			queries[2] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-%s[%s-12]",year-15, year -1, year,month) + "-" + swapId + "-cashFlows.jsonl";
-			queries[3] = baseFilePath + "cashflows/" + String.format("%s[10-%s]-[%s-%s]*",year, month, year + 1, year+15) + "-" + swapId + "-cashFlows.jsonl";
-			queries[4] = baseFilePath + "cashflows/" + String.format("%s[1-9]-[%s -%s]*", year,year + 1, year + 15) + "-" + swapId + "-cashFlows.jsonl";
+		if(effectiveDate.isAfter(testDate) || payDate.isBefore(testDate)){
+			return false;
 		}
-		queries[5] = baseFilePath + "cashflows/" + String.format("[%s-%s]*-[%s-%s]*",year-15, year-1, year+1, year+15) + "-" + swapId + "-cashFlows.jsonl";
-
-		Optional<Dataset<Row>> cashFlows = accessor.getDataFromSet(queries[0], queries[2],queries[1],queries[3],queries[4],queries[5]);
-		return cashFlows;
+		return true;
 	}
 
 	/**

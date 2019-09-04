@@ -46,8 +46,8 @@ public class CashFlow implements SwapDataset {
 		SwapDatasetFileManager.writeToFile(path, json);
 	}
 	private String getYearAndMonth(String date){
-		date = date.replaceAll("-","");
-		return date.substring(0,6);
+		String newDate = date.replaceAll("-","");
+		return newDate.substring(0,6);
 	}
 
 }
