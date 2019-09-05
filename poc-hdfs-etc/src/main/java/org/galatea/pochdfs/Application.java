@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Optional;
 import org.apache.commons.cli.MissingOptionException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -13,8 +14,6 @@ import org.galatea.pochdfs.service.analytics.SwapDataAnalyzer;
 import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +46,10 @@ public class Application implements ApplicationRunner {
 		resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
 
 
-
 		log.info("Result set has {} records", resultWithCache.count());
-//		log.info("Wrighting data to file");
-//		saveDataset(resultWithCache);
-//		log.info("File complete");
+		log.info("Wrighting {} {} data to file", args[1], args[2]);
+		wrightDatasetToFile(resultWithCache, "poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2]+ ".csv");
+		log.info("File complete");
 
 //		while (true) {
 //			Thread.sleep(5000);
@@ -63,7 +61,6 @@ public class Application implements ApplicationRunner {
 	 * Ensure that server port is passed in as a command line argument.
 	 *
 	 * @param args command line arguments
-	 * @throws MissingOptionException if server port not provided as argument
 	 */
 	@Override
 	@SneakyThrows
@@ -73,8 +70,8 @@ public class Application implements ApplicationRunner {
 		}
 	}
 
-	public static void saveDataset(Dataset<Row> dataset) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter("results.csv", false));
+	public static void wrightDatasetToFile(Dataset<Row> dataset, String fileName) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
 		Iterator<Row> iterator = dataset.toLocalIterator();
 		while(iterator.hasNext()){
 			Row row = iterator.next();
