@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mortbay.log.Log;
 import org.springframework.format.annotation.DateTimeFormat;
+import scala.collection.mutable.StringBuilder;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -79,12 +80,12 @@ public class SwapDataAccessor {
     }
   }
 
-  public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId) {
+  public Optional<Dataset<Row>> getCashFlows(final String queryDate, Collection<Long> swapIds) {
     if (searchWithDates) {
 
       long startTime = System.currentTimeMillis();
       try {
-        String [] paths = getCashFlowFilePathsInRange(queryDate,swapId);
+        String [] paths = getCashFlowFilePathsInRange(queryDate,swapIds);
         log.info("CashFlow FilePaths found in {} ms", System.currentTimeMillis() - startTime);
         return accessor.getDataFromSet(paths);
       }catch (DateTimeParseException e){
@@ -93,7 +94,15 @@ public class SwapDataAccessor {
       }
 
     } else {
-      return accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
+      ArrayList<String> paths = new ArrayList<>();
+      int counter = 0;
+      for(long id: swapIds){
+       paths.add(baseFilePath + "cashflows/" + id + "-cashFlows.jsonl");
+
+      }
+      Object[] arr = paths.toArray();
+      String [] pathArray = Arrays.copyOf(arr, arr.length, String[].class);
+      return accessor.getDataFromSet(pathArray);
     }
   }
 
@@ -181,14 +190,14 @@ public class SwapDataAccessor {
     }
   }
 
-  private String[] getCashFlowFilePathsInRange(String queryDate, Long swapId) throws DateTimeParseException{
+  private String[] getCashFlowFilePathsInRange(String queryDate, Collection<Long> swapIds) throws DateTimeParseException{
     FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
     ArrayList<String> fileNames = new ArrayList<>();
     YearMonth testDate = getQueryYearDate(queryDate);
     for (int i = 0; i < status.length; i++) {
       String fileName = status[i].getPath().getName();
       if (isNewerCashflowsFileVersion(fileName)) {
-        if (isValidCashflowsDateRange(testDate, swapId, status[i].getPath().getName())) {
+        if (isValidCashflowsDateRange(testDate, swapIds, status[i].getPath().getName())) {
           fileNames.add(status[i].getPath().toString());
         }
       }
@@ -207,7 +216,7 @@ public class SwapDataAccessor {
 
   }
 
-  private boolean isValidCashflowsDateRange(YearMonth testDate, long queryId, String path) {
+  private boolean isValidCashflowsDateRange(YearMonth testDate, Collection<Long> swapIds, String path) {
     String name = path.replace("cashflows/", "");
     String[] components = name.split("-");
 
@@ -218,7 +227,7 @@ public class SwapDataAccessor {
     YearMonth payDate = YearMonth.parse(components[1], yearMonthFormat);
     Long pathId = Long.parseLong(components[2]);
 
-    if (pathId != queryId) {
+    if (!swapIds.contains(pathId)) {
       return false;
     }
     if (effectiveDate.isAfter(testDate) || payDate.isBefore(testDate)) {
