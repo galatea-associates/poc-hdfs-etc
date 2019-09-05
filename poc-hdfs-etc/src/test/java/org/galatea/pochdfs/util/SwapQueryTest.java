@@ -15,8 +15,9 @@ import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 public abstract class SwapQueryTest extends SharedJavaSparkContext implements Serializable {
 
 	private static final long				serialVersionUID	= 1L;
-
+	private final boolean searchWithDates = true;
 	protected static SwapQueryResultGetter	resultGetter;
+
 
 	@Before
 	public void initializeResultGetter() {
@@ -25,7 +26,7 @@ public abstract class SwapQueryTest extends SharedJavaSparkContext implements Se
 		// SparkSession session = new SparkSession(sc());
 		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-				new SwapDataAccessor(fileSystemAccessor, SwapDatasetFileManager.getINPUT_BASE_PATH()));
+				new SwapDataAccessor(fileSystemAccessor, SwapDatasetFileManager.getINPUT_BASE_PATH(),searchWithDates));
 		resultGetter = new SwapQueryResultGetter(analyzer);
 	}
 

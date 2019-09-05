@@ -33,6 +33,7 @@ public class SwapDataAccessor {
 
 	private final FilesystemAccessor	accessor;
 	private final String				baseFilePath;
+	private final boolean searchWithDates;
 
 	public Optional<Dataset<Row>> getCounterPartySwapContracts(final Long counterPartyId) {
 		Optional<Dataset<Row>> swapContracts = accessor
@@ -77,15 +78,16 @@ public class SwapDataAccessor {
 		}
 	}
 
-	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId,boolean sortWithDate) {
-		if(sortWithDate) {
+	public Optional<Dataset<Row>> getCashFlows(final String queryDate, final long swapId) {
+		if(searchWithDates) {
 			FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
-			String regex = CashflowRegexBuilder.build(queryDate, swapId);
 			ArrayList<String> fileNames = new ArrayList<>();
 			for (int i = 0; i < status.length; i++) {
-				String path = status[i].getPath().toString();
-				if (isInRange(queryDate, swapId, path)) {
-					fileNames.add(path);
+				String name = status[i].getPath().getName();
+				if(!name.substring(0,4).contains("-")) {
+					if (isInRange(queryDate, swapId, status[i].getPath().getName())) {
+						fileNames.add(status[i].getPath().toString());
+					}
 				}
 			}
 			Object[] arr = fileNames.toArray();
@@ -93,18 +95,19 @@ public class SwapDataAccessor {
 			return accessor.getDataFromSet(paths);
 		}
 		else{
-			return accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashflows.jsonl");
+			return accessor.getData(baseFilePath + "cashflows/" + swapId + "-cashFlows.jsonl");
 		}
 	}
 
 	private boolean isInRange(String queryDate, long queryId, String path){
+		String name = path.replace("cashflows/","");
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMM");
 
-		String[] components = path.split("-");
-		YearMonth effectiveDate = YearMonth.parse(components[components.length-4].substring(components[components.length-4].length() - 6), dateFormat);
-		YearMonth payDate = YearMonth.parse(components[components.length-3],dateFormat);
+		String[] components = name.split("-");
+		YearMonth effectiveDate = YearMonth.parse(components[0], dateFormat);
+		YearMonth payDate = YearMonth.parse(components[1],dateFormat);
 		YearMonth testDate = YearMonth.parse(queryDate.replace("-","").substring(0,6),dateFormat);
-		Long pathId = Long.parseLong(components[components.length - 2]);
+		Long pathId = Long.parseLong(components[2]);
 
 		if(pathId != queryId){
 			return false;

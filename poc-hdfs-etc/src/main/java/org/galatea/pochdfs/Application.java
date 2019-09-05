@@ -32,9 +32,14 @@ public class Application implements ApplicationRunner {
 				.config("spark.executor.cores", 4).config("spark.driver.cores", 1).config("spark.driver.memory", "4g")
 				.config("spark.executor.memory", "4g").getOrCreate();
 
+		boolean searchWithDates = true;
+		if(args[2].toLowerCase().contains("f")){
+			searchWithDates = false;
+		}
+
 		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer
-				analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
+				analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/",searchWithDates));
 
 		Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
 
@@ -44,9 +49,9 @@ public class Application implements ApplicationRunner {
 
 
 		log.info("Result set has {} records", resultWithCache.count());
-		log.info("Wrighting data to file");
-		saveDataset(resultWithCache);
-		log.info("File complete");
+//		log.info("Wrighting data to file");
+//		saveDataset(resultWithCache);
+//		log.info("File complete");
 
 //		while (true) {
 //			Thread.sleep(5000);
@@ -69,7 +74,7 @@ public class Application implements ApplicationRunner {
 	}
 
 	public static void saveDataset(Dataset<Row> dataset) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter("output.csv", false));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("results.csv", false));
 		Iterator<Row> iterator = dataset.toLocalIterator();
 		while(iterator.hasNext()){
 			Row row = iterator.next();
