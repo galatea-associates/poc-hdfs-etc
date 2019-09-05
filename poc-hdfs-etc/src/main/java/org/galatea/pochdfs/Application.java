@@ -1,5 +1,6 @@
 package org.galatea.pochdfs;
 
+import com.google.common.base.Joiner;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,64 +23,59 @@ import lombok.extern.slf4j.Slf4j;
 //@SpringBootApplication
 public class Application implements ApplicationRunner {
 
-	@SneakyThrows
-	public static void main(final String[] args) {
+  @SneakyThrows
+  public static void main(final String[] args) {
 
 //		SpringApplication.run(Application.class, args);
-		SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
-				.config("spark.sql.shuffle.partitions", 24).config("spark.default.parallelism", 24)
-				.config("spark.executor.cores", 4).config("spark.driver.cores", 1).config("spark.driver.memory", "4g")
-				.config("spark.executor.memory", "4g").getOrCreate();
+    SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
+        .config("spark.sql.shuffle.partitions", 24).config("spark.default.parallelism", 24)
+        .config("spark.executor.cores", 4).config("spark.driver.cores", 1)
+        .config("spark.driver.memory", "4g")
+        .config("spark.executor.memory", "4g").getOrCreate();
 
-		boolean searchWithDates = true;
-		if(args[2].toLowerCase().contains("f")){
-			searchWithDates = false;
-		}
+    boolean searchWithDates = true;
+    if (args[2].toLowerCase().contains("f")) {
+      searchWithDates = false;
+    }
 
-		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
-		SwapDataAnalyzer
-				analyzer = new SwapDataAnalyzer(new SwapDataAccessor(fileSystemAccessor, "/cs/data/",searchWithDates));
+    FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
+    SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
+        new SwapDataAccessor(fileSystemAccessor, "/cs/data/", searchWithDates));
+    Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+    Dataset<Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+    resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
 
-		Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+    log.info("Result set has {} records", resultWithCache.count());
+    log.info("Wrighting {} {} data to file", args[1], args[2]);
+    wrightDatasetToFile(resultWithCache,
+        "poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
+    log.info("File complete");
 
-		Dataset <Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
-		resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
+  }
 
+  /**
+   * Ensure that server port is passed in as a command line argument.
+   *
+   * @param args command line arguments
+   */
+  @Override
+  @SneakyThrows
+  public void run(final ApplicationArguments args) {
+    if (!args.containsOption("server.port") && (System.getProperty("server.port") == null)) {
+      throw new MissingOptionException("Server port must be set via command line parameter");
+    }
+  }
 
-		log.info("Result set has {} records", resultWithCache.count());
-		log.info("Wrighting {} {} data to file", args[1], args[2]);
-		wrightDatasetToFile(resultWithCache, "poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2]+ ".csv");
-		log.info("File complete");
-
-//		while (true) {
-//			Thread.sleep(5000);
-//		}
-
-	}
-
-	/**
-	 * Ensure that server port is passed in as a command line argument.
-	 *
-	 * @param args command line arguments
-	 */
-	@Override
-	@SneakyThrows
-	public void run(final ApplicationArguments args) {
-		if (!args.containsOption("server.port") && (System.getProperty("server.port") == null)) {
-			throw new MissingOptionException("Server port must be set via command line parameter");
-		}
-	}
-
-	public static void wrightDatasetToFile(Dataset<Row> dataset, String fileName) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-		Iterator<Row> iterator = dataset.toLocalIterator();
-		while(iterator.hasNext()){
-			Row row = iterator.next();
-			writer.write(row.mkString(",") + "\n");
-		}
-		writer.close();
-	}
-
+  private static void wrightDatasetToFile(Dataset<Row> dataset, String fileName) throws IOException {
+    BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
+    writer.write(Joiner.on(",").join(dataset.columns()) + "\n");
+    Iterator<Row> iterator = dataset.toLocalIterator();
+    while (iterator.hasNext()) {
+      Row row = iterator.next();
+      writer.write(row.mkString(",") + "\n");
+    }
+    writer.close();
+  }
 
 
 }

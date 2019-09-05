@@ -132,8 +132,6 @@ public class SwapDataAnalyzer {
 		// mitigating for data gen incorrect cash flow effective date format
 		String formattedEffectiveDate = currentState.effectiveDate().replaceAll("-", "");
 
-		//String effectiveDate = currentState.effectiveDate();
-
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
 				.filter(cashFlows.col("effective_date").leq(functions.lit(formattedEffectiveDate))
@@ -175,7 +173,6 @@ public class SwapDataAnalyzer {
 
 		return Arrays.asList(pivotSet.groupBy("tempGroupCol").pivot("cashflow_type").sum("tempSumCol")
 				.drop("tempGroupCol").columns());
-
 	}
 
 	/**
