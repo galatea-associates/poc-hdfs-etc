@@ -199,6 +199,7 @@ public class SwapDataAccessor {
       if (isNewerCashflowsFileVersion(fileName)) {
         if (isValidCashflowsDateRange(testDate, swapIds, status[i].getPath().getName())) {
           fileNames.add(status[i].getPath().toString());
+          log.info("Adding item to cashflows path list: {} ", status[i].getPath().toString());
         }
       }
     }

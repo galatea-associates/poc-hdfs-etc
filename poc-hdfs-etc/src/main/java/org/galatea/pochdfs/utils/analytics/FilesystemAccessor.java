@@ -43,7 +43,7 @@ public class FilesystemAccessor {
 
 	public Optional<Dataset<Row>> getDataFromSet(final String... paths){
 		try {
-			log.info("Reading data from path {} into spark dataset", paths);
+			log.info("Reading {} files", paths.length);
 			return Optional.of(attemptGettingDataForSet(paths));
 		} catch (AnalysisException e) {
 			log.info("Error reading data with error message: {}. Returning empty Optional instead", e.getMessage());
