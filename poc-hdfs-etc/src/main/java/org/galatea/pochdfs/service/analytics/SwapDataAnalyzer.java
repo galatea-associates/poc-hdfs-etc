@@ -3,6 +3,7 @@ package org.galatea.pochdfs.service.analytics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.spark.sql.Dataset;
@@ -44,6 +45,7 @@ public class SwapDataAnalyzer {
 		Long subStartTime = System.currentTimeMillis();
 		log.info("Reading in current state");
 		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+
 		log.info("Current state read took {} ms", System.currentTimeMillis() - subStartTime);
 
 		subStartTime = System.currentTimeMillis();
@@ -78,6 +80,7 @@ public class SwapDataAnalyzer {
 	 */
 	public Dataset<Row> getEnrichedPositions(final String book, final String effectiveDate) {
 		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+
 		return getEnrichedPositions(currentState);
 	}
 
@@ -104,6 +107,7 @@ public class SwapDataAnalyzer {
 
 	public Dataset<Row> getUnpaidCash(final String book, final String effectiveDate) {
 		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
+
 		return getUnpaidCash(currentState);
 	}
 
@@ -118,7 +122,7 @@ public class SwapDataAnalyzer {
 	private Dataset<Row> createUnpaidCash(final BookSwapDataState currentState) {
 		Dataset<Row> unpaidCash = calculateUnpaidCash(currentState);
 		Dataset<Row> normalizedUnpaidCash = normalizeUnpaidCashByType(unpaidCash);
-		normalizedUnpaidCash.show();
+	//	normalizedUnpaidCash.show();
 		return normalizedUnpaidCash;
 	}
 
@@ -249,5 +253,6 @@ public class SwapDataAnalyzer {
 				.drop("droppable-swap_contract_id").drop("droppable-ric").distinct();
 		return dataset;
 	}
+
 
 }

@@ -22,8 +22,6 @@ import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mortbay.log.Log;
-import org.springframework.format.annotation.DateTimeFormat;
-import scala.collection.mutable.StringBuilder;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,7 +85,7 @@ public class SwapDataAccessor {
       try {
         String [] paths = getCashFlowFilePathsInRange(queryDate,swapIds);
         log.info("CashFlow FilePaths found in {} ms", System.currentTimeMillis() - startTime);
-        return accessor.getDataFromSet(paths);
+        return accessor.getData(paths);
       }catch (DateTimeParseException e){
         Log.info("Incorrectly formatted QueryDate Returning Empty DataSet");
         return Optional.empty();
@@ -102,7 +100,7 @@ public class SwapDataAccessor {
       }
       Object[] arr = paths.toArray();
       String [] pathArray = Arrays.copyOf(arr, arr.length, String[].class);
-      return accessor.getDataFromSet(pathArray);
+      return accessor.getData(pathArray);
     }
   }
 

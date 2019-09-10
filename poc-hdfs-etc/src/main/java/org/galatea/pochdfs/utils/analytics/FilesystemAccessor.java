@@ -1,17 +1,12 @@
 package org.galatea.pochdfs.utils.analytics;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.spark.ml.feature.RegexTokenizer;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -21,8 +16,6 @@ import org.apache.spark.sql.types.StructType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.pochdfs.utils.hdfs.FileSystemFactory;
-import org.mortbay.log.Log;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,34 +34,27 @@ public class FilesystemAccessor {
 		}
 	}
 
-	public Optional<Dataset<Row>> getDataFromSet(final String... paths){
+	public Optional<Dataset<Row>> getData(final String... paths){
 		try {
 			log.info("Reading {} files", paths.length);
-			return Optional.of(attemptGettingDataForSet(paths));
+			return Optional.of(attemptGettingData(paths));
 		} catch (AnalysisException e) {
 			log.info("Error reading data with error message: {}. Returning empty Optional instead", e.getMessage());
 			return Optional.empty();
 		}
 	}
-	public FileStatus[] getStatusArray(String filePath) {
+
+	public FileStatus[] getStatusArray(String directoryPath) {
+		log.info("Status Array Reguested");
 		try {
-			Path path = new Path(filePath);
+			Path path = new Path(directoryPath);
 			FileSystem fs = path.getFileSystem(sparkSession.sparkContext().hadoopConfiguration());
-			FileStatus[] status = fs.listStatus(path);
-			return status;
+			return fs.listStatus(path);
 		}
 		catch(IOException e){
-			log.info("Error Reading File: " + e.getMessage());
+			log.info("Error Reading From Directory: " + e.getMessage());
 			return new FileStatus[0];
 		}
-	}
-
-	private Dataset<Row> attemptGettingData(final String path) throws AnalysisException {
-		return sparkSession.read().json(path);
-	}
-
-	private Dataset<Row> attemptGettingDataForSet(final String... paths) throws AnalysisException{
-		return sparkSession.read().json(paths);
 	}
 
 	public Dataset<Row> createTemplateDataFrame(final StructType structType) {
@@ -86,6 +72,13 @@ public class FilesystemAccessor {
 	public void writeDataset(final Dataset<Row> dataset, final String path) {
 		log.info("Writing dataset to path {}", path);
 		dataset.write().mode(SaveMode.Overwrite).json(path);
+	}
+
+	private Dataset<Row> attemptGettingData(final String... path) throws AnalysisException {
+		long startTime = System.currentTimeMillis();
+		Dataset<Row> dataset = sparkSession.read().json(path);
+		log.info("{} files read in {} ms", path.length, System.currentTimeMillis() - startTime);
+		return dataset;
 	}
 
 //	public void test() {

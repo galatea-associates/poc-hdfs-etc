@@ -22,14 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 //@SpringBootApplication
 public class Application implements ApplicationRunner {
-
   @SneakyThrows
   public static void main(final String[] args) {
 
 //		SpringApplication.run(Application.class, args);
     SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
-        .config("spark.sql.shuffle.partitions", 24).config("spark.default.parallelism", 24)
-        .config("spark.executor.cores", 4).config("spark.driver.cores", 1)
+        .config("spark.sql.shuffle.partitions", 40).config("spark.default.parallelism", 40)
+        .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
         .config("spark.driver.memory", "4g")
         .config("spark.executor.memory", "4g").getOrCreate();
 
@@ -47,9 +46,12 @@ public class Application implements ApplicationRunner {
 
     log.info("Result set has {} records", resultWithCache.count());
     log.info("Wrighting {} {} data to file", args[1], args[2]);
-    wrightDatasetToFile(resultWithCache,
-        "poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
+    wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
     log.info("File complete");
+
+//    while(true){
+//      Thread.sleep(5000);
+//    }
 
   }
 
