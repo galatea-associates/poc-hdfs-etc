@@ -26,7 +26,8 @@ public class SwapStateGetter {
     Optional<Dataset<Row>> swapContracts =
         dataAccessor.getCounterPartySwapContracts(counterPartyId);
     Optional<Dataset<Row>> instruments = dataAccessor.getInstruments();
-    Optional<Dataset<Row>> cashFlows = getCashFlows(effectiveDate, swapIds);
+    //Optional<Dataset<Row>> cashFlows = getCashFlows(effectiveDate, swapIds);
+    Optional<Dataset<Row>> cashFlows = dataAccessor.getCashFlows(effectiveDate,swapIds);
 
     return new BookSwapDataState().counterParties(counterParties).counterPartyId(counterPartyId)
         .instruments(instruments).positions(positions).swapContracts(swapContracts).swapIds(swapIds)

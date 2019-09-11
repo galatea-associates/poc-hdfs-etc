@@ -77,7 +77,14 @@ public class FilesystemAccessor {
 	private Dataset<Row> attemptGettingData(final String... path) throws AnalysisException {
 		long startTime = System.currentTimeMillis();
 		Dataset<Row> dataset = sparkSession.read().json(path);
-		log.info("{} files read in {} ms", path.length, System.currentTimeMillis() - startTime);
+		log.info("{} file(s) read in {} ms", path.length, System.currentTimeMillis() - startTime);
+		return dataset;
+	}
+
+	private Dataset<Row> attemptGettingData(final String path) throws AnalysisException{
+		long startTime = System.currentTimeMillis();
+		Dataset<Row> dataset = sparkSession.read().json(path);
+		log.info("File read in {} ms ", System.currentTimeMillis()-startTime);
 		return dataset;
 	}
 

@@ -93,10 +93,8 @@ public class SwapDataAccessor {
 
     } else {
       ArrayList<String> paths = new ArrayList<>();
-      int counter = 0;
       for(long id: swapIds){
        paths.add(baseFilePath + "cashflows/" + id + "-cashFlows.jsonl");
-
       }
       Object[] arr = paths.toArray();
       String [] pathArray = Arrays.copyOf(arr, arr.length, String[].class);
@@ -189,6 +187,7 @@ public class SwapDataAccessor {
   }
 
   private String[] getCashFlowFilePathsInRange(String queryDate, Collection<Long> swapIds) throws DateTimeParseException{
+
     FileStatus[] status = accessor.getStatusArray(baseFilePath + "/cashflows");
     ArrayList<String> fileNames = new ArrayList<>();
     YearMonth testDate = getQueryYearDate(queryDate);
@@ -220,7 +219,6 @@ public class SwapDataAccessor {
     String[] components = name.split("-");
 
     DateTimeFormatter yearMonthFormat = DateTimeFormatter.ofPattern("yyyyMM");
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     YearMonth effectiveDate = YearMonth.parse(components[0], yearMonthFormat);
     YearMonth payDate = YearMonth.parse(components[1], yearMonthFormat);

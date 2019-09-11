@@ -49,9 +49,9 @@ public class Application implements ApplicationRunner {
     wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
     log.info("File complete");
 
-//    while(true){
-//      Thread.sleep(5000);
-//    }
+    while(true){
+      Thread.sleep(5000);
+    }
 
   }
 
