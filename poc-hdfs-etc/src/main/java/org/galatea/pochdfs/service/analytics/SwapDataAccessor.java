@@ -152,14 +152,25 @@ public class SwapDataAccessor {
    */
   public Optional<Dataset<Row>> getSwapContractsPositions(final Collection<Long> swapIds,
       final String effectiveDate) {
-    Stack<Dataset<Row>> totalPositions = new Stack<>();
-    for (Long swapId : swapIds) {
-      Optional<Dataset<Row>> positions = getEffectiveDateSwapPositions(swapId, effectiveDate);
-      if (positions.isPresent()) {
-        totalPositions.add(positions.get());
-      }
+
+//    Stack<Dataset<Row>> totalPositions = new Stack<>();
+//    for (Long swapId : swapIds) {
+//      Optional<Dataset<Row>> positions = getEffectiveDateSwapPositions(swapId, effectiveDate);
+//      if (positions.isPresent()) {
+//        totalPositions.add(positions.get());
+//      }
+//    }
+//    return combinePositions(totalPositions);
+
+    ArrayList<String> paths = new ArrayList<>();
+    for(long swapId: swapIds){
+      String path = baseFilePath + "positions/" + effectiveDate + "-" + swapId + "-" + "positions.jsonl";
+      log.info("Adding item to positions path list: {}", path);
+      paths.add(path);
     }
-    return combinePositions(totalPositions);
+    Object[] arr = paths.toArray();
+    return accessor.getData(Arrays.copyOf(arr, arr.length, String[].class));
+
   }
 
   public Dataset<Row> getBlankDataset() {

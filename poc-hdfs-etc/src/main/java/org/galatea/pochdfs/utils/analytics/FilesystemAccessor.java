@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import java.util.Stack;
+import lombok.Data;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -38,6 +40,14 @@ public class FilesystemAccessor {
 		try {
 			log.info("Reading {} files", paths.length);
 			return Optional.of(attemptGettingData(paths));
+//			long startTime = System.currentTimeMillis();
+//			Stack<Dataset<Row>> stack = new Stack<>();
+//			for(String path: paths){
+//				stack.push(attemptGettingData(path));
+//			}
+//			Optional<Dataset<Row>> dataset = combineRows(stack);
+//			log.info("read {} files in {} ms", paths.length, System.currentTimeMillis() - startTime);
+//			return dataset;
 		} catch (AnalysisException e) {
 			log.info("Error reading data with error message: {}. Returning empty Optional instead", e.getMessage());
 			return Optional.empty();
@@ -74,11 +84,12 @@ public class FilesystemAccessor {
 		dataset.write().mode(SaveMode.Overwrite).json(path);
 	}
 
-	private Dataset<Row> attemptGettingData(final String... path) throws AnalysisException {
+	private Dataset<Row> attemptGettingData(final String... paths) throws AnalysisException {
 		long startTime = System.currentTimeMillis();
-		Dataset<Row> dataset = sparkSession.read().json(path);
-		log.info("{} file(s) read in {} ms", path.length, System.currentTimeMillis() - startTime);
+		Dataset<Row> dataset = sparkSession.read().json(paths);
+		log.info("{} file(s) read in {} ms", paths.length, System.currentTimeMillis() - startTime);
 		return dataset;
+
 	}
 
 	private Dataset<Row> attemptGettingData(final String path) throws AnalysisException{
@@ -86,6 +97,18 @@ public class FilesystemAccessor {
 		Dataset<Row> dataset = sparkSession.read().json(path);
 		log.info("File read in {} ms ", System.currentTimeMillis()-startTime);
 		return dataset;
+	}
+
+	private Optional<Dataset<Row>> combineRows(final Stack<Dataset<Row>> sets) {
+		if (sets.isEmpty()) {
+				return Optional.empty();
+		} else {
+			Dataset<Row> result = sets.pop();
+			while (!sets.isEmpty()) {
+				result = result.union(sets.pop());
+			}
+			return Optional.of(result);
+		}
 	}
 
 //	public void test() {

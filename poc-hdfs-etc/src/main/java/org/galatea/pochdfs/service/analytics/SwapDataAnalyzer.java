@@ -122,7 +122,6 @@ public class SwapDataAnalyzer {
 	private Dataset<Row> createUnpaidCash(final BookSwapDataState currentState) {
 		Dataset<Row> unpaidCash = calculateUnpaidCash(currentState);
 		Dataset<Row> normalizedUnpaidCash = normalizeUnpaidCashByType(unpaidCash);
-	//	normalizedUnpaidCash.show();
 		return normalizedUnpaidCash;
 	}
 
