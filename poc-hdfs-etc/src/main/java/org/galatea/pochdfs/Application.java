@@ -12,6 +12,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.galatea.pochdfs.service.analytics.SwapDataAccessor;
 import org.galatea.pochdfs.service.analytics.SwapDataAnalyzer;
+import org.galatea.pochdfs.speedTest.QuerySpeedTester;
 import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -26,32 +27,35 @@ public class Application implements ApplicationRunner {
   public static void main(final String[] args) {
 
 //		SpringApplication.run(Application.class, args);
-    SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
-        .config("spark.sql.shuffle.partitions", 40).config("spark.default.parallelism", 40)
-        .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
-        .config("spark.driver.memory", "4g")
-        .config("spark.executor.memory", "4g").getOrCreate();
+//    SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
+//        .config("spark.sql.shuffle.partitions", 80).config("spark.default.parallelism", 12)
+//        .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
+//        .config("spark.driver.memory", "16g")
+//        .config("spark.executor.memory", "4g").config("spark.executor.instances", 24)
+//        .config("spark.driver.maxResultSize","1g").getOrCreate();
+//
+//    boolean searchWithDates = true;
+//    if (args[2].toLowerCase().contains("f")) {
+//      searchWithDates = false;
+//    }
+//
+//    FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
+//    SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
+//        new SwapDataAccessor(fileSystemAccessor, "/cs/data/", searchWithDates));
+//    Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+//    Dataset<Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+//    resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
 
-    boolean searchWithDates = true;
-    if (args[2].toLowerCase().contains("f")) {
-      searchWithDates = false;
-    }
+    Dataset<Row> resultWithCache = QuerySpeedTester.runSpeedTest(args[0], args[1]);
 
-    FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
-    SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-        new SwapDataAccessor(fileSystemAccessor, "/cs/data/", searchWithDates));
-    Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
-    Dataset<Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
-    resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
-
-    log.info("Result set has {} records", resultWithCache.count());
-    log.info("Wrighting {} {} data to file", args[1], args[2]);
+    //log.info("Result set has {} records", resultWithCache.count());
+    log.info("Wrighting {} {} data to file", args[0], args[1]);
     wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
     log.info("File complete");
 
-    while(true){
-      Thread.sleep(5000);
-    }
+//    while(true){
+//      Thread.sleep(5000);
+//    }
 
   }
 

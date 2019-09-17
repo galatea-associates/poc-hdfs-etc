@@ -17,6 +17,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.StructType;
+import org.galatea.pochdfs.speedTest.QuerySpeedTester;
 import org.galatea.pochdfs.utils.analytics.FilesystemAccessor;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,10 @@ public class SwapDataAccessor {
   private final boolean searchWithDates;
 
   public Optional<Dataset<Row>> getCounterPartySwapContracts(final Long counterPartyId) {
+    long startTime = System.currentTimeMillis();
     Optional<Dataset<Row>> swapContracts = accessor
         .getData(baseFilePath + "swapcontracts/" + counterPartyId + "-" + "swapContracts.jsonl");
+    //QuerySpeedTester.addValue().setSwapContractRead(System.currentTimeMillis()-startTime);
     return swapContracts;
   }
 
@@ -57,14 +60,18 @@ public class SwapDataAccessor {
   }
 
   public Optional<Dataset<Row>> getInstruments() {
+    long startTime = System.currentTimeMillis();
     Optional<Dataset<Row>> instruments =
         accessor.getData(baseFilePath + "instrument/instruments.jsonl");
+    //QuerySpeedTester.addValue().setInstrumentRead(System.currentTimeMillis()-startTime);
     return instruments;
   }
 
   public Optional<Dataset<Row>> getCounterParties() {
+    long startTime = System.currentTimeMillis();
     Optional<Dataset<Row>> counterparties =
         accessor.getData(baseFilePath + "counterparty/counterparties.jsonl");
+    //QuerySpeedTester.addValue().setCounterpartyRead(System.currentTimeMillis()-startTime);
     return counterparties;
   }
 
@@ -85,7 +92,10 @@ public class SwapDataAccessor {
       try {
         String [] paths = getCashFlowFilePathsInRange(queryDate,swapIds);
         log.info("CashFlow FilePaths found in {} ms", System.currentTimeMillis() - startTime);
-        return accessor.getData(paths);
+        startTime= System.currentTimeMillis();
+        Optional<Dataset<Row>> dataset = accessor.getData(paths);
+        //QuerySpeedTester.addValue().setCashFlowRead(System.currentTimeMillis()-startTime);
+        return dataset;
       }catch (DateTimeParseException e){
         Log.info("Incorrectly formatted QueryDate Returning Empty DataSet");
         return Optional.empty();
@@ -169,7 +179,10 @@ public class SwapDataAccessor {
       paths.add(path);
     }
     Object[] arr = paths.toArray();
-    return accessor.getData(Arrays.copyOf(arr, arr.length, String[].class));
+    long startTime = System.currentTimeMillis();
+    Optional<Dataset<Row>> positions = accessor.getData(Arrays.copyOf(arr, arr.length, String[].class));
+    //QuerySpeedTester.addValue().setPositionsRead(System.currentTimeMillis()-startTime);
+    return positions;
 
   }
 
@@ -222,7 +235,6 @@ public class SwapDataAccessor {
   private YearMonth getQueryYearDate(String queryDate) throws DateTimeParseException {
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			return YearMonth.from(LocalDate.parse(queryDate, dateFormat));
-
   }
 
   private boolean isValidCashflowsDateRange(YearMonth testDate, Collection<Long> swapIds, String path) {

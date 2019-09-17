@@ -12,6 +12,7 @@ import org.apache.spark.sql.functions;
 import org.galatea.pochdfs.domain.analytics.BookSwapDataState;
 import org.galatea.pochdfs.utils.analytics.DatasetTransformer;
 import org.galatea.pochdfs.utils.analytics.SwapStateGetter;
+import org.galatea.pochdfs.speedTest.QuerySpeedTester;
 
 import lombok.extern.slf4j.Slf4j;
 import scala.collection.JavaConverters;
@@ -47,27 +48,32 @@ public class SwapDataAnalyzer {
 		BookSwapDataState currentState = stateGetter.getBookState(book, effectiveDate);
 
 		log.info("Current state read took {} ms", System.currentTimeMillis() - subStartTime);
+		//QuerySpeedTester.addValue().setTotalBookRead(System.currentTimeMillis()-subStartTime);
 
 		subStartTime = System.currentTimeMillis();
 		log.info("Creating enriched positions for book {} with effective date {}", book, effectiveDate);
 		Dataset<Row> enrichedPositions = getEnrichedPositions(currentState);
 
 		log.info("Completed enriched positions creation in {} ms", System.currentTimeMillis() - subStartTime);
+		//QuerySpeedTester.addValue().setEnrichedPositionTime(System.currentTimeMillis()-subStartTime);
 
 		subStartTime = System.currentTimeMillis();
 		log.info("Getting unpaid cash for book {} with effective date {}", book, effectiveDate);
 		Dataset<Row> unpaidCash = getUnpaidCash(currentState);
 
 		log.info("Completed unpaid cash creation in {} ms", System.currentTimeMillis() - subStartTime);
+		//QuerySpeedTester.addValue().setCashCreationTime(System.currentTimeMillis()-subStartTime);
 
 		subStartTime = System.currentTimeMillis();
 		log.info("Joining enriched positions with unpaid cash");
 		Dataset<Row> enrichedPositionsWithUnpaidCash = joinEnrichedPositionsAndUnpaidCash(enrichedPositions,
 				unpaidCash);
 		log.info("Completed join in {} ms", System.currentTimeMillis() - subStartTime);
+		//QuerySpeedTester.addValue().setJoinTime(System.currentTimeMillis()-subStartTime);
 
 		log.info("Completed Enriched Positions with Unpaid Cash query im {} ms",
 				System.currentTimeMillis() - startTime);
+		//QuerySpeedTester.addValue().setTotalRunTime(System.currentTimeMillis()-startTime);
 		return enrichedPositionsWithUnpaidCash;
 	}
 
@@ -137,7 +143,7 @@ public class SwapDataAnalyzer {
 
 		Dataset<Row> cashFlows = currentState.cashFlows().get();
 		Dataset<Row> unpaidCash = cashFlows
-				.filter(cashFlows.col("effective_date").leq(functions.lit(formattedEffectiveDate))
+				.filter(cashFlows.col("effective_date").leq(functions.lit(currentState.effectiveDate()))
 						.and(cashFlows.col("pay_date").gt(functions.lit(currentState.effectiveDate()))));
 		unpaidCash = unpaidCash.groupBy("ric", "long_short", "swap_contract_id", "cashflow_type")
 				.agg(functions.sum("amount").as("unpaid_cash"));

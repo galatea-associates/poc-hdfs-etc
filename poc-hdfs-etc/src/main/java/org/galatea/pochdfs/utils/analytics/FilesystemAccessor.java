@@ -18,6 +18,7 @@ import org.apache.spark.sql.types.StructType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import scala.reflect.ClassTag;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -79,11 +80,11 @@ public class FilesystemAccessor {
 	}
 
 	private Dataset<Row> attemptGettingData(final String... paths) throws AnalysisException {
-		long startTime = System.currentTimeMillis();
-		Dataset<Row> dataset = sparkSession.read().json(paths);
-		log.info("{} file(s) read in {} ms", paths.length, System.currentTimeMillis() - startTime);
-		return dataset;
-	}
+    long startTime = System.currentTimeMillis();
+    Dataset<Row> dataset = sparkSession.read().json(paths);
+    log.info("{} file(s) read in {} ms", paths.length, System.currentTimeMillis() - startTime);
+    return dataset;
+  }
 
 	private Dataset<Row> attemptGettingData(final String path) throws AnalysisException{
 		long startTime = System.currentTimeMillis();
