@@ -92,6 +92,7 @@ public class SwapDataAccessor {
       try {
         String [] paths = getCashFlowFilePathsInRange(queryDate,swapIds);
         log.info("CashFlow FilePaths found in {} ms", System.currentTimeMillis() - startTime);
+        //QuerySpeedTester.addValue().setListingLeafTime(System.currentTimeMillis()-startTime);
         startTime= System.currentTimeMillis();
         Optional<Dataset<Row>> dataset = accessor.getData(paths);
         //QuerySpeedTester.addValue().setCashFlowRead(System.currentTimeMillis()-startTime);

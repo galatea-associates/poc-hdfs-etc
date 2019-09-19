@@ -30,7 +30,7 @@ public class SpeedTest {
   public Object[] getAllValues() {
     return new Object[] {numNodes, numCores,partitions,parallelism, date, totalRunTime, totalBookRead,
         positionsRead, cashFlowRead, instrumentRead, swapContractRead, cashCreationTime,
-        enrichedPositionTime, joinTime};
+        enrichedPositionTime, joinTime,listingLeafTime};
 
   }
 }

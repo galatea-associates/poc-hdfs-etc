@@ -19,11 +19,12 @@ public class QuerySpeedTester {
 
   private static String fileName = "speedTestOutput.csv";
 
-  private static final int NUM_CORES = 4;
-  private static final int NUM_NODES = 12;
+  private static final int NUM_CORES = 24;
+  private static final int NUM_NODES = 8;
 
-  private static final int PARTITIONS = 24;
-  private static final int PARALLELISM = 24;
+  private static final int PARTITIONS = 48;
+  private static final int PARALLELISM = 48;
+
 
 
 

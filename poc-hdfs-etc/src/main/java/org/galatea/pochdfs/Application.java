@@ -50,7 +50,7 @@ public class Application implements ApplicationRunner {
 
     //log.info("Result set has {} records", resultWithCache.count());
     log.info("Wrighting {} {} data to file", args[0], args[1]);
-    wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-" + args[2] + ".csv");
+    wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-true.csv");
     log.info("File complete");
 
 //    while(true){
