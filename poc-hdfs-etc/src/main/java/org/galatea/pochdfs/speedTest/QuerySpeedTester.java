@@ -30,21 +30,18 @@ public class QuerySpeedTester {
 
   public static Dataset<Row> runSpeedTest(String book, String date) throws IOException {
 
-    //SpringApplication.run(Application.class, args);
     SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
         .config("spark.sql.shuffle.partitions", PARTITIONS).config("spark.default.parallelism", PARALLELISM)
         .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
         .config("spark.driver.memory", "16g")
         .config("spark.executor.memory", "4g").config("spark.executor.instances", NUM_CORES)
-        //.config("spark.driver.maxResultSize","1g")
         .getOrCreate();
 
     FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
     SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-        new SwapDataAccessor(fileSystemAccessor, "/cs/data/", true));
+        new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
     currentTest = new SpeedTest();
     Dataset<Row> result = analyzer.getEnrichedPositionsWithUnpaidCash(book, date);
-
 
     for(int i = 0; i<numTests; i++) {
 
@@ -64,7 +61,7 @@ public class QuerySpeedTester {
 
   private static void writeResult(SpeedTest speedTest) throws IOException {
     BufferedWriter writer = new BufferedWriter(new FileWriter("poc_benchmarking/query_results/" + fileName, true));
-    if(new File("poc_benchmarking/query_results/" + fileName).exists() == false){
+    if(!new File("poc_benchmarking/query_results/" + fileName).exists()){
       writer.write("# of Nodes,#of Cores,Date,Total Run Time,total book read,cashflow file read,positions file read,instruments file read,swap contract file read,counterparty,listin leaf,pivot,enriched positions creation,unpaid cash creation,join");
     }
     writer.write(Joiner.on(",").join(speedTest.getAllValues()) + "\n");

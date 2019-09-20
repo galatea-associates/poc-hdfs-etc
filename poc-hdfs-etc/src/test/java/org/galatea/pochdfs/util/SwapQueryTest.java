@@ -23,10 +23,9 @@ public abstract class SwapQueryTest extends SharedJavaSparkContext implements Se
 	public void initializeResultGetter() {
 		SparkSession session = SparkSession.builder().sparkContext(sc()).config("spark.sql.shuffle.partitions", 1)
 				.config("spark.default.parallelism", 1).getOrCreate();
-		// SparkSession session = new SparkSession(sc());
 		FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
 		SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-				new SwapDataAccessor(fileSystemAccessor, SwapDatasetFileManager.getINPUT_BASE_PATH(),searchWithDates));
+				new SwapDataAccessor(fileSystemAccessor, SwapDatasetFileManager.getINPUT_BASE_PATH()));
 		resultGetter = new SwapQueryResultGetter(analyzer);
 	}
 

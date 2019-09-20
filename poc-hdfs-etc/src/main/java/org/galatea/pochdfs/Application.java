@@ -23,39 +23,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 //@SpringBootApplication
 public class Application implements ApplicationRunner {
+
   @SneakyThrows
   public static void main(final String[] args) {
 
 //		SpringApplication.run(Application.class, args);
-//    SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
-//        .config("spark.sql.shuffle.partitions", 80).config("spark.default.parallelism", 12)
-//        .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
-//        .config("spark.driver.memory", "16g")
-//        .config("spark.executor.memory", "4g").config("spark.executor.instances", 24)
-//        .config("spark.driver.maxResultSize","1g").getOrCreate();
-//
-//    boolean searchWithDates = true;
-//    if (args[2].toLowerCase().contains("f")) {
-//      searchWithDates = false;
-//    }
-//
-//    FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
-//    SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
-//        new SwapDataAccessor(fileSystemAccessor, "/cs/data/", searchWithDates));
-//    Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
-//    Dataset<Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
-//    resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
+    SparkSession session = SparkSession.builder().appName("SwapDataAnlyzer")
+        .config("spark.sql.shuffle.partitions", 80).config("spark.default.parallelism", 12)
+        .config("spark.executor.cores", 6).config("spark.driver.cores", 1)
+        .config("spark.driver.memory", "16g")
+        .config("spark.executor.memory", "4g").config("spark.executor.instances", 24)
+        .config("spark.driver.maxResultSize", "1g").getOrCreate();
 
-    Dataset<Row> resultWithCache = QuerySpeedTester.runSpeedTest(args[0], args[1]);
 
-    //log.info("Result set has {} records", resultWithCache.count());
+    FilesystemAccessor fileSystemAccessor = new FilesystemAccessor(session);
+    SwapDataAnalyzer analyzer = new SwapDataAnalyzer(
+        new SwapDataAccessor(fileSystemAccessor, "/cs/data/"));
+    Dataset<Row> resultWithoutCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+    Dataset<Row> resultWithCache = analyzer.getEnrichedPositionsWithUnpaidCash(args[0], args[1]);
+    resultWithCache = resultWithCache.drop("timeStamp").drop("timestamp").drop("time_stamp");
+
+    log.info("Result set has {} records", resultWithCache.count());
     log.info("Wrighting {} {} data to file", args[0], args[1]);
-    wrightDatasetToFile(resultWithCache,"poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-true.csv");
+    wrightDatasetToFile(resultWithCache,
+        "poc_benchmarking/query_results/" + args[0] + "-" + args[1] + "-true.csv");
     log.info("File complete");
 
-//    while(true){
-//      Thread.sleep(5000);
-//    }
 
   }
 
@@ -72,7 +65,8 @@ public class Application implements ApplicationRunner {
     }
   }
 
-  private static void wrightDatasetToFile(Dataset<Row> dataset, String fileName) throws IOException {
+  private static void wrightDatasetToFile(Dataset<Row> dataset, String fileName)
+      throws IOException {
     BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
     writer.write(Joiner.on(",").join(dataset.columns()) + "\n");
     Iterator<Row> iterator = dataset.toLocalIterator();

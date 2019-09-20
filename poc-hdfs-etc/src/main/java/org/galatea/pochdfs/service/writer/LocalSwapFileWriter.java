@@ -43,21 +43,20 @@ public class LocalSwapFileWriter {
   private long totalRecordsLogged = 0;
   private long systemStartTime;
 
-  public void writeSwapData(final String localFolderPath, String targetBasePath){
+  public void writeSwapData(final String localFolderPath, String targetBasePath) {
     systemStartTime = System.currentTimeMillis();
     File directory = new File(localFolderPath);
     File[] filesInDirectory = directory.listFiles();
     int filesProcessed = 0;
-    for(File file: filesInDirectory){
-      if(file.isDirectory() == false) {
-        if(file.getName().toLowerCase().contains("cashflows")) {
-          writeSwapDataFromIndividualFile(file, targetBasePath);
-          filesProcessed++;
-          log.info("Total Files Processed: {} ", filesProcessed);
-        }
+    for (File file : filesInDirectory) {
+      if (file.isDirectory() == false) {
+        writeSwapDataFromIndividualFile(file, targetBasePath);
+        filesProcessed++;
+        log.info("Total Files Processed: {} ", filesProcessed);
       }
     }
-    log.info("******** Process Completed in {} ms ********",System.currentTimeMillis() - systemStartTime);
+    log.info("******** Process Completed in {} ms ********",
+        System.currentTimeMillis() - systemStartTime);
   }
 
   @SneakyThrows
@@ -80,11 +79,13 @@ public class LocalSwapFileWriter {
       });
     } else if (filename.toLowerCase().contains("positions")) {
       writeRecords(file, targetBasePath, (jsonObject) -> {
-        return pathCreator.createPositionFilepath((String) jsonObject.get("effective_date"), (int) jsonObject.get("swap_contract_id"));
+        return pathCreator.createPositionFilepath((String) jsonObject.get("effective_date"),
+            (int) jsonObject.get("swap_contract_id"));
       });
     } else if (filename.toLowerCase().contains("cashflows")) {
       writeRecords(file, targetBasePath, (jsonObject) -> {
-        return pathCreator.createCashFlowFilepath((String) jsonObject.get("effective_date"),(String) jsonObject.get("pay_date"),(int) jsonObject.get("swap_contract_id"));
+        return pathCreator.createCashFlowFilepath((String) jsonObject.get("effective_date"),
+            (String) jsonObject.get("pay_date"), (int) jsonObject.get("swap_contract_id"));
       });
 
     } else {
@@ -105,7 +106,7 @@ public class LocalSwapFileWriter {
       dataMap = new HashMap<String, ArrayDeque<String>>();
 
       String jsonLine = reader.readLine();
-      while (jsonLine !=null) {
+      while (jsonLine != null) {
 
         Map<String, Object> jsonObject = objectMapper.getTimestampedObject(jsonLine);
         String filePath = pathGetter.getFilePath(jsonObject);
@@ -128,11 +129,10 @@ public class LocalSwapFileWriter {
 
   private void givePastSecondUpdate() {
     long totalSeconds = (System.currentTimeMillis() - systemStartTime) / 1000;
-    if(totalSeconds != 0){
+    if (totalSeconds != 0) {
       log.info("******** Average Records logged per second {} ********",
           totalRecordsLogged / totalSeconds);
-    }
-    else{
+    } else {
       log.info("******** Average Records logged per second {} ********",
           totalRecordsLogged);
     }
@@ -174,7 +174,7 @@ public class LocalSwapFileWriter {
     Files.createDirectories(Paths.get(filePath).getParent());
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
       for (String data : dataMap.get(filePath)) {
-        if(filePath.toLowerCase().contains("cashflows")) {
+        if (filePath.toLowerCase().contains("cashflows")) {
           writer.write(data);
           totalRecordsLogged++;
         }

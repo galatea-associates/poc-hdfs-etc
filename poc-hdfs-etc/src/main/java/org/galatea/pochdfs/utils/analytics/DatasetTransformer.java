@@ -38,7 +38,6 @@ public class DatasetTransformer {
 	 *
 	 * @param firstDataset
 	 * @param secondDataset
-	 * @param columnJoinOn
 	 * @return the resulting dataset with the duplicate column dropped
 	 */
 	public Dataset<Row> join(final Dataset<Row> firstDataset, final Dataset<Row> secondDataset,
