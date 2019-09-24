@@ -55,4 +55,11 @@ public class BasicTest extends SwapQueryTest {
 		results.assertResultCountEquals(0);
 	}
 
+	@Test
+	public void testNoCounterPartyAndNoEffectiveDate() {
+		EnrichedPositionsResults results = resultGetter.getEnrichedPositionResults("missingBook",
+				Defaults.EFFECTIVE_DATE + 1);
+		results.assertResultCountEquals(0);
+	}
+
 }
