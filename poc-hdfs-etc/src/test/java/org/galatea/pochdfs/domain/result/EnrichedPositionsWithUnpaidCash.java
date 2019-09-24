@@ -16,7 +16,7 @@ public class EnrichedPositionsWithUnpaidCash {
 	private String	ric;
 	private int		counterPartyId;
 	private String	counterPartyField1;
-	private int		effectiveDate;
+	private String	effectiveDate;
 	private double	unpaidDiv;
 	private double	unpaidInt;
 
@@ -46,8 +46,8 @@ public class EnrichedPositionsWithUnpaidCash {
 	}
 
 	private boolean equalsEffectiveDate(final Row row) {
-		Long effectiveDate = row.getAs("effective_date");
-		return effectiveDate.equals(Long.valueOf(this.effectiveDate));
+		String effectiveDate = row.getAs("effective_date");
+		return effectiveDate.equals(this.effectiveDate);
 	}
 
 	private boolean equalsRic(final Row row) {
@@ -56,12 +56,12 @@ public class EnrichedPositionsWithUnpaidCash {
 	}
 
 	private boolean equalsUnpaidDiv(final Row row) {
-		double unpaidDiv = row.getAs("unpaid_div");
+		double unpaidDiv = row.getAs("unpaid_DIV");
 		return unpaidDiv == this.unpaidDiv;
 	}
 
 	private boolean equalsUnpaidInt(final Row row) {
-		double unpaidInt = row.getAs("unpaid_int");
+		double unpaidInt = row.getAs("unpaid_INT");
 		return unpaidInt == this.unpaidInt;
 	}
 }
